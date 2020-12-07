@@ -61,7 +61,6 @@ export default {
   },
   data() {
     return {
-      url: "http://localhost/testphp/getquestion.php",
       showAnswer: false
     };
   },
@@ -70,6 +69,7 @@ export default {
             if (correct==1 ) {
                 console.log('cest gagné');
                 this.correct=1;
+                this.$emit('addArtworkEvent');
             }
             else { 
                 console.log('cestperdu');

@@ -4,13 +4,18 @@
       <transition name="fade">
         <div v-if="showQuestion" id="question">
           <keep-alive>
-            <Question v-bind:question="question" @newQuestionEvent="changeQuestion()"/>
+            <Question
+              v-bind:question="question"
+              @newQuestionEvent="chargeQuestion()"
+              @addArtworkEvent="addArtwork()"
+            />
           </keep-alive>
         </div>
       </transition>
 
-      <Exposition />
-      <button @click="showQuestion = !showQuestion">show</button>
+      <Exposition ref="expositionComponent" />
+      <button @click="showQuestion = !showQuestion">show Question</button>
+      <button @click="click">Click</button>
     </div>
   </div>
 </template>
@@ -25,31 +30,33 @@ export default {
   components: {
     Exposition,
     Question,
-    
   },
   data() {
     return {
       showQuestion: false,
       question: [],
-      url: "http://localhost/testphp/getquestion.php",
+      RndmQuestionurl: "http://localhost/testphp/getquestion.php",
     };
   },
   methods: {
-    changeQuestion() {
-      console.log('change question');
-       axios.get(this.url).then((response) => {
-      this.question = response.data;
-      console.log(this.question);
-      this.showQuestion=false;
-    })
+    chargeQuestion() {
+      console.log("change question");
+      axios.get(this.RndmQuestionurl).then((response) => {
+        this.question = response.data;
+        console.log(this.question);
+        this.showQuestion = false;
+      });
+    },
+    click: function () {
+      this.$refs.expositionComponent.testEvent("salut je test");
+    },
+    addArtwork: function() {
+       this.$refs.expositionComponent.addArtwork("salut je passe par là");
     }
   },
 
   mounted() {
-    axios.get(this.url).then((response) => {
-      this.question = response.data;
-      console.log(this.question);
-    });
+    this.chargeQuestion();
   },
 };
 </script>
@@ -62,6 +69,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+
+
 }
 
 #question {
