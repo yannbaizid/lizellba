@@ -52,7 +52,7 @@ export default {
       console.log(text);
     },
     addArtwork(text) {
-      console.log(text);
+      console.log(text+" , method addartwork in exposition component fired from app.vue");
 
       //DEBUT DE ADD ARTWORK WORK IN PROGRESS
 
@@ -70,13 +70,15 @@ export default {
           y: height / 4,
           image: image,
           width: 100,
-          height: (image.height / image.width) * 100,
+          height: 100,
           draggable: true,
           skewY: 0,
 
           name: "konva" + artwork.id,
         };
         image.onload = () => {
+          console.log("image:"+image.src+" loaded");
+          artwork.config.height=image.height/image.width*100;
           if (artwork.type == "peinture") {
             // set image only when it is loaded
             this.wallArtworks.push(artwork);

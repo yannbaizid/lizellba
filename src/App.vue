@@ -1,13 +1,17 @@
 <template>
   <div>
     <div id="app">
-      <transition name="fade">
+      
+      <answer-modal ref="AnswerModal" v-bind:question="question"> </answer-modal>
+
+      <transition name="slide">
         <div v-if="showQuestion" id="question">
           <keep-alive>
             <Question
               v-bind:question="question"
               @newQuestionEvent="chargeQuestion()"
-              @addArtworkEvent="addArtwork()"
+              @showAnswerEvent="handleShowAnswerEvent"
+              ref="questionComponent"
             />
           </keep-alive>
         </div>
@@ -16,6 +20,7 @@
       <Exposition ref="expositionComponent" />
       <button @click="showQuestion = !showQuestion">show Question</button>
       <button @click="click">Click</button>
+        <button   @click="$refs.AnswerModal.openModal('from button')">Open modal</button>
     </div>
   </div>
 </template>
@@ -24,12 +29,15 @@
 import Exposition from "./components/Expostion";
 import Question from "./components/Question";
 import axios from "axios";
+import AnswerModal from './components/AnswerModal.vue';
 
 export default {
   name: "App",
   components: {
     Exposition,
     Question,
+    AnswerModal
+   
   },
   data() {
     return {
@@ -50,8 +58,15 @@ export default {
     click: function () {
       this.$refs.expositionComponent.testEvent("salut je test");
     },
-    addArtwork: function() {
-       this.$refs.expositionComponent.addArtwork("salut je passe par là");
+
+    handleShowAnswerEvent(payload) {
+      console.log('handleShowAnswerEvent in app.vue, correct='+payload.correct);
+      if (payload.correct==1) {
+         this.$refs.expositionComponent.addArtwork("salut je suis app.vue et je demande à exposion.vue d'ajouter une oeuvre");
+      }
+      this.$refs.questionComponent.closeQuestion("salut je suis app.vue et je demande la fermeture de la question");
+      this.showQuestion=false;
+      this.$refs.AnswerModal.openModal(payload.correct);
     }
   },
 
@@ -69,8 +84,6 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-
-
 }
 
 #question {
@@ -80,15 +93,18 @@ export default {
 
   z-index: 100;
 }
-.fade-enter-active,
-.fade-leave-active {
+.slide-enter-active,
+.slide-leave-active {
   transition: all 0.5s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.slide-enter, .slide-leave-to /* .fade-leave-active below version 2.1.8 */ {
   left: -1000px;
 }
-.fade-enter-to,
-.fade-leave {
+.slide-enter-to,
+.slide-leave {
   left: 8px;
+}
+.overflow-hidden {
+  overflow: hidden;
 }
 </style>
