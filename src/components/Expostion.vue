@@ -1,65 +1,90 @@
 <template>
-     <v-stage :config="configKonva">
-    <v-layer  id="stage">
-      <v-image v-for="(image,index) in artworks" v-bind:key="index" :config="image.config"></v-image>
+  <v-stage :config="configKonva">
+    <v-layer id="background">
+      <v-line
+        v-for="(poly, index) in backgroundPolys"
+        v-bind:key="index"
+        :config="poly"
+      ></v-line>
+    </v-layer>
+    <v-layer id="wall">
+      <v-image
+        v-for="(image, index) in wallArtworks"
+        v-bind:key="index"
+        :config="image.config"
+      ></v-image>
+    </v-layer>
+    <v-layer id="floor">
+      <v-image
+        v-for="(image, index) in floorArtworks"
+        v-bind:key="index"
+        :config="image.config"
+      ></v-image>
     </v-layer>
   </v-stage>
 </template>
 
 <script>
-import axios from 'axios';
-const width=900;
-const height=700;
+import axios from "axios";
+const width = 900;
+const height = 700;
 
 export default {
-  name: 'Exposition',
-  props: {
-  },
-    data() {
+  name: "Exposition",
+  props: {},
+  data() {
     return {
       configKonva: {
         width: width,
-        height: height
+        height: height,
       },
-      artworks: [],
-      disponibleImages : []
-    }; },
-    
-    methods: {
-   testEvent: function(text) {
-       console.log(text);
+      wallArtworks: [],
+      floorArtworks: [],
+      disponibleImages: [],
+      backgroundPolys: [],
+      width: width,
+      height: height
+    };
+  },
+
+  methods: {
+    testEvent: function (text) {
+      console.log(text);
     },
     addArtwork(text) {
       console.log(text);
 
+      //DEBUT DE ADD ARTWORK WORK IN PROGRESS
 
-//DEBUT DE ADD ARTWORK WORK IN PROGRESS
-
-     if (this.disponibleImages.length > 0) {
+      if (this.disponibleImages.length > 0) {
         let index = Math.floor(Math.random() * this.disponibleImages.length);
         var artwork = this.disponibleImages.splice(index, 1)[0];
 
-        var image=new Image();
-        image.src="http://localhost/testphp/img/"+ artwork.src;
+        var image = new Image();
+        image.src = "http://localhost/testphp/img/" + artwork.src;
 
         console.log(artwork);
- 
-        artwork.config= {
-          x: 3 * width / 5,
+
+        artwork.config = {
+          x: (3 * width) / 5,
           y: height / 4,
           image: image,
           width: 100,
-          height: image.height/image.width*100,
+          height: (image.height / image.width) * 100,
           draggable: true,
           skewY: 0,
-  
-          name: 'konva' + artwork.id
-        }
-        image.onload=() => {
-      // set image only when it is loaded
-        this.artworks.push(artwork);
-        }
-/*
+
+          name: "konva" + artwork.id,
+        };
+        image.onload = () => {
+          if (artwork.type == "peinture") {
+            // set image only when it is loaded
+            this.wallArtworks.push(artwork);
+          } else {
+            this.floorArtworks.push(artwork);
+          }
+        };
+        /*
         console.log(this.imgLink + artwork.src);
 
         var image = new Image();
@@ -164,29 +189,60 @@ export default {
         };
         image.src = this.imgLink + artwork.src;
 */
+      } else {
+        alert("y a plus rien");
       }
-      else { alert('y a plus rien'); }
-    
-//END OF ADD ARTWORK WORK IN PROGRESS
 
-
-    }
+      //END OF ADD ARTWORK WORK IN PROGRESS
+    },
   },
+  created() {},
   mounted() {
-      axios.get("http://localhost/testphp/getartwork.php").then(response => {
+    //initialize background
+
+    //add wall:
+    this.backgroundPolys.push({
+      points: [
+        -5,
+        (9 * height) / 11,
+        width / 3,
+       2*height / 3,
+       width+5,
+       2*height / 3,
+        width +5,
+        height+5,
+        -5,
+        height+5,
+      ],
+      fill: '#E0E0E0',
+      stroke: 'black',
+      strokeWidth: 2,
+      closed: true,
+    });
+    this.backgroundPolys.push({
+        points: [
+        width / 3,
+       2*height / 3,
+        width/3,
+       -5
+      ],
+      stroke: 'black',
+      strokeWidth: 2,
+      closed: false,
+    })
+    console.log("background plys"+this.backgroundPolys);
+
+    axios.get("http://localhost/testphp/getartwork.php").then((response) => {
       this.disponibleImages = response.data;
       console.log(this.disponibleImages);
-    })
-
-  }
-}
+    });
+  },
+};
 </script>
 
 
 <style scoped lang="scss">
- #stage {
-   
+#stage {
   background-color: grey;
- }
-
+}
 </style>
