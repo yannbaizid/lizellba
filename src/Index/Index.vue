@@ -2,7 +2,7 @@
   <div id="index_container">
     <div id="index_intro">
         Lizellba! Yo guy c'est trop IENB!!!
-        <button>JOUE</button>
+            <router-link to="/game">GO TO GAME!! JVEU JOUER SA MERE</router-link> |
     </div>
     <div id="gallery">
         <gallery />

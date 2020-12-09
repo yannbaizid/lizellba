@@ -19,8 +19,8 @@
 
       <Exposition ref="expositionComponent" />
       <button @click="showQuestion = !showQuestion">show Question</button>
-      <button @click="click">Click</button>
         <button   @click="$refs.AnswerModal.openModal('from button')">Open modal</button>
+        <router-link to="/">Retour au sommaire.....</router-link>
     </div>
   </div>
 </template>
@@ -83,7 +83,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 #question {
