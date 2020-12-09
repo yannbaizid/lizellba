@@ -7,13 +7,15 @@
       :key="index"
       @click="showPhotoModal(photo)"
     >
-      {{ photo.image }}
+    <img class="img_thumbnail "  :src="require('@/assets/img/photo/'+photo.img_name)" :alt="photo.img_name">
     </div>
   </div>
 </template>
 
 <script>
 import PhotoModal from "./PhotoModal.vue";
+import axios from 'axios';
+
 export default {
   components: { PhotoModal },
   name: "Game",
@@ -23,12 +25,15 @@ export default {
     };
   },
   mounted() {
-    this.photos.push({ image: "image1", description: "description 1" });
-    this.photos.push({ image: "image2", description: "description 2" });
+       axios.get("http://localhost/testphp/getgalleryphotos.php").then((response) => {
+        this.photos = response.data;
+        console.log(this.photos);
+      });
   },
   methods: {
     showPhotoModal(photo) {
       console.log("je suis gallery.vue j'essaye d'ouvrir une photomodal");
+      console.log(this.photo);
       this.$refs.PhotoModal.openModal(photo);
     },
   },
@@ -36,4 +41,8 @@ export default {
 </script>
 
 <style>
+.img_thumbnail {
+    max-width: 150px;
+}
+
 </style>

@@ -5,9 +5,10 @@
       <div class="modal_dialog">
           Ze suis un modal et ze cache le reste du site,
           <br>RIen à battre!!!
+          <img  :src="require('@/assets/img/photo/'+photo.img_name)" :alt="photo.img_name">
           {{photo.image}}, {{photo.description}}
       </div>
-    </div>
+    </div> :src=
   </transition>
 </template>
 
