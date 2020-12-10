@@ -38,7 +38,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .modal {
   position: fixed;
   top: 0;
@@ -60,10 +60,10 @@ export default {
   }
   &_dialog {
     position: relative;
-    width: 600px;
+    //width: 600px;
     background-color: #ffffff;
     border-radius: 5px;
-    margin: 50px auto;
+    //margin: 50px auto;
     display: flex;
     flex-direction: column;
     z-index: 2;
