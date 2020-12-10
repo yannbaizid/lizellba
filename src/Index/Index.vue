@@ -1,28 +1,21 @@
 <template>
   <div id="index_container">
-    <div id="index_intro">
-        Lizellba! Yo guy c'est trop IENB!!!
-            <router-link to="/game">GO TO GAME!! JVEU JOUER SA MERE</router-link> |
+    <div id="index_presentation">
+      <presentation />
     </div>
     <div id="gallery">
-        <gallery />
+      <gallery />
     </div>
-  
-  
-  
   </div>
-
-
 </template>
 
 <script>
-import Gallery from './Components/Gallery.vue'
+import Gallery from "./Components/Gallery.vue";
+import Presentation from "./Components/Presentation.vue";
 export default {
-  components: { Gallery },
-
-}
+  components: { Gallery, Presentation },
+};
 </script>
 
 <style>
-
 </style>

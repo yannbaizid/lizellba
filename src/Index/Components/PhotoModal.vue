@@ -3,9 +3,8 @@
     <div class="modal" v-if="show">
       <div class="modal_backdrop" @click="closeModal()" />
       <div class="modal_dialog">
-          Ze suis un modal et ze cache le reste du site,
-          <br>RIen à battre!!!
-          <img  :src="require('@/assets/img/photo/'+photo.img_name)" :alt="photo.img_name">
+<app-icon class="align_right"/>
+          <img class="modal_img" :src="require('@/assets/img/photo/'+photo.img_name)" :alt="photo.img_name">
           {{photo.image}}, {{photo.description}}
       </div>
     </div> :src=
@@ -13,7 +12,9 @@
 </template>
 
 <script>
+import AppIcon from '../../services/icons/Icon.vue';
 export default {
+  components: { AppIcon },
  name: "PhotoModal",
    props: {
   },
@@ -40,7 +41,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .modal {
   position: fixed;
   top: 0;
@@ -50,6 +51,9 @@ export default {
   z-index: 9;
   overflow-x: hidden;
   overflow-y: auto;
+&_img {
+  padding: 0px 20px;
+}
 
   &_backdrop {
     position: fixed;
@@ -62,13 +66,14 @@ export default {
   }
   &_dialog {
     position: relative;
-    width: 600px;
+    width: 774px;
     background-color: #ffffff;
-    border-radius: 5px;
     margin: 50px auto;
     display: flex;
     flex-direction: column;
     z-index: 2;
+      height: 645px;
+      padding: 10px;
     @media screen and (max-width: 992px) {
       width: 90%;
     }
