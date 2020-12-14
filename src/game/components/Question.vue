@@ -1,34 +1,47 @@
 <template>
   <div id="question_container">
     <div id="question_content_container" v-if="showQuestion">
-        <div id="question_content_header"  class="container">
-          <div>Icone ici</div>
-          <div>carte {{ question.type? question.type : '*type unknow*'}}</div>
-        </div>
-        <div id="question_content_image"  class="container">
-          <img class="app_question_image" :src="question.imglink" alt="lol" />
-        </div>
-        <div id="question_content_question"  class="container"> 
-          {{ question.question }}
-        </div>
+      <div id="question_content_header" class="container">
+        <div>Icone ici</div>
+        <div>carte {{ question.type ? question.type : "*type unknow*" }}</div>
+      </div>
+      <div id="question_content_image" class="container">
+        <img class="app_question_image" :src="question.imglink" alt="lol" />
+      </div>
+      <div id="question_content_question" class="container">
+        {{ question.question }}
+      </div>
 
-        <div id="question_content_answerlist"  class="container">
-          <div @click="selectedAnswer=answer"
-            v-for="(answer,index) in question.answers"
-            :key="index"
-            class="question_content_answer flexbox_row"
-          >
-
-              <input type="radio" :id="answer.id" name="drone" :value="answer.correct" :checked="selectedAnswer.id==answer.id">
-            <div>{{ answer.text }} {{ answer.correct }}</div>
-          </div>
-        </div>
-
-        <div  id="question_content_validate"  @click="verifyAnswer(selectedAnswer.correct)" class="container">
-          <app-button :class="{'disabled': !selectedAnswer.correct}" message="valider" />
+      <div id="question_content_answerlist" class="container">
+        <div
+          @click="selectedAnswer = answer"
+          v-for="(answer, index) in question.answers"
+          :key="index"
+          class="question_content_answer flexbox_row"
+        >
+          <input
+            type="radio"
+            :id="answer.id"
+            name="drone"
+            :value="answer.correct"
+            :checked="selectedAnswer.id == answer.id"
+          />
+          <div>{{ answer.text }} {{ answer.correct }}</div>
         </div>
       </div>
- 
+
+      <div
+        id="question_content_validate"
+        @click="verifyAnswer(selectedAnswer.correct)"
+        class="container"
+      >
+        <app-button
+          :class="{ disabled: !selectedAnswer.correct }"
+          message="valider"
+        />
+      </div>
+    </div>
+
     <!--
     <div id="question_content_container" v-if="showQuestion">
       <div id="question_emptyset" v-if="!question">
@@ -83,37 +96,34 @@ export default {
       showAnswer: false,
       showQuestion: true,
       selectedAnswer: {},
-      
     };
   },
   methods: {
-
     toggleQuestion() {
       this.showQuestion = !this.showQuestion;
     },
     verifyAnswer(correct) {
-    
       if (correct) {
-
         this.$emit("showAnswerEvent", { correct: correct });
-      if (correct == 1) {
-
-        this.$emit("addArtworkEvent");
-      } else {
-        console.log("cestperdu");
-        this.correct = 0;
+        if (correct == 1) {
+          this.$emit("addArtworkEvent");
+        } else {
+          console.log("cestperdu");
+          this.correct = 0;
+        }
+        this.selectedAnswer = {};
+        this.showQuestion = false;
+        this.showAnswer = true;
+        this.emitNewQuestionEvent();
       }
-        this.showQuestion=false;
-      this.showAnswer = true;
-      this.emitNewQuestionEvent();
-      }
-  
     },
     emitNewQuestionEvent() {
-      console.log('Je vais tenter quelque chose...jémets un event pour mon composant parent... Newquesitonevent!');
+      console.log(
+        "Je vais tenter quelque chose...jémets un event pour mon composant parent... Newquesitonevent!"
+      );
       this.$emit("newQuestionEvent");
     },
-      
+
     closeQuestion(text) {
       console.log(text + ".right now i'm in question.vue");
     },
@@ -175,7 +185,7 @@ export default {
   max-width: 150px;
 }
 .disabled {
-  background-color:lightgray;
+  background-color: lightgray;
   cursor: default;
 }
 </style>
