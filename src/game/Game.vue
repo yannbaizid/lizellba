@@ -1,26 +1,29 @@
 <template>
   <div>
     <div id="app">
-      
-      <answer-modal ref="AnswerModal" v-bind:question="question"> </answer-modal>
+      <answer-modal ref="AnswerModal" v-bind:question="question">
+      </answer-modal>
 
-      <transition name="slide">
+      <!-- <transition name="slide">
         <div v-if="showQuestion" id="question">
-          <keep-alive>
-            <Question
-              v-bind:question="question"
-              @newQuestionEvent="chargeQuestion()"
-              @showAnswerEvent="handleShowAnswerEvent"
-              ref="questionComponent"
-            />
-          </keep-alive>
+          <keep-alive> -->
+      <div id="question">
+        <Question
+          v-bind:question="question"
+          @newQuestionEvent="chargeQuestion()"
+          @showAnswerEvent="handleShowAnswerEvent"
+          ref="questionComponent"
+        />
+      </div>
+      <!-- </keep-alive>
         </div>
-      </transition>
+      </transition>-->
 
       <Exposition ref="expositionComponent" />
-      <button @click="showQuestion = !showQuestion">show Question</button>
-        <button   @click="$refs.AnswerModal.openModal('from button')">Open modal</button>
-        <router-link to="/">Retour au sommaire.....</router-link>
+
+      <router-link to="/"
+        ><app-button message="retour au sommaire"
+      /></router-link>
     </div>
   </div>
 </template>
@@ -29,15 +32,16 @@
 import Exposition from "./components/Expostion";
 import Question from "./components/Question";
 import axios from "axios";
-import AnswerModal from './components/AnswerModal.vue';
+import AnswerModal from "./components/AnswerModal.vue";
+import AppButton from "../services/AppButton.vue";
 
 export default {
   name: "Game",
   components: {
     Exposition,
     Question,
-    AnswerModal
-   
+    AnswerModal,
+    AppButton,
   },
   data() {
     return {
@@ -60,14 +64,20 @@ export default {
     },
 
     handleShowAnswerEvent(payload) {
-      console.log('handleShowAnswerEvent in app.vue, correct='+payload.correct);
-      if (payload.correct==1) {
-         this.$refs.expositionComponent.addArtwork("salut je suis app.vue et je demande à exposion.vue d'ajouter une oeuvre");
+      console.log(
+        "handleShowAnswerEvent in app.vue, correct=" + payload.correct
+      );
+      if (payload.correct == 1) {
+        this.$refs.expositionComponent.addArtwork(
+          "salut je suis app.vue et je demande à exposion.vue d'ajouter une oeuvre"
+        );
       }
-      this.$refs.questionComponent.closeQuestion("salut je suis app.vue et je demande la fermeture de la question");
-      this.showQuestion=false;
+      this.$refs.questionComponent.closeQuestion(
+        "salut je suis app.vue et je demande la fermeture de la question"
+      );
+      this.showQuestion = false;
       this.$refs.AnswerModal.openModal(payload.correct);
-    }
+    },
   },
 
   mounted() {
@@ -77,14 +87,15 @@ export default {
 </script>
 
 <style lang="scss">
-
-
 #question {
   float: left;
-  position: absolute;
-  background-color: white;
+  position: fixed;
+  top: 0px;
+  left: 0px;
 
-  z-index: 100;
+  width: 100%;
+  z-index: 9;
+
 }
 .slide-enter-active,
 .slide-leave-active {

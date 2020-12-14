@@ -6,6 +6,9 @@
     <div id="gallery">
       <gallery />
     </div>
+    <div id="index_footer" class="align_left"> 
+      Crédits typographiques: JOJO TINTIN
+    </div>
   </div>
 </template>
 

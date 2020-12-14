@@ -3,25 +3,32 @@
     <div class="modal" v-if="show">
       <div class="modal_backdrop" @click="closeModal()" />
       <div class="modal_dialog">
-<app-icon class="align_right"/>
-          <img class="modal_img" :src="require('@/assets/img/photo/'+photo.img_name)" :alt="photo.img_name">
-          {{photo.image}}, {{photo.description}}
+
+
+          <app-icon  id="close_icon" v-bind:type="'x'" class="align_right" @click.native="closeModal()" />
+
+        <img
+          class="modal_img"
+          :src="require('@/assets/img/photo/' + photo.img_name)"
+          :alt="photo.img_name"
+        />
+        {{ photo.image }}, {{ photo.description }}
       </div>
-    </div> :src=
+    </div>
+    :src=
   </transition>
 </template>
 
 <script>
-import AppIcon from '../../services/icons/Icon.vue';
+import AppIcon from "../../services/icons/Icon.vue";
 export default {
   components: { AppIcon },
- name: "PhotoModal",
-   props: {
-  },
+  name: "PhotoModal",
+  props: {},
   data() {
     return {
       show: false,
-      photo: {}
+      photo: {},
     };
   },
   methods: {
@@ -34,11 +41,10 @@ export default {
       document.querySelector("body").classList.add("overflow-hidden");
       console.log("j'ouvr photo modal");
       console.log(this.photo);
-      this.photo=photo;
-
+      this.photo = photo;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -51,9 +57,9 @@ export default {
   z-index: 9;
   overflow-x: hidden;
   overflow-y: auto;
-&_img {
-  padding: 0px 20px;
-}
+  &_img {
+    padding: 0px 20px;
+  }
 
   &_backdrop {
     position: fixed;
@@ -72,8 +78,8 @@ export default {
     display: flex;
     flex-direction: column;
     z-index: 2;
-      height: 645px;
-      padding: 10px;
+    height: 645px;
+    padding: 10px;
     @media screen and (max-width: 992px) {
       width: 90%;
     }
