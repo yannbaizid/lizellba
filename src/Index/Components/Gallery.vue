@@ -1,7 +1,6 @@
 <template>
   <div id="gallery_container">
     <photo-modal ref="PhotoModal" />
-    gallery avec plein plein d'images YOLO LOLOLO!
     <div
       v-for="(photo, index) in photos"
       :key="index"
@@ -40,9 +39,17 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .img_thumbnail {
-    max-width: 150px;
+    max-width: 90%;
+}
+
+#gallery {
+  &_container {
+    display: flex;
+    flex-wrap: wrap;
+      justify-content: space-around;
+  }
 }
 
 </style>

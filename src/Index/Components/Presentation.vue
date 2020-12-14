@@ -58,7 +58,7 @@
       </svg>
     </div>
     <h3>
-      Aujourd'hui vous êtes commissaire d'exposition pour La Criée centre d'art
+      Aujourd'hui vous êtes commissaire d'exposition pour La Criée, centre d'art
       contemporain à Rennes !
     </h3>
     <router-link to="/game">
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import AppButton from "../../services/Button.vue";
+import AppButton from "../../services/AppButton.vue";
 export default {
   components: { AppButton },
   name: "Presentation",
@@ -94,7 +94,7 @@ export default {
 <style lang="scss">
 #presentation {
   //height: 90vh;
-  width: 100vw;
+  width: 100%;
   &_logo {
     height: 100%;
     display: inline-block;

@@ -1,13 +1,5 @@
 <template>
-  <transition name="fade">
-    <div class="modal" v-if="show">
-      <div class="modal_backdrop" @click="closeModal()" />
-      <div class="modal_dialog">
-          <div v-if="this.correct==1">Bonne réponse!! </div>
-          <div> {{question.answer}}</div>
-      </div>
-    </div>
-  </transition>
+ 
 </template>
 
 <script>
@@ -45,11 +37,9 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 10;
+  z-index: 9;
   overflow-x: hidden;
   overflow-y: auto;
-  display: flex;
-  align-items: center;
 
   &_backdrop {
     position: fixed;
@@ -62,11 +52,10 @@ export default {
   }
   &_dialog {
     position: relative;
-    width: 800px;
-    height: 600px;
+    //width: 600px;
     background-color: #ffffff;
     border-radius: 5px;
-    margin:  auto;
+    //margin: 50px auto;
     display: flex;
     flex-direction: column;
     z-index: 2;

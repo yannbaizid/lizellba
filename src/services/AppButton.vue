@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: "button",
+  name: "AppButton",
   props: {
     message: String,
     link: String,
@@ -23,6 +23,9 @@ export default {
   border-radius: 50px;
   padding: 10px 25px;
   display: inline-block;
+  &:hover {
+    cursor: pointer;
+  }
   &_text {
       border:10px;
       text-decoration: none;
