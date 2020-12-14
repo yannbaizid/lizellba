@@ -118,9 +118,6 @@ export default {
       }
     },
     emitNewQuestionEvent() {
-      console.log(
-        "Je vais tenter quelque chose...jémets un event pour mon composant parent... Newquesitonevent!"
-      );
       this.$emit("newQuestionEvent");
     },
 
