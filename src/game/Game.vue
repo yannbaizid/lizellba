@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="app">
-      <answer-modal ref="AnswerModal" v-bind:question="question">
+      <answer-modal ref="AnswerModal" v-bind:question="question" id="exposition">
       </answer-modal>
 
       <!-- <transition name="slide">
@@ -21,9 +21,9 @@
 
       <Exposition ref="expositionComponent" />
 
-      <router-link to="/"
-        ><app-button message="retour au sommaire"
-      /></router-link>
+      <router-link to="/" id="btn_close">
+        <app-icon type="x" />
+      </router-link>
     </div>
   </div>
 </template>
@@ -33,7 +33,7 @@ import Exposition from "./components/Expostion";
 import Question from "./components/Question";
 import axios from "axios";
 import AnswerModal from "./components/AnswerModal.vue";
-import AppButton from "../services/AppButton.vue";
+import AppIcon from "../services/icons/Icon.vue";
 
 export default {
   name: "Game",
@@ -41,12 +41,13 @@ export default {
     Exposition,
     Question,
     AnswerModal,
-    AppButton,
+
+    AppIcon,
   },
   data() {
     return {
       showQuestion: false,
-      question: [],
+      question: {},
       RndmQuestionurl: "http://localhost/testphp/getquestion.php",
     };
   },
@@ -93,9 +94,7 @@ export default {
   top: 0px;
   left: 0px;
 
-  width: 100%;
   z-index: 9;
-
 }
 .slide-enter-active,
 .slide-leave-active {
@@ -111,4 +110,14 @@ export default {
 .overflow-hidden {
   overflow: hidden;
 }
+
+#btn_close {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  z-index: 7;
+}
+
+
+
 </style>
