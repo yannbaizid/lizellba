@@ -24,6 +24,7 @@
       <router-link to="/" id="btn_close">
         <app-icon type="x" />
       </router-link>
+       <app-icon type="?"  id="btn_tuto"/>
     </div>
   </div>
 </template>
@@ -113,11 +114,17 @@ export default {
 
 #btn_close {
   position: fixed;
-  right: 10px;
-  top: 10px;
+  right: 20px;
+  top: 20px;
   z-index: 7;
 }
 
 
+#btn_tuto {
+  position: fixed;
+  right: 80px;
+  top: 20px;
+  z-index: 7;
+}
 
 </style>

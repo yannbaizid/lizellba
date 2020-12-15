@@ -8,12 +8,15 @@
         :config="poly"
       ></v-line>
     </v-layer>
-    <v-layer id="wall">
+    <v-layer id="wall" :config="{ width: 500 }">
       <v-image
         v-for="(image, index) in wallArtworks"
         v-bind:key="index"
         :config="image.config"
-      ></v-image>
+        @dragmove="dragMove(image, $event)"
+      >
+        ></v-image
+      >
     </v-layer>
     <v-layer id="floor">
       <v-image
@@ -78,16 +81,24 @@ export default {
           x: (3 * width) / 5,
           y: height / 4,
           image: image,
-          width: 100,
-          height: 100,
+          width: 300,
+          height: 300,
           draggable: true,
           skewY: 0,
+          dragBoundFunc: function (pos) {
+            var newY = pos.y > 400 ? 400 : pos.y;
+            console.log(pos.y + " et " + cornerHeight);
+            return {
+              x: pos.x,
+              y: newY,
+            };
+          },
 
           name: "konva" + artwork.id,
         };
         image.onload = () => {
           console.log("image:" + image.src + " loaded");
-          artwork.config.height = (image.height / image.width) * 100;
+          artwork.config.height = (image.height / image.width) * 300;
           if (artwork.type == "peinture") {
             // set image only when it is loaded
             this.wallArtworks.push(artwork);
@@ -210,13 +221,27 @@ export default {
       //TODO
       console.log(poly);
     },
+    dragMove(image, event) {
+      console.log("draging " + image.src);
+      console.log(event.target.x());
+    },
+    fitStageIntoParentContainer() {
+      heightRatio = window.innerHeight / height;
+      widthRatio = window.innerWidth / width;
+      this.configKonva.scaleX=Math.min(heightRatio, widthRatio);
+      this.configKonva.scaleY=Math.min(heightRatio, widthRatio);
+      this.configKonva.width=width*heightRatio;
+      this.configKonva.height=height*heightRatio;
+
+    },
   },
   created() {},
   mounted() {
+    window.addEventListener("resize", this.fitStageIntoParentContainer);
     //init Size of canvas
 
-    this.configKonva.scaleX = Math.min(heightRatio, widthRatio);
-    this.configKonva.scaleY = Math.min(heightRatio, widthRatio);
+    //this.configKonva.scaleX = Math.min(heightRatio, widthRatio);
+    //this.configKonva.scaleY = Math.min(heightRatio, widthRatio);
 
     //this.configKonva.scale = Math.min(heightRatio, widthRatio);
     console.log(
@@ -227,6 +252,8 @@ export default {
         ", scale=" +
         this.configKonva.scaleX
     );
+    this.configKonva.width =
+      this.configKonva.width * Math.min(heightRatio, widthRatio);
 
     //initialize background
 
@@ -237,7 +264,7 @@ export default {
         cornerHeight,
         width + 5,
         height + 5,
-        width+5,
+        width + 5,
         -5,
         cornerWidth,
         -5,
@@ -256,7 +283,7 @@ export default {
         -5,
         -5,
         -5,
-        cornerHeight
+        cornerHeight,
       ],
       fill: "#FFFFFF",
       stroke: "black",
