@@ -1,9 +1,10 @@
 <template>
-  <v-stage :config="configKonva">
+  <v-stage id="stage" :config="configKonva">
     <v-layer id="background">
       <v-line
         v-for="(poly, index) in backgroundPolys"
         v-bind:key="index"
+        @click="changePolyColor(poly)"
         :config="poly"
       ></v-line>
     </v-layer>
@@ -26,8 +27,12 @@
 
 <script>
 import axios from "axios";
-const width = 900;
-const height = 700;
+const width = 2000;
+const height = 1504;
+let heightRatio = window.innerHeight / height;
+let widthRatio = window.innerWidth / width;
+const cornerHeight = (2 * height) / 3;
+const cornerWidth = (2 * width) / 3;
 
 export default {
   name: "Exposition",
@@ -37,13 +42,15 @@ export default {
       configKonva: {
         width: width,
         height: height,
+        scaleX: Math.min(heightRatio, widthRatio),
+        scaleY: Math.min(heightRatio, widthRatio),
       },
       wallArtworks: [],
       floorArtworks: [],
       disponibleImages: [],
       backgroundPolys: [],
       width: width,
-      height: height
+      height: height,
     };
   },
 
@@ -52,7 +59,9 @@ export default {
       console.log(text);
     },
     addArtwork(text) {
-      console.log(text+" , method addartwork in exposition component fired from app.vue");
+      console.log(
+        text + " , method addartwork in exposition component fired from app.vue"
+      );
 
       //DEBUT DE ADD ARTWORK WORK IN PROGRESS
 
@@ -77,8 +86,8 @@ export default {
           name: "konva" + artwork.id,
         };
         image.onload = () => {
-          console.log("image:"+image.src+" loaded");
-          artwork.config.height=image.height/image.width*100;
+          console.log("image:" + image.src + " loaded");
+          artwork.config.height = (image.height / image.width) * 100;
           if (artwork.type == "peinture") {
             // set image only when it is loaded
             this.wallArtworks.push(artwork);
@@ -197,42 +206,80 @@ export default {
 
       //END OF ADD ARTWORK WORK IN PROGRESS
     },
+    changePolyColor(poly) {
+      //TODO
+      console.log(poly);
+    },
   },
   created() {},
   mounted() {
+    //init Size of canvas
+
+    this.configKonva.scaleX = Math.min(heightRatio, widthRatio);
+    this.configKonva.scaleY = Math.min(heightRatio, widthRatio);
+
+    //this.configKonva.scale = Math.min(heightRatio, widthRatio);
+    console.log(
+      "height ratio" +
+        heightRatio +
+        "; width R=" +
+        widthRatio +
+        ", scale=" +
+        this.configKonva.scaleX
+    );
+
     //initialize background
 
     //add wall:
     this.backgroundPolys.push({
       points: [
+        cornerWidth,
+        cornerHeight,
+        width + 5,
+        height + 5,
+        width+5,
         -5,
-        (9 * height) / 11,
-        width / 3,
-       2*height / 3,
-       width+5,
-       2*height / 3,
-        width +5,
-        height+5,
+        cornerWidth,
         -5,
-        height+5,
       ],
-      fill: '#E0E0E0',
-      stroke: 'black',
+      fill: "#FFFFFF",
+      stroke: "black",
       strokeWidth: 2,
       closed: true,
     });
     this.backgroundPolys.push({
-        points: [
-        width / 3,
-       2*height / 3,
-        width/3,
-       -5
+      points: [
+        cornerWidth,
+        cornerHeight,
+        cornerWidth,
+        -5,
+        -5,
+        -5,
+        -5,
+        cornerHeight
       ],
-      stroke: 'black',
+      fill: "#FFFFFF",
+      stroke: "black",
       strokeWidth: 2,
-      closed: false,
-    })
-    console.log("background plys"+this.backgroundPolys);
+      closed: true,
+    });
+    this.backgroundPolys.push({
+      points: [
+        cornerWidth,
+        cornerHeight,
+        width + 5,
+        height + 5,
+        -5,
+        height + 5,
+        -5,
+        cornerHeight,
+      ],
+      stroke: "black",
+      strokeWidth: 2,
+      fill: "#949494",
+      closed: true,
+    });
+    console.log("background plys" + this.backgroundPolys);
 
     axios.get("http://localhost/testphp/getartwork.php").then((response) => {
       this.disponibleImages = response.data;
@@ -245,6 +292,9 @@ export default {
 
 <style scoped lang="scss">
 #stage {
-  background-color: grey;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: #e0e0e0;
 }
 </style>
