@@ -34,6 +34,7 @@ const width = 2000;
 const height = 1504;
 let heightRatio = window.innerHeight / height;
 let widthRatio = window.innerWidth / width;
+let ratio=Math.min(heightRatio, widthRatio);
 const cornerHeight = (2 * height) / 3;
 const cornerWidth = (2 * width) / 3;
 
@@ -43,10 +44,11 @@ export default {
   data() {
     return {
       configKonva: {
+
         width: width,
         height: height,
-        scaleX: Math.min(heightRatio, widthRatio),
-        scaleY: Math.min(heightRatio, widthRatio),
+        scaleX: ratio,
+        scaleY: ratio,
       },
       wallArtworks: [],
       floorArtworks: [],
@@ -228,10 +230,11 @@ export default {
     fitStageIntoParentContainer() {
       heightRatio = window.innerHeight / height;
       widthRatio = window.innerWidth / width;
-      this.configKonva.scaleX=Math.min(heightRatio, widthRatio);
-      this.configKonva.scaleY=Math.min(heightRatio, widthRatio);
-      this.configKonva.width=width*heightRatio;
-      this.configKonva.height=height*heightRatio;
+      ratio=Math.min(heightRatio,widthRatio);
+      this.configKonva.scaleX=ratio;
+      this.configKonva.scaleY=ratio;
+      this.configKonva.width=width*ratio;
+      this.configKonva.height=height*ratio;
 
     },
   },
@@ -319,9 +322,15 @@ export default {
 
 <style scoped lang="scss">
 #stage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
   background-color: #e0e0e0;
 }
+
+
 </style>
