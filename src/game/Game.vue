@@ -128,4 +128,13 @@ export default {
   top: 20px;
   z-index: 7;
 }
+
+#exposition {
+
+  background-color: #E5E5E5;
+  display: flex;
+ justify-content: center;
+ align-items: center;
+
+}
 </style>
