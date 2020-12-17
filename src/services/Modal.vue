@@ -13,14 +13,19 @@ import AppIcon from "./icons/Icon.vue";
 export default {
   components: { AppIcon },
   name: "Modal",
-  props: {},
+  props: {
+   initialState: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
-      show: true,
+      show: false,
     };
   },
   mounted() {
-    this.show = true;
+    this.show = this.initialState;
   },
   methods: {
     closeModal() {
@@ -62,7 +67,7 @@ export default {
   }
   &_dialog {
     width: 60%;
-    min-width: 800px;
+
     height: 60%;
     min-height: 390px;
     background-color: #ffffff;
@@ -72,8 +77,11 @@ export default {
     flex-direction: column;
     z-index: 2;
     justify-content: space-between;
-    @media screen and (max-width: 992px) {
-      width: 90%;
+    @media screen and (max-width: 900px) {
+      width: 80%;
+    }
+    @media screen and (max-width: 600px) {
+      width: 95%;
     }
   }
 }
