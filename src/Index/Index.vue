@@ -2,12 +2,15 @@
   <div id="index_container">
     <div id="index_presentation">
       <presentation />
+      Gallerie
     </div>
     <div id="gallery">
       <gallery />
     </div>
     <div id="index_footer" class="align_left"> 
-      Crédits typographiques: JOJO TINTIN
+      <div id="typo_credits">
+      Crédit typographique pour le logo Lizellba : Jocelyn Cottencin
+      </div>
     </div>
   </div>
 </template>
@@ -21,4 +24,8 @@ export default {
 </script>
 
 <style>
+#typo_credits {
+  padding: 20px;
+}
+
 </style>

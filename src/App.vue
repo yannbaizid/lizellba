@@ -8,10 +8,14 @@
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Livvic");
+html {
+  height: 100%;
+}
 body {
   margin: 0px;
   padding: none;
   width: 100%;
+  height: 100%;
 }
 #app {
   font-family: Livvic;
@@ -19,6 +23,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #000000;
+  height: 100%;
 }
 
 #nav {

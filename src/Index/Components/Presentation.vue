@@ -1,7 +1,8 @@
 <template>
   <div id="presentation">
     <div id="presentation_logo_container">
-      <svg id="presentation_logo"
+      <svg
+        id="presentation_logo"
         width="735"
         height="182"
         viewBox="0 0 735 182"
@@ -64,20 +65,20 @@
     <router-link to="/game">
       <app-button message="Commencer le jeu" />
     </router-link>
-    <div>
+    <div id="intro_container">
       <div class="text_column">
-        Résolvez les énigmes et découvrez des œuvres miniatures pour mettre en
-        place votre exposition en lien avec le cycle artistique Lili, la rozell
-        et le marimba. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        In facilisis felis ultrices, volutpat nisl at, vulputate mi. Le document
-        se fait livrer en pli secret. Amarez les bittes.
+        Aujourd'hui vous êtes commissaire d'exposition pour La Criée centre
+        d'art contemporain à Rennes ! Le jeu LiZellBa vous propose de créer une
+        exposition fictive à partir de la découverte des œuvres du cycle
+        artistique Lili, la rozell et le marimba (2019-2022) Pour cela, résolvez
+        les énigmes proposées et obtenez des reproductions d’oeuvres
       </div>
       <div class="text_column">
-        Vivamus sagittis, neque quis mattis volutpat, sem leo consectetur
-        tortor, non porta sapien risus vel libero. Ramutcho libero galileo
-        galileo. J'en prends plein la poire, mais la tomate est libre. Une tasse
-        de café et ça repart, franchement c'est pas volé. Et qu'est ce qu'on
-        fait quand la purée est froide? On écope, faute de mieux.
+        Pour composer votre exposition, choisissez les œuvres que vous voulez
+        présenter et leur disposition dans l'espace. Vous pouvez jouer sur les
+        formes, les couleurs ou chercher des correspondances entre les questions
+        abordées. Les œuvres racontent des histoires, jouez avec celles-ci pour
+        créer votre exposition!
       </div>
     </div>
   </div>
@@ -108,10 +109,17 @@ h3 {
   padding: 50px 0px;
 }
 
+#intro_container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 50px 0px;
+}
+
 .text_column {
-  display: inline-block;
-  max-width: 600px;
-  text-align: justify;
-  padding: 50px 20px;
+max-width: 600px;
+  padding: 20px;
+  text-align: left;
 }
 </style>
