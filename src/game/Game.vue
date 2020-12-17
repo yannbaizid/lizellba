@@ -1,12 +1,9 @@
 <template>
   <div>
     <div id="app">
-      <answer-modal ref="AnswerModal" v-bind:question="question" id="exposition">
-      </answer-modal>
+      <tuto-modal id="tuto" ref="TutoModal" />
+      <answer-modal ref="AnswerModal" v-bind:question="question" />
 
-      <!-- <transition name="slide">
-        <div v-if="showQuestion" id="question">
-          <keep-alive> -->
       <div id="question">
         <Question
           v-bind:question="question"
@@ -15,16 +12,13 @@
           ref="questionComponent"
         />
       </div>
-      <!-- </keep-alive>
-        </div>
-      </transition>-->
 
-      <Exposition ref="expositionComponent" />
+      <Exposition ref="expositionComponent" id="exposition" />
 
       <router-link to="/" id="btn_close">
         <app-icon type="x" />
       </router-link>
-       <app-icon type="?"  id="btn_tuto"/>
+      <app-icon type="?" id="btn_tuto" />
     </div>
   </div>
 </template>
@@ -35,6 +29,7 @@ import Question from "./components/Question";
 import axios from "axios";
 import AnswerModal from "./components/AnswerModal.vue";
 import AppIcon from "../services/icons/Icon.vue";
+import TutoModal from "./components/TutoModal.vue";
 
 export default {
   name: "Game",
@@ -44,6 +39,7 @@ export default {
     AnswerModal,
 
     AppIcon,
+    TutoModal,
   },
   data() {
     return {
@@ -119,12 +115,10 @@ export default {
   z-index: 7;
 }
 
-
 #btn_tuto {
   position: fixed;
   right: 80px;
   top: 20px;
   z-index: 7;
 }
-
 </style>

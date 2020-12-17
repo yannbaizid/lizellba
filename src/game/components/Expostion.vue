@@ -8,12 +8,12 @@
         :config="poly"
       ></v-line>
     </v-layer>
-    <v-layer id="wall" :config="{ width: 500 }">
+    <v-layer id="wall">
       <v-image
         v-for="(image, index) in wallArtworks"
-        v-bind:key="index"
+        v-bind:key="image.id"
         :config="image.config"
-        @dragmove="dragMove(image, $event)"
+        @dragmove="dragMoveWall(image,index, $event)"
       >
         ></v-image
       >
@@ -34,7 +34,7 @@ const width = 2000;
 const height = 1504;
 let heightRatio = window.innerHeight / height;
 let widthRatio = window.innerWidth / width;
-let ratio=Math.min(heightRatio, widthRatio);
+let ratio = Math.min(heightRatio, widthRatio);
 const cornerHeight = (2 * height) / 3;
 const cornerWidth = (2 * width) / 3;
 
@@ -44,7 +44,6 @@ export default {
   data() {
     return {
       configKonva: {
-
         width: width,
         height: height,
         scaleX: ratio,
@@ -87,15 +86,15 @@ export default {
           height: 300,
           draggable: true,
           skewY: 0,
-          dragBoundFunc: function (pos) {
-            var newY = pos.y > 400 ? 400 : pos.y;
-            console.log(pos.y + " et " + cornerHeight);
+          /*dragBoundFunc: function (pos) {
+            var newY = (pos.y) > (cornerHeight)*ratio ? cornerHeight*ratio : pos.y;
+            console.log(pos.y + " et " + cornerHeight+ "position ");
             return {
               x: pos.x,
               y: newY,
             };
           },
-
+*/
           name: "konva" + artwork.id,
         };
         image.onload = () => {
@@ -223,40 +222,44 @@ export default {
       //TODO
       console.log(poly);
     },
-    dragMove(image, event) {
+    dragMoveWall(image, index,event) {
       console.log("draging " + image.src);
-      console.log(event.target.x());
+      console.log(image);
+      image.config.skewY=0.25;
+     // const y=event.target.y();
+     // const x=event.target.x();
+      if (event.target.x()  < cornerWidth) {
+   
+        if (event.target.y() > cornerHeight - image.config.height) {
+          event.target.y(cornerHeight - image.config.height);
+        }
+      }
+      if (event.target.x() > cornerWidth) {
+        console.log('partie droite'+height+"skew ="+image.config.skewY);
+
+
+        const floorHeigth= cornerHeight+(event.target.x()-cornerWidth)/(width-cornerWidth)*(height-cornerHeight);
+        if (event.target.y()>floorHeigth- image.config.height) {
+          event.target.y(floorHeigth- image.config.height);
+        }
+      }
+      this.wallArtworks.push( this.wallArtworks.splice(index, 1)[0]);
     },
     fitStageIntoParentContainer() {
       heightRatio = window.innerHeight / height;
       widthRatio = window.innerWidth / width;
-      ratio=Math.min(heightRatio,widthRatio);
-      this.configKonva.scaleX=ratio;
-      this.configKonva.scaleY=ratio;
-      this.configKonva.width=width*ratio;
-      this.configKonva.height=height*ratio;
-
+      ratio = Math.min(heightRatio, widthRatio);
+      this.configKonva.scaleX = ratio;
+      this.configKonva.scaleY = ratio;
+      this.configKonva.width = width * ratio;
+      this.configKonva.height = height * ratio;
     },
   },
   created() {},
   mounted() {
     window.addEventListener("resize", this.fitStageIntoParentContainer);
-    //init Size of canvas
 
-    //this.configKonva.scaleX = Math.min(heightRatio, widthRatio);
-    //this.configKonva.scaleY = Math.min(heightRatio, widthRatio);
-
-    //this.configKonva.scale = Math.min(heightRatio, widthRatio);
-    console.log(
-      "height ratio" +
-        heightRatio +
-        "; width R=" +
-        widthRatio +
-        ", scale=" +
-        this.configKonva.scaleX
-    );
-    this.configKonva.width =
-      this.configKonva.width * Math.min(heightRatio, widthRatio);
+    this.fitStageIntoParentContainer();
 
     //initialize background
 
@@ -331,6 +334,4 @@ export default {
   overflow: hidden;
   background-color: #e0e0e0;
 }
-
-
 </style>
