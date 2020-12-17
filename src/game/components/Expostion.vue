@@ -1,5 +1,5 @@
 <template>
-  <v-stage id="stage" :config="configKonva">
+  <v-stage :config="configKonva">
     <v-layer id="background">
       <v-line
         v-for="(poly, index) in backgroundPolys"
@@ -13,7 +13,7 @@
         v-for="(image, index) in wallArtworks"
         v-bind:key="image.id"
         :config="image.config"
-        @dragmove="dragMoveWall(image,index, $event)"
+        @dragmove="dragMoveWall(image, index, $event)"
       >
         ></v-image
       >
@@ -23,6 +23,7 @@
         v-for="(image, index) in floorArtworks"
         v-bind:key="index"
         :config="image.config"
+        @dragmove="dragMoveFloor(image, index, $event)"
       ></v-image>
     </v-layer>
   </v-stage>
@@ -30,8 +31,11 @@
 
 <script>
 import axios from "axios";
-const width = 2000;
-const height = 1504;
+const totalWidth = 1920;
+const totalHeight = 1080;
+const relativeSizeOfContent = 0.95;
+let height = totalHeight * relativeSizeOfContent;
+let width = totalWidth * relativeSizeOfContent;
 let heightRatio = window.innerHeight / height;
 let widthRatio = window.innerWidth / width;
 let ratio = Math.min(heightRatio, widthRatio);
@@ -44,8 +48,8 @@ export default {
   data() {
     return {
       configKonva: {
-        width: width,
-        height: height,
+        width: totalWidth,
+        height: totalHeight,
         scaleX: ratio,
         scaleY: ratio,
       },
@@ -57,6 +61,14 @@ export default {
       height: height,
     };
   },
+  computed: {
+    topHeight() {
+      return (totalHeight * (1 - relativeSizeOfContent)) / 2;
+    },
+    leftWidth() {
+      return totalWidth * (1 - relativeSizeOfContent);
+    },
+  },
 
   methods: {
     testEvent: function (text) {
@@ -66,8 +78,6 @@ export default {
       console.log(
         text + " , method addartwork in exposition component fired from app.vue"
       );
-
-      //DEBUT DE ADD ARTWORK WORK IN PROGRESS
 
       if (this.disponibleImages.length > 0) {
         let index = Math.floor(Math.random() * this.disponibleImages.length);
@@ -86,15 +96,15 @@ export default {
           height: 300,
           draggable: true,
           skewY: 0,
-          /*dragBoundFunc: function (pos) {
-            var newY = (pos.y) > (cornerHeight)*ratio ? cornerHeight*ratio : pos.y;
+          /* dragBoundFunc: function (pos) {
+            var newY = (pos.y) < (totalHeight*(1-relativeSizeOfContent)/2)*ratio ?(totalHeight*(1-relativeSizeOfContent)/2)*ratio : pos.y;
             console.log(pos.y + " et " + cornerHeight+ "position ");
             return {
               x: pos.x,
               y: newY,
             };
-          },
-*/
+          },*/
+
           name: "konva" + artwork.id,
         };
         image.onload = () => {
@@ -107,152 +117,152 @@ export default {
             this.floorArtworks.push(artwork);
           }
         };
-        /*
-        console.log(this.imgLink + artwork.src);
-
-        var image = new Image();
-        image.src = this.imgLink + artwork.src;
-        this.images.push(image);
-
-        if (image.width < image.height) {
-          imagewidth = 200;
-          imageHeight = image.height / image.width * 200;
-        }
-        else {
-          imageHeight = 200;
-          imagewidth = (image.width / image.height) * 200;
-        }
-
-
-
-        var konvaImage = new Konva.Image({
-          x: 3 * this.width / 5,
-          y: this.height / 4,
-          image: this.images[this.images.length - 1],
-          width: imagewidth,
-          height: imageHeight,
-          draggable: true,
-          skewY: 0,
-  
-          name: 'konva' + artwork.id
-        });
-
-        this.konvaImages.push(konvaImage);
-
-        var lastindex = this.konvaImages.length - 1;
-        console.log('last index of' + this.konvaImages + ' =' + lastindex + ' test dacces a propriete image.src' + this.konvaImages[lastindex].image().src + ' name' + konvaImage.name());
-        if (artwork.type == 'sculpture') {
-
-          konvaImage.getTransform().rotate(40);
-          konvaImage.y(this.height / 2);
-          konvaImage.on('dragmove', () => {
-            console.log('testscale' + konvaImage.y() / (this.height / 2));
-
-            this.layer.draw();
-
-            if (konvaImage.y() + konvaImage.height() - 15 < (this.height / 2)) {
-              console.log('lOl');
-
-              konvaImage.y(this.height / 2 - this.konvaImages[lastindex].height() + 15);
-            }
-          });
-          this.floorLayer.add(this.konvaImages[this.konvaImages.length - 1]);
-          this.floorLayer.batchDraw();
-        }
-        this.konvaImages[lastindex].on('dragstart', function () { 
-          this.moveToTop();
-        } );
-        this.konvaImages[lastindex].on('click', function () { 
-          this.moveToTop();
-        } );
-        if (artwork.type == 'peinture') {
-          this.konvaImages[lastindex].on('dragmove', () => {
-
-            var x = this.konvaImages[lastindex].x();
-            var y = this.konvaImages[lastindex].y();
-
-            var diffX = event.clientX - x;
-            var diffY = event.clientY - y
-            console.log('skew' + this.konvaImages[lastindex].skewY());
-            if (this.konvaImages[lastindex].skewY() != -0.5 && x <= this.width / 3) {
-              this.konvaImages[lastindex].x(this.width / 3);
-              console.log('no biais' + this.konvaImages[lastindex].image().src);
-
-            }
-            if (this.konvaImages[lastindex].skewY() == -0.5 && x + this.konvaImages[lastindex].width() >= (this.width / 3)) {
-              this.konvaImages[lastindex].x((this.width / 3) - this.konvaImages[lastindex].width());
-              console.log('biais' + this.konvaImages[lastindex].image().src);
-
-            }
-
-
-            if ((x + this.konvaImages[lastindex].width()) < (this.width / 3)) {
-              this.konvaImages[lastindex].skewY(-0.5);
-              console.log('essaie rajout biais : ' + this.konvaImages[lastindex].image().src);
-
-            }
-            else if (x > this.width / 3) {
-              this.konvaImages[lastindex].skewY(0);
-
-              console.log('trankeuls' + this.konvaImages[lastindex].image().src);
-            }
-
-
-          });
-          this.layer.add(this.konvaImages[this.konvaImages.length - 1]);
-          this.layer.batchDraw();
-  
-        }
-
-
- 
-
-        image.onload = () => {
-          this.stage.draw();
-        };
-        image.src = this.imgLink + artwork.src;
-*/
       } else {
         alert("y a plus rien");
       }
-
-      //END OF ADD ARTWORK WORK IN PROGRESS
     },
     changePolyColor(poly) {
       //TODO
       console.log(poly);
     },
-    dragMoveWall(image, index,event) {
+    dragMoveWall(image, index, event) {
       console.log("draging " + image.src);
-      console.log(image);
-      image.config.skewY=0.25;
-     // const y=event.target.y();
-     // const x=event.target.x();
-      if (event.target.x()  < cornerWidth) {
-   
-        if (event.target.y() > cornerHeight - image.config.height) {
+      // image.config.skewY = 0.25;
+      const y = event.target.y();
+      var x = event.target.x();
+
+      //TRANSITION ZONE FROM LEFT TO RIGHT
+      if (x > cornerWidth - image.config.width && x < cornerWidth) {
+        if (y < 0) {
+          event.target.y(0);
+        }
+        if (y > cornerHeight - image.config.height) {
           event.target.y(cornerHeight - image.config.height);
         }
-      }
-      if (event.target.x() > cornerWidth) {
-        console.log('partie droite'+height+"skew ="+image.config.skewY);
-
-
-        const floorHeigth= cornerHeight+(event.target.x()-cornerWidth)/(width-cornerWidth)*(height-cornerHeight);
-        if (event.target.y()>floorHeigth- image.config.height) {
-          event.target.y(floorHeigth- image.config.height);
+        if (image.config.skewY == 0) {
+          event.target.x(cornerWidth - image.config.width);
+        } else {
+          event.target.x(cornerWidth);
         }
       }
-      this.wallArtworks.push( this.wallArtworks.splice(index, 1)[0]);
+
+      //ARTWORK ON LEFT WALL
+      if (x < cornerWidth - image.config.width) {
+        image.config.skewY = 0;
+        if (y > cornerHeight - image.config.height) {
+          event.target.y(cornerHeight - image.config.height);
+        }
+        if (y < 0) {
+          event.target.y(0);
+        }
+
+        if (x < 0) {
+          event.target.x(0);
+        }
+      }
+
+      //ARTWORK  ON RIGHT WALL
+      if (x > cornerWidth) {
+        image.config.skewY = 0.56;
+        console.log("partie droite" + height + "skew =" + image.config.skewY);
+        if (x + image.config.width > width) {
+          event.target.x(width - image.config.width);
+          x = event.target.x();
+        }
+
+        const ceilingHeight =
+          ((x - cornerWidth) / (width - cornerWidth)) * (height - cornerHeight);
+
+        const floorHeigth = ceilingHeight + cornerHeight;
+
+        if (y > floorHeigth - image.config.height) {
+          event.target.y(floorHeigth - image.config.height);
+        }
+        if (y < ceilingHeight) {
+          event.target.y(ceilingHeight);
+        }
+      }
+      this.wallArtworks.push(this.wallArtworks.splice(index, 1)[0]);
     },
+    dragMoveFloor(image, index, event) {
+      const margin = 50;
+      const artworkHeight = image.config.height;
+      const artworkWidth = image.config.width;
+      const y = event.target.y();
+      var x = event.target.x();
+      let rightX = x + artworkWidth;
+      const bottomY = y + artworkHeight;
+console.log('x='+x+",target x="+event.target.x()+",target y="+event.target.y()+', bottomy='+bottomY)
+      //TOP LIMIT
+      if (bottomY < cornerHeight + margin) {
+        console.log('je tape le mur du haut!');
+        event.target.y(cornerHeight + margin - artworkHeight);
+      }
+
+      //BOTTOM LIMIT
+      if (bottomY > height) {
+        console.log('je tape la limite basse!');
+        event.target.y(height - artworkHeight);
+      }
+        //LEFT LIMIT
+        if (x<0) {
+          event.target.x(0);
+          x=0;
+          rightX=artworkWidth;
+        }
+  
+        if (rightX>width) {
+          event.target.x(width-artworkWidth);
+          x=width-artworkWidth;
+          rightX=width;
+        }
+      //RIGHT BORDER LIMIT
+
+      if (rightX > cornerWidth) {
+        
+        const floorHeight =
+          cornerHeight +
+          ((rightX - cornerWidth) / (width - cornerWidth)) *
+            (height - cornerHeight);
+        if (bottomY - margin < floorHeight) {
+           console.log('je tape la limite droite!');
+          event.target.y(floorHeight + margin - artworkHeight);
+        }
+      }
+
+      //LEFT BORDER LIMIT
+      if (x < width - cornerWidth) {
+        const floorHeight =
+          cornerHeight + (x / (width - cornerWidth)) * (height - cornerHeight);
+        if (bottomY  > floorHeight) {
+           console.log('je tape la limite gôche!  x=');
+          event.target.y(floorHeight  - artworkHeight);
+        }
+      }
+        //TOP LIMIT
+      if (event.target.y()+artworkHeight < cornerHeight + margin) {
+        console.log('je tape le mur du haut!');
+        event.target.y(cornerHeight + margin - artworkHeight);
+      }
+
+      //BOTTOM LIMIT
+      if (event.target.y()+artworkHeight > height) {
+        console.log('je tape la limite basse!');
+        event.target.y(height - artworkHeight);
+      }
+
+    },
+
     fitStageIntoParentContainer() {
-      heightRatio = window.innerHeight / height;
-      widthRatio = window.innerWidth / width;
+      heightRatio = window.innerHeight / totalHeight;
+      widthRatio = window.innerWidth / totalWidth;
       ratio = Math.min(heightRatio, widthRatio);
       this.configKonva.scaleX = ratio;
       this.configKonva.scaleY = ratio;
-      this.configKonva.width = width * ratio;
-      this.configKonva.height = height * ratio;
+      this.configKonva.width = totalWidth * ratio;
+      this.configKonva.height = totalHeight * ratio;
+      this.configKonva.x = (totalWidth - width) / 2;
+      this.configKonva.y = (totalHeight - height) / 2;
     },
   },
   created() {},
@@ -262,53 +272,59 @@ export default {
     this.fitStageIntoParentContainer();
 
     //initialize background
+    //add backgound:
+    this.backgroundPolys.push({
+      points: [-5, -5, width + 5, -5, width + 5, height + 5, -5, height + 5],
+      fill: "#E5E5E5",
+      closed: true,
+    });
 
     //add wall:
+
+    //RIGHT WALL
     this.backgroundPolys.push({
       points: [
         cornerWidth,
         cornerHeight,
-        width + 5,
-        height + 5,
-        width + 5,
-        -5,
+        width,
+        height,
+        width,
+        height - cornerHeight,
         cornerWidth,
-        -5,
+        0,
       ],
-      fill: "#FFFFFF",
-      stroke: "black",
-      strokeWidth: 2,
+      fill: "#F2F2F2",
       closed: true,
     });
+
+    //WRONG WALL.... NO LEFT WALL
     this.backgroundPolys.push({
       points: [
         cornerWidth,
         cornerHeight,
         cornerWidth,
-        -5,
-        -5,
-        -5,
-        -5,
+        0,
+        0,
+        0,
+        0,
         cornerHeight,
       ],
       fill: "#FFFFFF",
-      stroke: "black",
-      strokeWidth: 2,
       closed: true,
     });
+
+    //add floor
     this.backgroundPolys.push({
       points: [
         cornerWidth,
         cornerHeight,
-        width + 5,
-        height + 5,
-        -5,
-        height + 5,
-        -5,
+        width,
+        height,
+        width - cornerWidth,
+        height,
+        0,
         cornerHeight,
       ],
-      stroke: "black",
-      strokeWidth: 2,
       fill: "#949494",
       closed: true,
     });
@@ -323,15 +339,5 @@ export default {
 </script>
 
 
-<style scoped lang="scss">
-#stage {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  background-color: #e0e0e0;
-}
+<style lang="scss">
 </style>
