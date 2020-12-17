@@ -12,7 +12,12 @@
           :src="require('@/assets/img/photo/' + photo.img_name)"
           :alt="photo.img_name"
         />
-        {{ photo.image }}, {{ photo.description }}
+        <div id="exposition_description">
+          <div id="exposition_author">{{photo.author_name}}</div>
+          {{photo.expo_name}}
+
+        </div>
+
       </div>
     </div>
     :src=
@@ -84,5 +89,16 @@ export default {
       width: 90%;
     }
   }
+}
+
+#exposition_description {
+  position: absolute;
+  bottom: 0px;
+  left : 0px;
+  padding: 10px 30px 50px 30px;
+}
+#exposition_author {
+  border: 1px solid black;
+  padding: 10px;
 }
 </style>
