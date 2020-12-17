@@ -57,6 +57,9 @@ a {
     flex-direction: row;
      align-items: center;
   }
+  &_justifycenter {
+    justify-content: center;
+  }
 }
 .container {
   width: 90%;

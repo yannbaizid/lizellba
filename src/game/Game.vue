@@ -18,7 +18,9 @@
       <router-link to="/" id="btn_close">
         <app-icon type="x" />
       </router-link>
-      <app-icon type="?" id="btn_tuto" />
+      <div id="btn_tuto"  @click="openTutoModal()">
+      <app-icon type="?" />
+      </div>
     </div>
   </div>
 </template>
@@ -76,6 +78,11 @@ export default {
       this.showQuestion = false;
       this.$refs.AnswerModal.openModal(payload.correct);
     },
+    openTutoModal() {
+      console.log("Lâche ce point d'interrogation!!");
+       this.$refs.TutoModal.openModal();
+      
+    }
   },
 
   mounted() {
