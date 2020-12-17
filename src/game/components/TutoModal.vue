@@ -1,6 +1,7 @@
 <template>
   <div>
     <modal ref="TutoModal" id="tuto_modal"
+     :initialState=true
     @closeModalEvent="handleCloseModalEvent" >
       <div>{{ index + 1 }}/{{ tutoSteps.length }}</div>
       <div>{{ tutoSteps[index] }}</div>

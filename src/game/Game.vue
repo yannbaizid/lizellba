@@ -1,26 +1,27 @@
 <template>
-  <div>
-    <div id="app">
-      <tuto-modal id="tuto" ref="TutoModal" />
-      <answer-modal ref="AnswerModal" v-bind:question="question" />
+  <div id="app">
+    <tuto-modal id="tuto" ref="TutoModal" />
+    <answer-modal ref="AnswerModal" v-bind:question="question" />
+    <validate-modal id="validateModal" ref="ValidateModal" />
+    <div id="question">
+      <Question
+        v-bind:question="question"
+        @newQuestionEvent="chargeQuestion()"
+        @showAnswerEvent="handleShowAnswerEvent"
+        ref="questionComponent"
+      />
+    </div>
 
-      <div id="question">
-        <Question
-          v-bind:question="question"
-          @newQuestionEvent="chargeQuestion()"
-          @showAnswerEvent="handleShowAnswerEvent"
-          ref="questionComponent"
-        />
-      </div>
+    <Exposition ref="expositionComponent" id="exposition" />
 
-      <Exposition ref="expositionComponent" id="exposition" />
-
-      <router-link to="/" id="btn_close">
-        <app-icon type="x" />
-      </router-link>
-      <div id="btn_tuto"  @click="openTutoModal()">
+    <router-link to="/" id="btn_close">
+      <app-icon type="x" />
+    </router-link>
+    <div id="btn_tuto" @click="openTutoModal()">
       <app-icon type="?" />
-      </div>
+    </div>
+    <div id="btn_validate" @click="openValidateModal()">
+      <app-button message="valider votre exposition" />
     </div>
   </div>
 </template>
@@ -32,6 +33,8 @@ import axios from "axios";
 import AnswerModal from "./components/AnswerModal.vue";
 import AppIcon from "../services/icons/Icon.vue";
 import TutoModal from "./components/TutoModal.vue";
+import AppButton from "../services/AppButton.vue";
+import ValidateModal from "./components/ValidateModal.vue";
 
 export default {
   name: "Game",
@@ -39,9 +42,10 @@ export default {
     Exposition,
     Question,
     AnswerModal,
-
     AppIcon,
     TutoModal,
+    AppButton,
+    ValidateModal,
   },
   data() {
     return {
@@ -80,9 +84,13 @@ export default {
     },
     openTutoModal() {
       console.log("Lâche ce point d'interrogation!!");
-       this.$refs.TutoModal.openModal();
-      
-    }
+      this.$refs.TutoModal.openModal();
+    },
+    openValidateModal() {
+      console.log("on valide toussa!");
+      this.$refs.ValidateModal.openModal();
+    },
+
   },
 
   mounted() {
@@ -129,12 +137,18 @@ export default {
   z-index: 7;
 }
 
+#btn_validate {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 7;
+}
+
 #exposition {
-
-  background-color: #E5E5E5;
+  background-color: #e5e5e5;
   display: flex;
- justify-content: center;
- align-items: center;
-
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 }
 </style>
