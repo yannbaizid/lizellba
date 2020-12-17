@@ -1,6 +1,7 @@
 <template>
   <div>
-    <modal ref="TutoModal" id="tuto_modal">
+    <modal ref="TutoModal" id="tuto_modal"
+    @closeModalEvent="handleCloseModalEvent" >
       <div>{{ index + 1 }}/{{ tutoSteps.length }}</div>
       <div>{{ tutoSteps[index] }}</div>
       <div class="flexbox_row flexbox_justifycenter">
@@ -41,13 +42,14 @@ export default {
 
   },
   methods: {
-    closeModal() {
-      console.log("close dat shit");
-      this.show = false;
-    },
+
     openModal() {
       console.log("Open da shit");
       this.$refs.TutoModal.openModal();
+    },
+    handleCloseModalEvent() {
+        console.log('handleclosemodalevent');
+        this.index=0;
     }
   },
 };
