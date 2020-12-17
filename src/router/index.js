@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Index from '../Index/Index'
 import Game from '../game/Game'
+import TestModal from '../views/TestModal'
 
 Vue.use(VueRouter)
 
@@ -16,6 +17,13 @@ const routes = [
     name: 'Game',
     component: Game
   },
+  
+  {
+    path: '/test',
+    name: 'test',
+    component: TestModal
+  },
+
   {
     path: '/about',
     name: 'About',
