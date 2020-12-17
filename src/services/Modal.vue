@@ -2,7 +2,7 @@
   <div class="modal" v-if="show">
     <div class="modal_backdrop" />
     <div class="modal_dialog">
-      <div @click="show = false" class="modal_close align_right"><app-icon type="x"  /></div>
+      <div @click="closeModal()" class="modal_close align_right"><app-icon type="x"  /></div>
       <slot></slot>
     </div>
   </div>
@@ -24,6 +24,8 @@ export default {
   },
   methods: {
     closeModal() {
+      this.$emit('closeModalEvent');
+      console.log('je suis method closeModal de Modal.vue');
       this.show = false;
       document.querySelector("body").classList.remove("overflow-hidden");
     },

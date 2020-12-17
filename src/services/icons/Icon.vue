@@ -133,7 +133,7 @@
 export default {
   name: "appIcon",
   mounted() {
-    console.log(this.type);
+
   },
   props: {
     type: String,
