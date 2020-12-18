@@ -9,21 +9,22 @@
       ></v-line>
     </v-layer>
     <v-layer id="wall">
-      <v-image
-        v-for="(image, index) in wallArtworks"
-        v-bind:key="image.id"
-        :config="image.config"
-        @dragmove="dragMoveWall(image, index, $event)"
-      >
-        ></v-image
-      >
+      <div v-for="(image, index) in wallArtworks" v-bind:key="image.id">
+        <v-image
+          :config="image.config"
+          @dragmove="dragMoveWall(image, index, $event)"
+        >
+        </v-image>
+      </div>
     </v-layer>
+
     <v-layer id="floor">
       <v-image
         v-for="(image, index) in floorArtworks"
-        v-bind:key="index"
+        v-bind:key="image.id"
         :config="image.config"
         @dragmove="dragMoveFloor(image, index, $event)"
+        @dragend="setZindex()"
       ></v-image>
     </v-layer>
   </v-stage>
@@ -84,16 +85,16 @@ export default {
         var artwork = this.disponibleImages.splice(index, 1)[0];
 
         var image = new Image();
-        image.src = "http://localhost/testphp/img/" + artwork.src;
-
-        console.log(artwork);
+        //image.src = "http://localhost/testphp/img/" + artwork.src;
+        image.src = require("@/assets/img/artworks/" + artwork.src);
+   
 
         artwork.config = {
-          x: (3 * width) / 5,
-          y: height / 4,
+          x: width / 5,
+          y: height / 5,
           image: image,
-          width: 300,
-          height: 300,
+          width: 100,
+          height: 100,
           draggable: true,
           skewY: 0,
           /* dragBoundFunc: function (pos) {
@@ -109,11 +110,19 @@ export default {
         };
         image.onload = () => {
           console.log("image:" + image.src + " loaded");
-          artwork.config.height = (image.height / image.width) * 300;
+          if (image.height < image.width) {
+            artwork.config.height = 175;
+            artwork.config.width = (image.width / image.height) * 175;
+          } else {
+            artwork.config.width = 175;
+            artwork.config.height = (image.height / image.width) * 175;
+          }
           if (artwork.type == "peinture") {
             // set image only when it is loaded
             this.wallArtworks.push(artwork);
           } else {
+            artwork.config.y = height / 2;
+            artwork.config.x = width / 2;
             this.floorArtworks.push(artwork);
           }
         };
@@ -192,40 +201,48 @@ export default {
       var x = event.target.x();
       let rightX = x + artworkWidth;
       const bottomY = y + artworkHeight;
-console.log('x='+x+",target x="+event.target.x()+",target y="+event.target.y()+', bottomy='+bottomY)
+      console.log(
+        "x=" +
+          x +
+          ",target x=" +
+          event.target.x() +
+          ",target y=" +
+          event.target.y() +
+          ", bottomy=" +
+          bottomY
+      );
       //TOP LIMIT
       if (bottomY < cornerHeight + margin) {
-        console.log('je tape le mur du haut!');
+        console.log("je tape le mur du haut!");
         event.target.y(cornerHeight + margin - artworkHeight);
       }
 
       //BOTTOM LIMIT
       if (bottomY > height) {
-        console.log('je tape la limite basse!');
+        console.log("je tape la limite basse!");
         event.target.y(height - artworkHeight);
       }
-        //LEFT LIMIT
-        if (x<0) {
-          event.target.x(0);
-          x=0;
-          rightX=artworkWidth;
-        }
-  
-        if (rightX>width) {
-          event.target.x(width-artworkWidth);
-          x=width-artworkWidth;
-          rightX=width;
-        }
+      //LEFT LIMIT
+      if (x < 0) {
+        event.target.x(0);
+        x = 0;
+        rightX = artworkWidth;
+      }
+
+      if (rightX > width) {
+        event.target.x(width - artworkWidth);
+        x = width - artworkWidth;
+        rightX = width;
+      }
       //RIGHT BORDER LIMIT
 
       if (rightX > cornerWidth) {
-        
         const floorHeight =
           cornerHeight +
           ((rightX - cornerWidth) / (width - cornerWidth)) *
             (height - cornerHeight);
         if (bottomY - margin < floorHeight) {
-           console.log('je tape la limite droite!');
+          console.log("je tape la limite droite!");
           event.target.y(floorHeight + margin - artworkHeight);
         }
       }
@@ -234,23 +251,29 @@ console.log('x='+x+",target x="+event.target.x()+",target y="+event.target.y()+'
       if (x < width - cornerWidth) {
         const floorHeight =
           cornerHeight + (x / (width - cornerWidth)) * (height - cornerHeight);
-        if (bottomY  > floorHeight) {
-           console.log('je tape la limite gôche!  x=');
-          event.target.y(floorHeight  - artworkHeight);
+        if (bottomY > floorHeight) {
+          console.log("je tape la limite gôche!  x=");
+          event.target.y(floorHeight - artworkHeight);
         }
       }
-        //TOP LIMIT
-      if (event.target.y()+artworkHeight < cornerHeight + margin) {
-        console.log('je tape le mur du haut!');
+      //TOP LIMIT
+      if (event.target.y() + artworkHeight < cornerHeight + margin) {
+        console.log("je tape le mur du haut!");
         event.target.y(cornerHeight + margin - artworkHeight);
       }
 
       //BOTTOM LIMIT
-      if (event.target.y()+artworkHeight > height) {
-        console.log('je tape la limite basse!');
+      if (event.target.y() + artworkHeight > height) {
+        console.log("je tape la limite basse!");
         event.target.y(height - artworkHeight);
       }
-
+      this.floorArtworks.push(this.floorArtworks.splice(index, 1)[0]);
+    },
+    setZindex() {
+      this.floorArtworks.forEach((artwork) => {
+        console.log("artwork " + artwork.config.y);
+      });
+      console.log("dragend");
     },
 
     fitStageIntoParentContainer() {
@@ -331,6 +354,7 @@ console.log('x='+x+",target x="+event.target.x()+",target y="+event.target.y()+'
     console.log("background plys" + this.backgroundPolys);
 
     axios.get("http://localhost/testphp/getartwork.php").then((response) => {
+    //axios.get("http://yannbaizid.fr/yann/lizellba/getartwork.php").then((response) => {
       this.disponibleImages = response.data;
       console.log(this.disponibleImages);
     });

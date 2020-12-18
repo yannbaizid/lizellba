@@ -25,6 +25,7 @@ export default {
   methods: {
     closeModal() {
       this.show = false;
+      this.$emit("newQuestionEvent");
       document.querySelector("body").classList.remove("overflow-hidden");
     },
     openModal(correct) {

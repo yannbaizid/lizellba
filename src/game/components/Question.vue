@@ -114,7 +114,7 @@ export default {
         this.selectedAnswer = {};
         this.showQuestion = false;
         this.showAnswer = true;
-        this.emitNewQuestionEvent();
+        
       }
     },
     emitNewQuestionEvent() {
