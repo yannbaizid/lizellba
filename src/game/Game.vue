@@ -1,12 +1,15 @@
 <template>
   <div id="app">
     <tuto-modal id="tuto" ref="TutoModal" />
-    <answer-modal ref="AnswerModal" v-bind:question="question" />
+    <answer-modal
+      ref="AnswerModal"
+      v-bind:question="question"
+      @newQuestionEvent="chargeQuestion()"
+    />
     <validate-modal id="validateModal" ref="ValidateModal" />
     <div id="question">
       <Question
         v-bind:question="question"
-        @newQuestionEvent="chargeQuestion()"
         @showAnswerEvent="handleShowAnswerEvent"
         ref="questionComponent"
       />
@@ -52,6 +55,7 @@ export default {
       showQuestion: false,
       question: {},
       RndmQuestionurl: "http://localhost/testphp/getquestion.php",
+      //RndmQuestionurl: "http://yannbaizid.fr/yann/lizellba/getquestion.php",
     };
   },
   methods: {
@@ -62,9 +66,6 @@ export default {
         console.log(this.question);
         this.showQuestion = false;
       });
-    },
-    click: function () {
-      this.$refs.expositionComponent.testEvent("salut je test");
     },
 
     handleShowAnswerEvent(payload) {
@@ -90,7 +91,6 @@ export default {
       console.log("on valide toussa!");
       this.$refs.ValidateModal.openModal();
     },
-
   },
 
   mounted() {
