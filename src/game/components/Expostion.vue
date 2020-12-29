@@ -9,13 +9,13 @@
       ></v-line>
     </v-layer>
     <v-layer id="wall">
-      <div v-for="(image, index) in wallArtworks" v-bind:key="image.id">
-        <v-image
-          :config="image.config"
-          @dragmove="dragMoveWall(image, index, $event)"
-        >
-        </v-image>
-      </div>
+      <v-image
+        v-for="(image, index) in wallArtworks"
+        v-bind:key="image.id"
+        :config="image.config"
+        @dragmove="dragMoveWall(image, index, $event)"
+      >
+      </v-image>
     </v-layer>
 
     <v-layer id="floor">
@@ -87,7 +87,6 @@ export default {
         var image = new Image();
         //image.src = "http://localhost/testphp/img/" + artwork.src;
         image.src = require("@/assets/img/artworks/" + artwork.src);
-   
 
         artwork.config = {
           x: width / 5,
@@ -136,6 +135,7 @@ export default {
     },
     dragMoveWall(image, index, event) {
       console.log("draging " + image.src);
+      console.log(image);
       // image.config.skewY = 0.25;
       const y = event.target.y();
       var x = event.target.x();
@@ -158,6 +158,7 @@ export default {
       //ARTWORK ON LEFT WALL
       if (x < cornerWidth - image.config.width) {
         image.config.skewY = 0;
+         event.target.skewY(0);
         if (y > cornerHeight - image.config.height) {
           event.target.y(cornerHeight - image.config.height);
         }
@@ -173,6 +174,7 @@ export default {
       //ARTWORK  ON RIGHT WALL
       if (x > cornerWidth) {
         image.config.skewY = 0.56;
+        event.target.skewY(0.56);
         console.log("partie droite" + height + "skew =" + image.config.skewY);
         if (x + image.config.width > width) {
           event.target.x(width - image.config.width);
@@ -284,8 +286,8 @@ export default {
       this.configKonva.scaleY = ratio;
       this.configKonva.width = totalWidth * ratio;
       this.configKonva.height = totalHeight * ratio;
-      this.configKonva.x = (totalWidth - width) / 2;
-      this.configKonva.y = (totalHeight - height) / 2;
+      this.configKonva.x = (totalWidth - width) / 2*ratio;
+      this.configKonva.y = (totalHeight - height) / 2*ratio;
     },
   },
   created() {},
@@ -353,8 +355,8 @@ export default {
     });
     console.log("background plys" + this.backgroundPolys);
 
-    axios.get("http://localhost/testphp/getartwork.php").then((response) => {
-    //axios.get("http://yannbaizid.fr/yann/lizellba/getartwork.php").then((response) => {
+    //axios.get("http://localhost/testphp/getartwork.php").then((response) => {
+      axios.get("http://yannbaizid.fr/yann/lizellba/getartwork.php").then((response) => {
       this.disponibleImages = response.data;
       console.log(this.disponibleImages);
     });

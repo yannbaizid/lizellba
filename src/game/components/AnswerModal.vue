@@ -3,8 +3,20 @@
     <div class="modal" v-if="show">
       <div class="modal_backdrop" @click="closeModal()" />
       <div class="modal_dialog">
-          <div v-if="this.correct==1">Bonne réponse!! </div>
-          <div> {{question.answer}}</div>
+        <div id="reponse">
+          <div>{{ question.answer }}</div>
+          <div v-if="this.correct == 1">
+            Bonne réponse!! Vous gagnez une oeuvre à placer dans l'espace
+            d'exposition
+          </div>
+          <div v-if="this.correct == 0">Mauvaise réponse!!</div>
+        </div>
+        <div id="info_link">
+          plus d'informations:
+          <a :href="question.info_link" target="_blank">{{
+            question.info_link
+          }}</a>
+        </div>
       </div>
     </div>
   </transition>
@@ -13,13 +25,13 @@
 <script>
 export default {
   name: "AnswerModal",
-   props: {
-      question: Object
+  props: {
+    question: Object,
   },
   data() {
     return {
       show: false,
-      correct: false
+      correct: false,
     };
   },
   methods: {
@@ -31,9 +43,9 @@ export default {
     openModal(correct) {
       this.show = true;
       document.querySelector("body").classList.add("overflow-hidden");
-      console.log("j'ouvre! modal! réponse correc' ="+correct);
+      console.log("j'ouvre! modal! réponse correc' =" + correct);
       console.log(this.question);
-      this.correct=correct;
+      this.correct = correct;
     },
   },
 };
@@ -67,7 +79,7 @@ export default {
     height: 600px;
     background-color: #ffffff;
     border-radius: 5px;
-    margin:  auto;
+    margin: auto;
     display: flex;
     flex-direction: column;
     z-index: 2;
@@ -75,5 +87,12 @@ export default {
       width: 90%;
     }
   }
+}
+#info_link {
+  padding: 50px 0px;
+}
+
+#reponse {
+  padding: 50px 0px;
 }
 </style>
