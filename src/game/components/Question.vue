@@ -3,10 +3,11 @@
     <div id="question_content_container" v-if="showQuestion">
       <div id="question_content_header" class="container">
         <div>Icone ici</div>
-        <div>carte {{ question.type ? question.type : "*type unknow*" }}</div>
+        <div>carte {{ question.type ? question.type.name : "*type unknow*" }}</div>
       </div>
       <div id="question_content_image" class="container">
-        <img class="app_question_image" :src="question.imglink" alt="lol" />
+        <img class="app_question_image" :src="question.imglink" alt="image loading" />
+        <div>{{question.caption}}</div>
       </div>
       <div id="question_content_question" class="container">
         {{ question.question }}
@@ -140,7 +141,7 @@ export default {
     justify-content: space-between;
   }
   &_content_container {
-    height: 100vh;
+    height: 100%;
     width: 25%;
     min-width: 400px;
     border-right: 1px solid black;
@@ -153,6 +154,7 @@ export default {
   &_container {
     display: flex;
     justify-content: flex-start;
+    height: 100%;
   }
   &_toggler {
     writing-mode: tb-rl;
@@ -166,7 +168,7 @@ export default {
     height: 100px;
     background-color: white;
     position: relative;
-    top: 300px;
+    top: 200px;
     margin-left: -1px;
 
     padding: 10px;

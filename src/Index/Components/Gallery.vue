@@ -24,8 +24,8 @@ export default {
     };
   },
   mounted() {
-       axios.get("http://localhost/testphp/getgalleryphotos.php").then((response) => {
-       //axios.get("http://yannbaizid.fr/yann/lizellba/getgalleryphotos.php").then((response) => {
+       //axios.get("http://localhost/testphp/getgalleryphotos.php").then((response) => {
+      axios.get("http://yannbaizid.fr/yann/lizellba/getgalleryphotos.php").then((response) => {
         this.photos = response.data;
         console.log(this.photos);
       });

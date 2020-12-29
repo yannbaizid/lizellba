@@ -54,8 +54,8 @@ export default {
     return {
       showQuestion: false,
       question: {},
-      RndmQuestionurl: "http://localhost/testphp/getquestion.php",
-      //RndmQuestionurl: "http://yannbaizid.fr/yann/lizellba/getquestion.php",
+      //RndmQuestionurl: "http://localhost/testphp/getquestion.php",
+      RndmQuestionurl: "http://yannbaizid.fr/yann/lizellba/getquestion.php",
     };
   },
   methods: {
@@ -105,6 +105,7 @@ export default {
   position: fixed;
   top: 0px;
   left: 0px;
+  height: 100%;
 
   z-index: 9;
 }
