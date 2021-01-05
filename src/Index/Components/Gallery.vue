@@ -35,7 +35,6 @@ export default {
   methods: {
     showPhotoModal(photo) {
       console.log("je suis gallery.vue j'essaye d'ouvrir une photomodal");
-      console.log(this.photo);
       this.$refs.PhotoModal.openModal(photo);
     },
   },
@@ -44,11 +43,14 @@ export default {
 
 <style lang="scss" scoped>
 .img_thumbnail {
-    width: 30%;
+    width: 300px;
+    max-width: 30%;
 }
 
 .gallery_img {
   width:100%;
+  border-radius: 5%;
+
 }
 
 #gallery {
