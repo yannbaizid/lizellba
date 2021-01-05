@@ -3,8 +3,9 @@
     <modal ref="TutoModal" id="tuto_modal"
      :initialState=true
     @closeModalEvent="handleCloseModalEvent" >
-      <div>{{ index + 1 }}/{{ tutoSteps.length }}</div>
-      <div>{{ tutoSteps[index] }}</div>
+    <div  class="modal_container">
+      <div >{{ index + 1 }}/{{ tutoSteps.length }}</div>
+      <div class="bold">{{ tutoSteps[index] }}</div>
       <div class="flexbox_row flexbox_justifycenter">
         <div v-if="index > 0" @click="index--">
           <app-icon type="<" />
@@ -17,6 +18,7 @@
           <app-icon type=">" />
         </div>
       </div>
+    </div>
     </modal>
   </div>
 </template>

@@ -1,14 +1,16 @@
 <template>
-  <div id="gallery_container">
+<div id="gallery">
     <photo-modal ref="PhotoModal" />
-    <div
+  <div id="gallery_container">
+    <div class="img_thumbnail "
       v-for="(photo, index) in photos"
       :key="index"
       @click="showPhotoModal(photo)"
     >
-    <img class="img_thumbnail "  :src="require('@/assets/img/photo/'+photo.img_name)" :alt="photo.img_name">
+    <img class="gallery_img"  :src="require('@/assets/img/photo/'+photo.img_name)" :alt="photo.img_name">
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -42,7 +44,11 @@ export default {
 
 <style lang="scss" scoped>
 .img_thumbnail {
-    max-width: 90%;
+    width: 30%;
+}
+
+.gallery_img {
+  width:100%;
 }
 
 #gallery {

@@ -71,4 +71,35 @@ a {
   display: inline-block;
   margin: auto;
 }
+
+.modal_container {
+  width: 80%;
+  height: 100%;
+  margin: 0px auto 40px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+&_text {
+  margin: auto;
+}
+}
+
+.bold {
+ font-weight: bold;
+}
+
+input {
+  margin: 0px 0px 2em 0px;
+  width: 100%;
+  border-radius: 5px;
+  height: 2em;
+  border: 1px solid;
+}
+
+
+.input_long {
+  width: 100%;
+  text-align: start;
+}
 </style>

@@ -3,11 +3,17 @@
     <div id="question_content_container" v-if="showQuestion">
       <div id="question_content_header" class="container">
         <div>Icone ici</div>
-        <div>carte {{ question.type ? question.type.name : "*type unknow*" }}</div>
+        <div>
+          carte {{ question.type ? question.type.name : "*type unknow*" }}
+        </div>
       </div>
       <div id="question_content_image" class="container">
-        <img class="app_question_image" :src="question.imglink" alt="image loading" />
-        <div>{{question.caption}}</div>
+        <img
+          class="app_question_image"
+          :src="question.imglink"
+          alt="image loading"
+        />
+        <div>{{ question.caption }}</div>
       </div>
       <div id="question_content_question" class="container">
         {{ question.question }}
@@ -42,40 +48,6 @@
         />
       </div>
     </div>
-
-    <!--
-    <div id="question_content_container" v-if="showQuestion">
-      <div id="question_emptyset" v-if="!question">
-        SALUT LES BRANGOLOS
-        <div>a tout de suite pour dé question</div>
-      </div>
-      <div class="row">
-        <div class="columns small-6">
-          <div class="card">
-            <div class="card-divider">
-              {{ question.question }}
-            </div>
-
-            <div class="card-section">
-              <ul>
-                <li v-for="answer in question.answers" :key="answer.id">
-                  <div
-                    class="hollow button"
-                    @click="verifyAnswer(answer.correct)"
-                  >
-                    {{ answer.text }} {{ answer.correct }}
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <img class="app_question_image" :src="question.imglink" alt="lol" />
-          </div>
-        </div>
-
-      </div>
-
-    </div> 
-    -->
     <div id="question_toggler" @click="toggleQuestion()" class="flexbox_row">
       <app-icon :size="20" v-bind:type="showQuestion ? '>' : '<'" />
       QUIZZ
@@ -115,7 +87,6 @@ export default {
         this.selectedAnswer = {};
         this.showQuestion = false;
         this.showAnswer = true;
-        
       }
     },
     emitNewQuestionEvent() {
