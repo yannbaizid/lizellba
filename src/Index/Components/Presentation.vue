@@ -118,7 +118,9 @@ h3 {
 }
 
 .text_column {
+width: 40%;
 max-width: 600px;
+
   padding: 20px;
   text-align: left;
 }

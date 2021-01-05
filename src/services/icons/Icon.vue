@@ -8,7 +8,7 @@
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle cx="19.5" cy="19.5" r="19" fill="white" stroke="black" />
+      <circle v-if="circle" cx="19.5" cy="19.5" r="19" fill="white" stroke="black" />
 
       <!-- ICON "X" -->
       <g v-if="type == 'x'">
@@ -140,6 +140,10 @@ export default {
     size: {
       type: Number,
       default: 39,
+    },
+    circle: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
