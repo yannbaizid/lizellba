@@ -1,9 +1,9 @@
 <template>
   <div id="question_container">
     <div id="question_content_container" v-if="showQuestion">
-      <div id="question_content_header" class="container">
-        <div>Icone ici</div>
-        <div>
+      <div id="question_content_header" class="container" :class="question.type.name">
+        <div><question-icon :type="question.type.name"/></div>
+        <div >
           carte {{ question.type ? question.type.name : "*type unknow*" }}
         </div>
       </div>
@@ -67,8 +67,9 @@
 <script>
 import AppButton from "../../services/AppButton.vue";
 import AppIcon from "../../services/icons/Icon.vue";
+import QuestionIcon from '../../services/icons/QuestionIcon.vue';
 export default {
-  components: { AppIcon, AppButton },
+  components: { AppIcon, AppButton, QuestionIcon },
   name: "Question",
   props: {
     question: Object,
@@ -177,5 +178,17 @@ overflow: auto;
 
 .caption {
   font-size: smaller;
+}
+
+.question {
+color: #50BCBD;
+}
+
+.texte {
+color:  #692F88;
+}
+
+.icone {
+color: #004F91;
 }
 </style>
