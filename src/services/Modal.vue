@@ -1,6 +1,6 @@
 <template>
   <div class="modal" v-if="show">
-    <div class="modal_backdrop" />
+    <div class="modal_backdrop"  @click="closeModal()"/>
     <div class="modal_dialog">
       <div @click="closeModal()" class="modal_close">
         <app-icon type="x" :circle="false" class="modal_close_icon" />

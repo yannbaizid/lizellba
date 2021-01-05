@@ -3,21 +3,24 @@
     <div class="modal" v-if="show">
       <div class="modal_backdrop" @click="closeModal()" />
       <div class="modal_dialog">
-
-
-          <app-icon  id="close_icon" v-bind:type="'x'" class="align_right" @click.native="closeModal()" />
-
-        <img
-          class="modal_img"
-          :src="require('@/assets/img/photo/' + photo.img_name)"
-          :alt="photo.img_name"
+        <app-icon
+          id="close_icon"
+          v-bind:type="'x'"
+          :circle="false"
+          class="align_right"
+          @click.native="closeModal()"
         />
-        <div id="exposition_description">
-          <div id="exposition_author">{{photo.author_name}}</div>
-          {{photo.expo_name}}
-
+        <div class="flexbox_col flexbox_spacebetween flexbox_alignstart h_100">
+          <img
+            class="img_rnd"
+            :src="require('@/assets/img/photo/' + photo.img_name)"
+            :alt="photo.img_name"
+          />
+          <div id="exposition_description">
+            <div id="exposition_author">{{ photo.author_name }}</div>
+            <div id="exposition_name">{{ photo.expo_name }}</div>
+          </div>
         </div>
-
       </div>
     </div>
     :src=
@@ -62,9 +65,6 @@ export default {
   z-index: 9;
   overflow-x: hidden;
   overflow-y: auto;
-  &_img {
-    padding: 0px 20px;
-  }
 
   &_backdrop {
     position: fixed;
@@ -83,8 +83,8 @@ export default {
     display: flex;
     flex-direction: column;
     z-index: 2;
-    height: 645px;
-    padding: 10px;
+   // height: 645px;
+    padding: 0px;
     @media screen and (max-width: 992px) {
       width: 90%;
     }
@@ -92,13 +92,25 @@ export default {
 }
 
 #exposition_description {
-  position: absolute;
-  bottom: 0px;
-  left : 0px;
-  padding: 10px 30px 50px 30px;
+  //position: absolute;
+ // bottom: 0px;
+ // left: 0px;
+ margin: 20px 0px 20px 20px;
+
 }
 #exposition_author {
   border: 1px solid black;
-  padding: 10px;
+  padding: 5px;
+
+}
+#exposition_name {
+  font-style: italic;
+  padding: 5px;
+
+}
+.img_rnd {
+  border-radius: 5%;
+  padding: 0px 20px;
+  width: 90%;
 }
 </style>

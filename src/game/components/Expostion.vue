@@ -1,5 +1,5 @@
 <template>
-  <v-stage :config="configKonva">
+  <v-stage :config="configKonva" ref="stage">
     <v-layer id="background">
       <v-line
         v-for="(poly, index) in backgroundPolys"
@@ -27,7 +27,12 @@
         @dragend="setZindex()"
       ></v-image>
     </v-layer>
+    <v-layer  id="watermark">
+      <v-image ref="watermark" :config="watermark"> </v-image>
+    </v-layer>
+    
   </v-stage>
+  
 </template>
 
 <script>
@@ -60,6 +65,8 @@ export default {
       backgroundPolys: [],
       width: width,
       height: height,
+      watermark: {},
+
     };
   },
   computed: {
@@ -158,7 +165,7 @@ export default {
       //ARTWORK ON LEFT WALL
       if (x < cornerWidth - image.config.width) {
         image.config.skewY = 0;
-         event.target.skewY(0);
+        event.target.skewY(0);
         if (y > cornerHeight - image.config.height) {
           event.target.y(cornerHeight - image.config.height);
         }
@@ -286,8 +293,37 @@ export default {
       this.configKonva.scaleY = ratio;
       this.configKonva.width = totalWidth * ratio;
       this.configKonva.height = totalHeight * ratio;
-      this.configKonva.x = (totalWidth - width) / 2*ratio;
-      this.configKonva.y = (totalHeight - height) / 2*ratio;
+      this.configKonva.x = ((totalWidth - width) / 2) * ratio;
+      this.configKonva.y = ((totalHeight - height) / 2) * ratio;
+    },
+    saveExpoImage() {
+
+       //this.watermark.opacity=1;
+       
+      //this.$refs.stage.getNode().draw();
+     this.$refs.watermark.getNode().opacity(1);
+      this.$refs.watermark.getNode().draw();
+      const pixelRatio = totalWidth / this.$refs.stage.getNode().width();
+     // this.$refs.stage.getNode().draw();
+      var dataURL = this.$refs.stage.getNode().toDataURL({
+        mimeType: "image/jpeg",
+        pixelRatio: pixelRatio,
+        quality: 1,
+      });
+
+      axios
+        .post("http://localhost/testphp/testphpinput.php", {
+          image: dataURL,
+          curatorName: "jeanclaude",
+        })
+        .then(function (data) {
+          console.log(data.data);
+        })
+
+        .catch(function () {
+          console.log("FAILURE!!");
+        });
+      //this.downloadURI(dataURL, 'stage.jpg');*/
     },
   },
   created() {},
@@ -299,11 +335,35 @@ export default {
     //initialize background
     //add backgound:
     this.backgroundPolys.push({
-      points: [-5, -5, width + 5, -5, width + 5, height + 5, -5, height + 5],
+      points: [
+        -100,
+        -100,
+        width + 100,
+        -500,
+        width + 100,
+        height + 100,
+        -100,
+        height + 100,
+      ],
       fill: "#E5E5E5",
       closed: true,
     });
 
+    //add floor
+    this.backgroundPolys.push({
+      points: [
+        cornerWidth,
+        cornerHeight,
+        width,
+        height,
+        width - cornerWidth,
+        height,
+        0,
+        cornerHeight,
+      ],
+      fill: "#949494",
+      closed: true,
+    });
     //add wall:
 
     //RIGHT WALL
@@ -338,28 +398,36 @@ export default {
       closed: true,
     });
 
-    //add floor
-    this.backgroundPolys.push({
-      points: [
-        cornerWidth,
-        cornerHeight,
-        width,
-        height,
-        width - cornerWidth,
-        height,
-        0,
-        cornerHeight,
-      ],
-      fill: "#949494",
-      closed: true,
-    });
-    console.log("background plys" + this.backgroundPolys);
+    //INIT WATERMARK
 
+    var image = new Image();
+    image.src = require("@/assets/watermark.png");
+
+    this.watermark = {
+      x: 50,
+      y: height - 270,
+      image: image,
+      width: 300,
+      height: 300,
+      opacity: 1,
+    };
+
+    image.onload = () => {
+      console.log("watermark loeaded");
+      this.watermark.opacity=0;
+      this.showWaterMark=false;
+      
+      this.$refs.stage.getNode().draw();
+    };
+
+    //LOAD images from DB
     //axios.get("http://localhost/testphp/getartwork.php").then((response) => {
-      axios.get("http://yannbaizid.fr/yann/lizellba/getartwork.php").then((response) => {
-      this.disponibleImages = response.data;
-      console.log(this.disponibleImages);
-    });
+    axios
+      .get("http://yannbaizid.fr/yann/lizellba/getartwork.php")
+      .then((response) => {
+        this.disponibleImages = response.data;
+        console.log(this.disponibleImages);
+      });
   },
 };
 </script>

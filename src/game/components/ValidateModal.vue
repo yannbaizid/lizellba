@@ -79,6 +79,7 @@ export default {
     handleCloseModalEvent() {
       this.currentStep = 1;
       console.log("handleclosemodalevent");
+
     },
     validate() {
       if (!(this.curatorName && this.expoName)) {
@@ -90,6 +91,9 @@ export default {
           this.currentStep++;
         } else if (this.currentStep == 2) {
           alert("et hop, cest validé");
+          this.$emit('validateExpoEvent');
+           this.$refs.ValidateModal.closeModal();
+           this.$router.push({ name: 'Home'});
         }
       }
     },

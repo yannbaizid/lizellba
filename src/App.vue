@@ -74,6 +74,12 @@ a {
   &_spacearound {
     justify-content: space-around;
   }
+  &_spacebetween {
+    justify-content: space-between;
+  }
+  &_alignstart {
+    align-items: flex-start;
+  }
 }
 .container {
   width: 90%;
@@ -98,6 +104,9 @@ a {
  font-weight: bold;
 }
 
+.h_100 {
+  height: 100%;
+}
 
 .valign_middle {
   vertical-align: middle;

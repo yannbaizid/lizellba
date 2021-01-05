@@ -6,7 +6,8 @@
       v-bind:question="question"
       @newQuestionEvent="chargeQuestion()"
     />
-    <validate-modal id="validateModal" ref="ValidateModal" />
+    <validate-modal id="validateModal" ref="ValidateModal" 
+    @validateExpoEvent="handleValidateExpoEvent"/>
     <div id="question">
       <Question
         v-bind:question="question"
@@ -69,6 +70,12 @@ export default {
         this.showQuestion = false;
       });
     },
+    handleValidateExpoEvent() {
+      console.log('game.vue, handleValidateExpo');
+      this.$refs.expositionComponent.saveExpoImage();
+
+    }
+  ,
 
     handleShowAnswerEvent(payload) {
       console.log(
