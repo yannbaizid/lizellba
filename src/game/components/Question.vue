@@ -7,13 +7,15 @@
           carte {{ question.type ? question.type.name : "*type unknow*" }}
         </div>
       </div>
-      <div id="question_content_image" class="container">
-        <img
-          class="app_question_image"
-          :src="question.imglink"
-          alt="image loading"
-        />
-        <div>{{ question.caption }}</div>
+      <div class="container">
+      
+          <img  id="question_content_image"
+            class="app_question_image"
+            :src="question.imglink"
+            alt="image loading"
+          />
+
+        <div class="caption">{{ question.caption }}</div>
       </div>
       <div id="question_content_question" class="container">
         {{ question.question }}
@@ -26,13 +28,16 @@
           :key="index"
           class="question_content_answer flexbox_row"
         >
-          <input
-            type="radio"
-            :id="answer.id"
-            name="drone"
-            :value="answer.correct"
-            :checked="selectedAnswer.id == answer.id"
-          />
+          <div class="flexbox_col flexbox_spacearound">
+            <input
+              class="align_left"
+              type="radio"
+              :id="answer.id"
+              name="drone"
+              :value="answer.correct"
+              :checked="selectedAnswer.id == answer.id"
+            />
+          </div>
           <div>{{ answer.text }} {{ answer.correct }}</div>
         </div>
       </div>
@@ -48,7 +53,11 @@
         />
       </div>
     </div>
-    <div id="question_toggler" @click="toggleQuestion()" class="flexbox_row">
+    <div
+      id="question_toggler"
+      @click="toggleQuestion()"
+      class="flexbox_row flexbox_spacearound"
+    >
       <app-icon :size="20" v-bind:type="showQuestion ? '>' : '<'" />
       QUIZZ
     </div>
@@ -111,21 +120,30 @@ export default {
     flex-direction: row;
     justify-content: space-between;
   }
+  &_content_image {
+    width: 100%;
+    height: 200px;
+    background-color: #F4F4F4;
+    object-fit: contain;
+  }
   &_content_container {
     height: 100%;
     width: 25%;
     min-width: 400px;
+    max-width: 100%;
     border-right: 1px solid black;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     background-color: white;
     text-align: left;
+overflow: auto;
   }
   &_container {
     display: flex;
     justify-content: flex-start;
     height: 100%;
+ 
   }
   &_toggler {
     writing-mode: tb-rl;
@@ -151,11 +169,13 @@ export default {
 .question_content_answer {
   padding: 10px 0px;
 }
-.app_question_image {
-  max-width: 150px;
-}
+
 .disabled {
   background-color: lightgray;
   cursor: default;
+}
+
+.caption {
+  font-size: smaller;
 }
 </style>

@@ -62,8 +62,17 @@ a {
     flex-direction: row;
      align-items: center;
   }
+ &_col {
+      display: flex;
+    flex-direction: column;
+     align-items: center;
+  }
+
   &_justifycenter {
     justify-content: center;
+  }
+  &_spacearound {
+    justify-content: space-around;
   }
 }
 .container {
@@ -89,17 +98,12 @@ a {
  font-weight: bold;
 }
 
-input {
-  margin: 0px 0px 2em 0px;
-  width: 100%;
-  border-radius: 5px;
-  height: 2em;
-  border: 1px solid;
+
+.valign_middle {
+  vertical-align: middle;
 }
 
-
-.input_long {
-  width: 100%;
-  text-align: start;
+.inlineblock {
+  display: inline-block;
 }
 </style>

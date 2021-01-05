@@ -75,9 +75,11 @@ export default {
     background-color: #ffffff;
     border-radius: 2px;
     padding: 0px;
+    padding-bottom: 40px;
     display: flex;
     flex-direction: column;
     z-index: 2;
+
 
     @media screen and (max-width: 900px) {
       width: 80%;

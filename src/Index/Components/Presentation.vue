@@ -58,7 +58,7 @@
         </defs>
       </svg>
     </div>
-    <h3>
+    <h3 id="presentation_subtitle">
       Aujourd'hui vous êtes commissaire d'exposition pour La Criée, centre d'art
       contemporain à Rennes !
     </h3>
@@ -96,14 +96,25 @@ export default {
 #presentation {
   //height: 90vh;
   width: 100%;
+  background-image: url('../../assets/logo_bg.png') ;
+  background-size: 100%;
+  background-repeat: no-repeat;
   &_logo {
     height: 100%;
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: bottom;
     &_container {
-      height: 500px;
+
+      padding-top: 222px;
+      
     }
   }
+  &_subtitle {
+    width: 546px;
+    max-width: 60%;
+    margin: auto;
+  }
+
 }
 h3 {
   padding: 50px 0px;

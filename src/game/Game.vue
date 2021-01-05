@@ -16,8 +16,10 @@
     </div>
 
     <Exposition ref="expositionComponent" id="exposition" />
-
-    <router-link to="/" id="btn_close">
+   <!-- <div id="btn_close" @click="closeGame">
+      <app-icon type="x" />
+    </div>-->
+   <router-link to="/" id="btn_close">
       <app-icon type="x" />
     </router-link>
     <div id="btn_tuto" @click="openTutoModal()">
