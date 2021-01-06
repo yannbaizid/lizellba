@@ -79,8 +79,8 @@ export default {
       const expoName=data.expoName;
       const imgURL=this.$refs.expositionComponent.saveExpoImage();
       console.log('curator name:'+curatorName + " exponame:" + expoName);
+
       //Send data to php
-      
         axios
         .post("http://localhost/testphp/testphpinput.php", {
           image: imgURL,
@@ -88,11 +88,11 @@ export default {
           expoName: expoName
         })
         .then(function (data) {
-          console.log(data.data);
+          console.log(data);
         })
 
         .catch(function () {
-          console.log("FAILURE!!");
+          console.log("FAILURE to save!!");
         });
     },
     handleShowAnswerEvent(payload) {
