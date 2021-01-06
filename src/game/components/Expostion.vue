@@ -27,12 +27,10 @@
         @dragend="setZindex()"
       ></v-image>
     </v-layer>
-    <v-layer  id="watermark">
+    <v-layer id="watermark">
       <v-image ref="watermark" :config="watermark"> </v-image>
     </v-layer>
-    
   </v-stage>
-  
 </template>
 
 <script>
@@ -66,7 +64,6 @@ export default {
       width: width,
       height: height,
       watermark: {},
-
     };
   },
   computed: {
@@ -296,34 +293,17 @@ export default {
       this.configKonva.x = ((totalWidth - width) / 2) * ratio;
       this.configKonva.y = ((totalHeight - height) / 2) * ratio;
     },
-    saveExpoImage() {
-
-       //this.watermark.opacity=1;
-       
-      //this.$refs.stage.getNode().draw();
-     this.$refs.watermark.getNode().opacity(1);
+    returnExpoImage() {
+      this.$refs.watermark.getNode().opacity(1);
       this.$refs.watermark.getNode().draw();
       const pixelRatio = totalWidth / this.$refs.stage.getNode().width();
-     // this.$refs.stage.getNode().draw();
-      var dataURL = this.$refs.stage.getNode().toDataURL({
+
+      var imgURL = this.$refs.stage.getNode().toDataURL({
         mimeType: "image/jpeg",
         pixelRatio: pixelRatio,
         quality: 1,
       });
-
-      axios
-        .post("http://localhost/testphp/testphpinput.php", {
-          image: dataURL,
-          curatorName: "jeanclaude",
-        })
-        .then(function (data) {
-          console.log(data.data);
-        })
-
-        .catch(function () {
-          console.log("FAILURE!!");
-        });
-      //this.downloadURI(dataURL, 'stage.jpg');*/
+      return imgURL;
     },
   },
   created() {},
@@ -414,9 +394,9 @@ export default {
 
     image.onload = () => {
       console.log("watermark loeaded");
-      this.watermark.opacity=0;
-      this.showWaterMark=false;
-      
+      this.watermark.opacity = 0;
+      this.showWaterMark = false;
+
       this.$refs.stage.getNode().draw();
     };
 
