@@ -6,8 +6,11 @@
       v-bind:question="question"
       @newQuestionEvent="chargeQuestion()"
     />
-    <validate-modal id="validateModal" ref="ValidateModal" 
-    @validateExpoEvent="handleValidateExpoEvent"/>
+    <validate-modal
+      id="validateModal"
+      ref="ValidateModal"
+      @validateExpoEvent="handleValidateExpoEvent"
+    />
     <div id="question">
       <Question
         v-bind:question="question"
@@ -17,10 +20,10 @@
     </div>
 
     <Exposition ref="expositionComponent" id="exposition" />
-   <!-- <div id="btn_close" @click="closeGame">
+    <!-- <div id="btn_close" @click="closeGame">
       <app-icon type="x" />
     </div>-->
-   <router-link to="/" id="btn_close">
+    <router-link to="/" id="btn_close">
       <app-icon type="x" />
     </router-link>
     <div id="btn_tuto" @click="openTutoModal()">
@@ -70,13 +73,28 @@ export default {
         this.showQuestion = false;
       });
     },
-    handleValidateExpoEvent() {
-      console.log('game.vue, handleValidateExpo');
-      this.$refs.expositionComponent.saveExpoImage();
+    handleValidateExpoEvent(data) {
+      console.log("game.vue, handleValidateExpo");
+      const curatorName=data.curatorName;
+      const expoName=data.expoName;
+      const imgURL=this.$refs.expositionComponent.saveExpoImage();
+      console.log('curator name:'+curatorName + " exponame:" + expoName);
+      //Send data to php
+      
+        axios
+        .post("http://localhost/testphp/testphpinput.php", {
+          image: imgURL,
+          curatorName: curatorName,
+          expoName: expoName
+        })
+        .then(function (data) {
+          console.log(data.data);
+        })
 
-    }
-  ,
-
+        .catch(function () {
+          console.log("FAILURE!!");
+        });
+    },
     handleShowAnswerEvent(payload) {
       console.log(
         "handleShowAnswerEvent in app.vue, correct=" + payload.correct

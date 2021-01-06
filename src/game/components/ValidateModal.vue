@@ -91,7 +91,8 @@ export default {
           this.currentStep++;
         } else if (this.currentStep == 2) {
           alert("et hop, cest validé");
-          this.$emit('validateExpoEvent');
+          
+          this.$emit('validateExpoEvent',{curatorName: this.curatorName, expoName: this.expoName});
            this.$refs.ValidateModal.closeModal();
            this.$router.push({ name: 'Home'});
         }
