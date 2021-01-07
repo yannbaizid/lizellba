@@ -37,7 +37,7 @@
 import axios from "axios";
 const totalWidth = 1920;
 const totalHeight = 1080;
-const relativeSizeOfContent = 0.95;
+const relativeSizeOfContent = 0.90;
 let height = totalHeight * relativeSizeOfContent;
 let width = totalWidth * relativeSizeOfContent;
 let heightRatio = window.innerHeight / height;
@@ -45,6 +45,9 @@ let widthRatio = window.innerWidth / width;
 let ratio = Math.min(heightRatio, widthRatio);
 const cornerHeight = (2 * height) / 3;
 const cornerWidth = (2 * width) / 3;
+const thickness = 20;
+
+    const angle = Math.atan((height - cornerHeight) / (width - cornerWidth));
 
 export default {
   name: "Exposition",
@@ -329,6 +332,53 @@ export default {
       closed: true,
     });
 
+    const smallWidth = thickness * Math.cos(angle);
+    const smallHeight = thickness * Math.sin(angle);
+    //greyer thickness:
+    this.backgroundPolys.push({
+      points: [
+        width,
+        height,
+        width + thickness,
+        height,
+        width + thickness,
+        height + thickness,
+        width - cornerWidth,height + thickness,
+        -smallWidth,cornerHeight-smallHeight+thickness,
+        -smallWidth,cornerHeight-smallHeight,
+        0,cornerHeight
+      ],
+      fill: "#8d8d8d",
+      closed: true,
+    });
+    //white ackgound:
+    this.backgroundPolys.push({
+      points: [
+        width,
+        height,
+        width + thickness,
+        height,
+        width + thickness,
+        height - cornerHeight,
+        cornerWidth-smallWidth+thickness,-smallHeight,
+        -smallWidth,-smallHeight,
+        0,0
+      ],
+      fill: "#ffffff",
+      closed: true,
+    });
+    //grey thickness:
+    this.backgroundPolys.push({
+      points: [
+        -smallWidth,-smallHeight,
+        0,0,
+        0,cornerHeight,
+        -smallWidth,cornerHeight-smallHeight,
+
+      ],
+      fill: "#f2f2f2",
+      closed: true,
+    });
     //add floor
     this.backgroundPolys.push({
       points: [
