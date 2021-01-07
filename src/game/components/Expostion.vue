@@ -206,61 +206,56 @@ export default {
       const margin = 50;
       const artworkHeight = image.config.height;
       const artworkWidth = image.config.width;
-      const y = event.target.y();
-      var x = event.target.x();
-      let rightX = x + artworkWidth;
-      const bottomY = y + artworkHeight;
-      console.log(
-        "x=" +
-          x +
-          ",target x=" +
-          event.target.x() +
-          ",target y=" +
-          event.target.y() +
-          ", bottomy=" +
-          bottomY
-      );
+     
+      
+  
       //TOP LIMIT
-      if (bottomY < cornerHeight + margin) {
+      if (event.target.y()+artworkHeight < cornerHeight + margin) {
         console.log("je tape le mur du haut!");
         event.target.y(cornerHeight + margin - artworkHeight);
       }
 
       //BOTTOM LIMIT
-      if (bottomY > height) {
+      if (event.target.y()+artworkHeight  > height) {
         console.log("je tape la limite basse!");
         event.target.y(height - artworkHeight);
       }
       //LEFT LIMIT
-      if (x < 0) {
+      if (event.target.x() < 0) {
         event.target.x(0);
-        x = 0;
-        rightX = artworkWidth;
+  
       }
 
-      if (rightX > width) {
+      if (event.target.x()+ artworkWidth > width) {
         event.target.x(width - artworkWidth);
-        x = width - artworkWidth;
-        rightX = width;
       }
       //RIGHT BORDER LIMIT
 
-      if (rightX > cornerWidth) {
+      if (event.target.x()+ artworkWidth > cornerWidth) {
         const floorHeight =
           cornerHeight +
-          ((rightX - cornerWidth) / (width - cornerWidth)) *
+          ((event.target.x()+ artworkWidth - cornerWidth) / (width - cornerWidth)) *
             (height - cornerHeight);
-        if (bottomY - margin < floorHeight) {
+        if (event.target.y()+artworkHeight  - margin < floorHeight) {
           console.log("je tape la limite droite!");
           event.target.y(floorHeight + margin - artworkHeight);
         }
       }
 
       //LEFT BORDER LIMIT
-      if (x < width - cornerWidth) {
+      const floorWidth = ((event.target.y()+artworkHeight-cornerHeight)/(height-cornerHeight))*(width-cornerWidth);
+      if (event.target.x()<floorWidth) {
+        event.target.x(floorWidth);
+      }
+      /*
+      if (event.target.x()< width - cornerWidth) {
+
+
+
+
         const floorHeight =
-          cornerHeight + (x / (width - cornerWidth)) * (height - cornerHeight);
-        if (bottomY > floorHeight) {
+          cornerHeight + (event.target.x() / (width - cornerWidth)) * (height - cornerHeight);
+        if (event.target.y()+artworkHeight  > floorHeight) {
           console.log("je tape la limite gôche!  x=");
           event.target.y(floorHeight - artworkHeight);
         }
@@ -269,7 +264,7 @@ export default {
       if (event.target.y() + artworkHeight < cornerHeight + margin) {
         console.log("je tape le mur du haut!");
         event.target.y(cornerHeight + margin - artworkHeight);
-      }
+      }*/
 
       //BOTTOM LIMIT
       if (event.target.y() + artworkHeight > height) {
