@@ -43,7 +43,9 @@ a {
   text-decoration: none;
   color: inherit;
 }
-
+.text_align_left {
+  text-align: left;
+}
 .align {
   display: inline-block;
   &_right {
@@ -115,4 +117,9 @@ a {
 .inlineblock {
   display: inline-block;
 }
+
+.caption {
+  font-size: smaller;
+}
+
 </style>

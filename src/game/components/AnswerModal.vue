@@ -1,29 +1,56 @@
 <template>
   <transition name="fade">
-    <div class="modal" v-if="show">
-      <div class="modal_backdrop" @click="closeModal()" />
-      <div class="modal_dialog">
-        <div id="reponse">
-          <div>{{ question.answer }}</div>
-          <div v-if="this.correct == 1">
-            Bonne réponse!! Vous gagnez une oeuvre à placer dans l'espace
-            d'exposition
+    <modal
+      ref="AnswerModal"
+      id="answer_modal"
+      @closeModalEvent="handleCloseModalEvent"
+    >
+      <div class="flexbox flexbox_row">
+        <div class="answer_panel_left">
+          <img
+            id="answer_image"
+            class="answer_image"
+            :src="question.imglink"
+            alt="image loading"
+          />
+          <div class="caption">
+            {{ question.caption }}
           </div>
-          <div v-if="this.correct == 0">Mauvaise réponse!!</div>
         </div>
-        <div id="info_link">
-          plus d'informations:
-          <a :href="question.info_link" target="_blank">{{
-            question.info_link
-          }}</a>
+        <div class="answer_panel_right text_align_left ">
+          <div id="reponse ">
+            <div class="bold" v-if="this.correct == 1">
+              Bonne réponse!<br />Tu as gagné une oeuvre à placer dans ton
+              espace d'exposition!
+            </div>
+            <div class="bold" v-if="this.correct == 0">
+              Mauvaise réponse!<br />Ne te décourage pas, essaye encore!
+            </div>
+          </div>
+          <!--         <div v-for="answer in question.answers" :key="answer.id">
+              <div v-if="answer.correct==1">{{answer.text}}</div>
+            </div>
+ -->
+          <div>{{ question.answer }}</div>
+          <div id="info_link">
+            <a id="answer_link" :href="question.info_link" target="_blank">
+              lien vers le site de La Criée</a
+            >
+          </div>
+          <div @click="$refs.AnswerModal.closeModal()">
+            <app-button message="Placer l'oeuvre" />
+          </div>
         </div>
       </div>
-    </div>
+    </modal>
   </transition>
 </template>
 
 <script>
+import AppButton from '../../services/AppButton.vue';
+import Modal from "../../services/Modal.vue";
 export default {
+  components: { Modal, AppButton },
   name: "AnswerModal",
   props: {
     question: Object,
@@ -41,58 +68,44 @@ export default {
       document.querySelector("body").classList.remove("overflow-hidden");
     },
     openModal(correct) {
-      this.show = true;
-      document.querySelector("body").classList.add("overflow-hidden");
+      this.$refs.AnswerModal.openModal();
+
       console.log("j'ouvre! modal! réponse correc' =" + correct);
       console.log(this.question);
       this.correct = correct;
     },
+    handleCloseModalEvent() {
+      this.closeModal();
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.modal {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 10;
-  overflow-x: hidden;
-  overflow-y: auto;
-  display: flex;
-  align-items: center;
-
-  &_backdrop {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: 1;
-  }
-  &_dialog {
-    position: relative;
-    width: 800px;
-    height: 600px;
-    background-color: #ffffff;
-    border-radius: 5px;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    z-index: 2;
-    @media screen and (max-width: 992px) {
-      width: 90%;
-    }
-  }
-}
 #info_link {
-  padding: 50px 0px;
+  padding: 0px;
 }
 
 #reponse {
-  padding: 50px 0px;
+  padding:  0px;
+}
+
+.answer_panel_right {
+  width: 50%;
+  padding: 20px;
+}
+.answer_panel_left {
+  width: 40%;
+  padding: 20px;
+}
+
+#answer_link {
+  text-decoration: underline;
+}
+.answer_image {
+  width: 100%;
+  height: 400px;
+  background-color: #f4f4f4;
+  object-fit: contain;
 }
 </style>
