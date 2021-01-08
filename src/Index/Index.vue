@@ -2,13 +2,13 @@
   <div id="index_container">
     <div id="index_presentation">
       <presentation />
-      Gallerie
+      
     </div>
     <div id="gallery">
       <gallery />
     </div>
     <div id="index_footer" class="align_left"> 
-      <div id="typo_credits">
+      <div id="typo_credits font_size_small">
       Crédit typographique pour le logo Lizellba : Jocelyn Cottencin
       </div>
     </div>

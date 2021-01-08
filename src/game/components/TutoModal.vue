@@ -7,13 +7,16 @@
       <div >{{ index + 1 }}/{{ tutoSteps.length }}</div>
       <div class="bold">{{ tutoSteps[index] }}</div>
       <div class="flexbox_row flexbox_justifycenter">
-        <div v-if="index > 0" @click="index--">
+        <div v-if="index == tutoSteps.length - 1" @click="closeModal()">
+          <app-button :message="!visited? 'Commencer le jeu' : 'Retour au jeu'" />
+        </div>
+        <div v-if="index > 0 && index <tutoSteps.length - 1" @click="index--" class="align_left">
           <app-icon type="<" />
         </div>
         <div
           v-if="index < tutoSteps.length - 1"
           @click="index++"
-          class="tuto_arrow"
+          class="tuto_arrow align_right"
         >
           <app-icon type=">" />
         </div>
@@ -25,15 +28,16 @@
 
 <script>
 import AppIcon from "../../services/icons/Icon.vue";
-
+import AppButton from "../../services/AppButton";
 import Modal from "../../services/Modal.vue";
 export default {
-  components: { Modal, AppIcon },
+  components: { Modal, AppIcon, AppButton },
   name: "TutoModal",
   data() {
     return {
       tutoSteps: [],
       index: 0,
+      visited: false,
     };
   },
   mounted() {
@@ -47,12 +51,16 @@ export default {
   methods: {
 
     openModal() {
-      console.log("Open da shit");
+      console.log("Open da shit "+this.visited);
       this.$refs.TutoModal.openModal();
     },
     handleCloseModalEvent() {
-        console.log('handleclosemodalevent');
+        console.log('handleclosemodalevent, '+this.visited);
         this.index=0;
+        this.visited=true;
+    },
+    closeModal() {
+      this.$refs.TutoModal.closeModal();
     }
   },
 };

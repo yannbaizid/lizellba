@@ -26,6 +26,8 @@ export default {
   display: inline-block;
   &:hover {
     cursor: pointer;
+    border: 1px solid #9A9A9A;
+    color:  #9A9A9A;
   }
   &_text {
       border:10px;

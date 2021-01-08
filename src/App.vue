@@ -1,9 +1,7 @@
 <template>
-  <div id="app">
-  
-      <router-view />
+  <div id="app" class="font_size_normal">
+    <router-view />
   </div>
-
 </template>
 
 <style lang="scss">
@@ -16,110 +14,143 @@ body {
   padding: none;
   width: 100%;
   height: 100%;
-}
-#app {
-  font-family: Livvic;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #000000;
-  height: 100%;
-}
 
-#nav {
-  padding: 30px;
+  #nav {
+    padding: 30px;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+    a {
+      font-weight: bold;
+      color: #2c3e50;
 
-    &.router-link-exact-active {
-      color: #42b983;
+      &.router-link-exact-active {
+        color: #42b983;
+      }
     }
   }
-}
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-.text_align_left {
-  text-align: left;
-}
-.align {
-  display: inline-block;
-  &_right {
-    margin-left: auto;
-    margin-right: 0px;
-  }
-  &_left {
-    float: left;
+  a {
+    text-decoration: none;
+    color: inherit;
   }
 
-}
-.flexbox {
-  display: flex;
-  &_row {
+  .align {
+    &_right {
+      display: inline-block;
+      margin-left: auto;
+      margin-right: 0px;
+    }
+    &_left {
+      float: left;
+    }
+  }
+
+  //flexbox logic
+  .flexbox {
+    display: flex;
+    &_row {
       display: flex;
-    flex-direction: row;
-     align-items: center;
-  }
- &_col {
+      flex-direction: row;
+      align-items: center;
+    }
+    &_col {
       display: flex;
-    flex-direction: column;
-     align-items: center;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &_justifycenter {
+      justify-content: center;
+    }
+    &_spacearound {
+      justify-content: space-around;
+    }
+    &_spacebetween {
+      justify-content: space-between;
+    }
+    &_alignstart {
+      align-items: flex-start;
+    }
+  }
+  .container {
+    width: 90%;
+    display: inline-block;
+    margin: auto;
   }
 
-  &_justifycenter {
-    justify-content: center;
-  }
-  &_spacearound {
-    justify-content: space-around;
-  }
-  &_spacebetween {
-    justify-content: space-between;
-  }
-  &_alignstart {
-    align-items: flex-start;
-  }
-}
-.container {
-  width: 90%;
-  display: inline-block;
-  margin: auto;
-}
-
-.modal_container {
-  width: 80%;
-  height: 100%;
-  margin: 0px auto 40px auto;
+  .modal_container {
+    width: 80%;
+    height: 100%;
+    margin: 0px auto 40px auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 
-&_text {
-  margin: auto;
-}
-}
+    &_text {
+      margin: auto;
+    }
+  }
 
-.bold {
- font-weight: bold;
-}
+  .h_100 {
+    height: 100%;
+  }
 
-.h_100 {
-  height: 100%;
-}
+  .valign_middle {
+    vertical-align: middle;
+  }
 
-.valign_middle {
-  vertical-align: middle;
-}
+  .inlineblock {
+    display: inline-block;
+  }
 
-.inlineblock {
-  display: inline-block;
-}
+  //FONT STYLES
+  .bold {
+    font-weight: 600px;
+  }
 
-.caption {
-  font-size: smaller;
-}
+  .bolder {
+    font-weight: bold;
+  }
+  .caption {
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 15px;
+  }
+  #app {
+    font-family: Livvic;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #000000;
+    height: 100%;
+  }
 
+  //font size
+  .font_size_normal {
+    font-size: 15px;
+  }
+
+  .font_size_big {
+    font-size: 20px;
+  }
+  .font_size_small {
+    font-size: 12px;
+  }
+  //font style
+  .font_style_italic {
+    font-style: italic;
+  }
+
+  .text_align_left {
+    text-align: left;
+  }
+
+
+  //image styling
+
+  .img_rnd {
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+}
 </style>

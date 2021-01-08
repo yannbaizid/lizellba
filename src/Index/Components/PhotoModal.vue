@@ -12,13 +12,13 @@
         />
         <div class="flexbox_col flexbox_spacebetween flexbox_alignstart h_100">
           <img
-            class="img_rnd"
+            class="img_rnd photo_modal_img"
             :src="require('@/assets/img/photo/' + photo.img_name)"
             :alt="photo.img_name"
           />
-          <div id="exposition_description">
+          <div id="exposition_description" class="flexbox_col flexbox_spacebetween flexbox_alignstart">
             <div id="exposition_author">{{ photo.author_name }}</div>
-            <div id="exposition_name">{{ photo.expo_name }}</div>
+            <div id="exposition_name" class="font_style_italic">{{ photo.expo_name }}</div>
           </div>
         </div>
       </div>
@@ -92,25 +92,21 @@ export default {
 }
 
 #exposition_description {
-  //position: absolute;
- // bottom: 0px;
- // left: 0px;
- margin: 20px 0px 20px 20px;
+ margin: 20px;
 
 }
 #exposition_author {
   border: 1px solid black;
-  padding: 5px;
+  padding: 5px 20px 5px 20px;
 
 }
 #exposition_name {
-  font-style: italic;
-  padding: 5px;
+  padding: 5px 0px;
 
 }
-.img_rnd {
-  border-radius: 5%;
+.photo_modal_img {
+
   padding: 0px 20px;
-  width: 90%;
+  width:100%;
 }
 </style>
