@@ -6,6 +6,11 @@
       v-bind:question="question"
       @newQuestionEvent="chargeQuestion()"
     />
+    <closing-modal
+      ref="ClosingModal"
+    @askExpoValidationEvent="openValidateModal"
+      @closeExpoEvent="exitToHome()"
+    />
     <validate-modal
       id="validateModal"
       ref="ValidateModal"
@@ -23,9 +28,9 @@
     <!-- <div id="btn_close" @click="closeGame">
       <app-icon type="x" />
     </div>-->
-    <router-link to="/" id="btn_close">
+    <div id="btn_close" @click="openClosingModal()">
       <app-icon type="x" />
-    </router-link>
+    </div>
     <div id="btn_tuto" @click="openTutoModal()">
       <app-icon type="?" />
     </div>
@@ -44,6 +49,7 @@ import AppIcon from "../services/icons/Icon.vue";
 import TutoModal from "./components/TutoModal.vue";
 import AppButton from "../services/AppButton.vue";
 import ValidateModal from "./components/ValidateModal.vue";
+import ClosingModal from "./components/ClosingModal.vue";
 
 export default {
   name: "Game",
@@ -55,6 +61,7 @@ export default {
     TutoModal,
     AppButton,
     ValidateModal,
+    ClosingModal,
   },
   data() {
     return {
@@ -75,17 +82,18 @@ export default {
     },
     handleValidateExpoEvent(data) {
       console.log("game.vue, handleValidateExpo");
-      const curatorName=data.curatorName;
-      const expoName=data.expoName;
-      const imgURL=this.$refs.expositionComponent.saveExpoImage();
-      console.log('curator name:'+curatorName + " exponame:" + expoName);
+      const curatorName = data.curatorName;
+      const expoName = data.expoName;
+      const imgURL = this.$refs.expositionComponent.returnExpoImage();
+      console.log("curator name:" + curatorName + " exponame:" + expoName);
 
       //Send data to php
-        axios
+      axios
+       // .post("http://localhost/testphp/testphpinput.php", {
         .post("http://localhost/testphp/testphpinput.php", {
           image: imgURL,
           curatorName: curatorName,
-          expoName: expoName
+          expoName: expoName,
         })
         .then(function (data) {
           console.log(data);
@@ -94,6 +102,7 @@ export default {
         .catch(function () {
           console.log("FAILURE to save!!");
         });
+        this.exitToHome();
     },
     handleShowAnswerEvent(payload) {
       console.log(
@@ -110,6 +119,10 @@ export default {
       this.showQuestion = false;
       this.$refs.AnswerModal.openModal(payload.correct);
     },
+    
+    openClosingModal() {
+      this.$refs.ClosingModal.openModal();
+    },
     openTutoModal() {
       console.log("Lâche ce point d'interrogation!!");
       this.$refs.TutoModal.openModal();
@@ -118,6 +131,9 @@ export default {
       console.log("on valide toussa!");
       this.$refs.ValidateModal.openModal();
     },
+exitToHome() {
+   this.$router.push({ name: 'Home'});
+}
   },
 
   mounted() {

@@ -79,7 +79,6 @@ export default {
     handleCloseModalEvent() {
       this.currentStep = 1;
       console.log("handleclosemodalevent");
-
     },
     validate() {
       if (!(this.curatorName && this.expoName)) {
@@ -91,10 +90,12 @@ export default {
           this.currentStep++;
         } else if (this.currentStep == 2) {
           alert("et hop, cest validé");
-          
-          this.$emit('validateExpoEvent',{curatorName: this.curatorName, expoName: this.expoName});
-           this.$refs.ValidateModal.closeModal();
-           this.$router.push({ name: 'Home'});
+
+          this.$emit("validateExpoEvent", {
+            curatorName: this.curatorName,
+            expoName: this.expoName,
+          });
+          this.$refs.ValidateModal.closeModal();
         }
       }
     },
@@ -102,6 +103,10 @@ export default {
       if (this.currentStep == 2) {
         this.currentStep--;
       }
+    },
+    closeModal() {
+      console.log("validate modal. Close modal");
+      this.$refs.ValidateModal.closeModal();
     },
   },
 };

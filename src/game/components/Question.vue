@@ -15,10 +15,10 @@
             alt="image loading"
           />
 
-        <div class="caption">{{ question.caption }}</div>
+        <div class="caption">{{ question.caption? question.caption : "" }}</div>
       </div>
       <div id="question_content_question" class="container">
-        {{ question.question }}
+        {{question.question? question.question : "*question loading*" }}
       </div>
 
       <div id="question_content_answerlist" class="container">
@@ -176,9 +176,6 @@ overflow: auto;
   cursor: default;
 }
 
-.caption {
-  font-size: smaller;
-}
 
 .question {
 color: #50BCBD;
