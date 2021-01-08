@@ -145,6 +145,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    fill: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {};

@@ -1,6 +1,6 @@
 <template>
   <div class="modal" v-if="show">
-    <div class="modal_backdrop"  @click="closeModal()"/>
+    <div class="modal_backdrop" @click="closeModal()" />
     <div class="modal_dialog">
       <div @click="closeModal()" class="modal_close">
         <app-icon type="x" :circle="false" class="modal_close_icon" />
@@ -69,7 +69,7 @@ export default {
   }
   &_dialog {
     width: 60%;
-
+    border: 1px solid #000000;
     height: 60%;
     min-height: 390px;
     background-color: #ffffff;
@@ -80,7 +80,6 @@ export default {
     flex-direction: column;
     z-index: 2;
 
-
     @media screen and (max-width: 900px) {
       width: 80%;
     }
@@ -89,9 +88,8 @@ export default {
     }
   }
   &_close {
-
     &_icon {
-     float:right;
+      float: right;
     }
   }
 }
