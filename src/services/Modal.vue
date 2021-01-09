@@ -1,9 +1,9 @@
 <template>
   <div class="modal" v-if="show">
     <div class="modal_backdrop" @click="closeModal()" />
-    <div class="modal_dialog">
-      <div @click="closeModal()" class="modal_close">
-        <app-icon type="x" :circle="false" class="modal_close_icon" />
+    <div class="modal_dialog" :class="type">
+      <div @click="closeModal()">
+        <app-icon type="x" :circle="false" class="float_right" id="close_icon"/>
       </div>
       <slot></slot>
     </div>
@@ -20,6 +20,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    type: {
+      type: String,
+      default: 'default'
+    }
   },
   data() {
     return {
@@ -64,33 +68,41 @@ export default {
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 1;
   }
   &_dialog {
-    width: 60%;
+    width: 774px;
     border: 1px solid #000000;
-    height: 60%;
+   
     min-height: 390px;
     background-color: #ffffff;
     border-radius: 2px;
-    padding: 0px;
-    padding-bottom: 40px;
+    padding: 0px 20px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     z-index: 2;
-
-    @media screen and (max-width: 900px) {
-      width: 80%;
-    }
-    @media screen and (max-width: 600px) {
-      width: 95%;
-    }
-  }
-  &_close {
-    &_icon {
-      float: right;
-    }
+    max-width: 98%;
   }
 }
+
+.default {
+   height: 393px;
+}
+
+.answer {
+  height: 522px;
+  padding-bottom: 20px;
+}
+
+.gallery {
+  height: 600px;
+  padding-bottom: 20px;
+}
+
+#close_icon {
+  margin-right: -20px;
+}
+
 </style>

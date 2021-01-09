@@ -24,10 +24,8 @@
       />
     </div>
 
-    <Exposition ref="expositionComponent" id="exposition" />
-    <!-- <div id="btn_close" @click="closeGame">
-      <app-icon type="x" />
-    </div>-->
+    <Exposition ref="expositionComponent" id="exposition" class="flexbox_row flexbox_justifycenter h_100"/>
+ 
     <div id="btn_close" @click="openClosingModal()">
       <app-icon type="x" />
     </div>
@@ -144,13 +142,17 @@ exitToHome() {
 
 <style lang="scss">
 #question {
-  float: left;
+ 
   position: fixed;
-  top: 0px;
+  top: -1px;
   left: 0px;
   height: 100%;
 
   z-index: 9;
+   @media (max-width: 500px) {
+   top:1%;
+   left: 1%;
+  }
 }
 .slide-enter-active,
 .slide-leave-active {
@@ -183,16 +185,13 @@ exitToHome() {
 
 #btn_validate {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: 40px;
+  bottom: 40px;
   z-index: 7;
 }
 
 #exposition {
   background-color: #e5e5e5;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
+
 }
 </style>

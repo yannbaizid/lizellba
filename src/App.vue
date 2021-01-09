@@ -42,6 +42,16 @@ body {
     &_left {
       float: left;
     }
+    &_center {
+      margin-left:auto;
+      margin-right:auto;
+    }
+  }
+
+  .float {
+    &_right {
+      float: right;
+    }
   }
 
   //flexbox logic
@@ -61,6 +71,13 @@ body {
     &_justifycenter {
       justify-content: center;
     }
+    &_justifystart {
+      justify-content: flex-start;
+    }
+    &_justifyend {
+      justify-content: flex-end;
+    }
+
     &_spacearound {
       justify-content: space-around;
     }
@@ -71,31 +88,36 @@ body {
       align-items: flex-start;
     }
   }
-  .container {
-    width: 90%;
-    display: inline-block;
-    margin: auto;
+
+  .flex_grow {
+    flex-grow: 1;
   }
 
-  .modal_container {
-    width: 80%;
-    height: 100%;
-    margin: 0px auto 40px auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  .flex_shrink {
+    flex-shrink: 1;
+  }
 
-    &_text {
-      margin: auto;
-    }
+
+  .modal_container {
+
+    margin: 0px auto 40px auto;
+ 
+
   }
 
   .h_100 {
     height: 100%;
   }
+  .w_100 {
+    width: 100%;
+  }
 
   .valign_middle {
     vertical-align: middle;
+  }
+
+  .valign_top {
+    vertical-align: top;
   }
 
   .inlineblock {
@@ -104,7 +126,7 @@ body {
 
   //FONT STYLES
   .bold {
-    font-weight: 600px;
+    font-weight: 600;
   }
 
   .bolder {
@@ -152,5 +174,19 @@ body {
     border-radius: 5px;
     box-sizing: border-box;
   }
+
+  .p {
+    &_t_20 {
+      padding-top: 20px;
+    }
+    &_b_20 {
+      padding-bottom: 20px;
+    }
+  }
+.box_20 {
+  margin: 20px;
+  box-sizing: border-box;
+}
+ 
 }
 </style>

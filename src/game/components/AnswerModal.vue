@@ -3,42 +3,49 @@
     <modal
       ref="AnswerModal"
       id="answer_modal"
+      type="answer"
       @closeModalEvent="handleCloseModalEvent"
     >
-      <div class="flexbox flexbox_row">
-        <div class="answer_panel_left">
+      <div class="flexbox flexbox_row h_100">
+        <div class="answer_panel_left flexbox_col h_100">
           <img
             id="answer_image"
-            class="answer_image"
+            class="answer_image flex_grow"
             :src="question.imglink"
             alt="image loading"
           />
-          <div class="caption">
+          <div class="caption text_align_left">
             {{ question.caption }}
           </div>
         </div>
-        <div class="answer_panel_right text_align_left ">
-          <div id="reponse ">
-            <div class="bold" v-if="this.correct == 1">
-              Bonne réponse!<br />Tu as gagné une oeuvre à placer dans ton
-              espace d'exposition!
+        <div
+          class="answer_panel_right text_align_left flexbox_col h_100"
+        >
+          <div class="answer_width flexbox_col flexbox_spacearound flex_grow">
+            <div>
+              <div class="bold font_size_big" v-if="this.correct == 1">
+                Bonne réponse!<br />Vous avez gagné une oeuvre à placer dans ton
+                espace d'exposition!
+              </div>
+              <div class="bold font_size_big" v-if="this.correct == 0">
+                Mauvaise réponse!<br />Ne vous découragez pas, essayez encore!
+              </div>
             </div>
-            <div class="bold" v-if="this.correct == 0">
-              Mauvaise réponse!<br />Ne te décourage pas, essaye encore!
-            </div>
-          </div>
-          <!--         <div v-for="answer in question.answers" :key="answer.id">
+            <!--         <div v-for="answer in question.answers" :key="answer.id">
               <div v-if="answer.correct==1">{{answer.text}}</div>
             </div>
  -->
-          <div>{{ question.answer }}</div>
-          <div id="info_link">
-            <a id="answer_link" :href="question.info_link" target="_blank">
-              lien vers le site de La Criée</a
-            >
-          </div>
-          <div @click="$refs.AnswerModal.closeModal()">
-            <app-button message="Placer l'oeuvre" />
+            <div>
+              <div>{{ question.answer }}</div>
+              <div id="info_link" class="p_t_20">
+                <a id="answer_link"  :href="question.info_link" target="_blank">
+                  lien vers le site de La Criée</a
+                >
+              </div>
+            </div>
+            <div @click="$refs.AnswerModal.closeModal()">
+              <app-button message="Placer l'oeuvre" />
+            </div>
           </div>
         </div>
       </div>
@@ -47,7 +54,7 @@
 </template>
 
 <script>
-import AppButton from '../../services/AppButton.vue';
+import AppButton from "../../services/AppButton.vue";
 import Modal from "../../services/Modal.vue";
 export default {
   components: { Modal, AppButton },
@@ -76,27 +83,20 @@ export default {
     },
     handleCloseModalEvent() {
       this.closeModal();
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-#info_link {
-  padding: 0px;
-}
 
-#reponse {
-  padding:  0px;
-}
 
 .answer_panel_right {
-  width: 50%;
-  padding: 20px;
+  width: 60%;
 }
 .answer_panel_left {
-  width: 40%;
-  padding: 20px;
+  max-width: 40%;
+  width: 424px;
 }
 
 #answer_link {
@@ -104,8 +104,12 @@ export default {
 }
 .answer_image {
   width: 100%;
-  height: 400px;
+
   background-color: #f4f4f4;
   object-fit: contain;
+}
+
+.answer_width {
+  max-width: 300px;
 }
 </style>

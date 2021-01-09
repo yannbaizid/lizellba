@@ -1,29 +1,32 @@
 <template>
-  <div>
+  
     <modal
       ref="ClosingModal"
       id="closing_modal"
+      class="w_100"
       @closeModalEvent="handleCloseModalEvent"
     >
       <!--ASK FOR CONFIRMATION -->
-
-      <div class="bold">
-        Es-tu sûr de vouloir quitter le montage sans valider l'exposition?
-      </div>
-
-      <div class="flexbox flexbox_col flexbox_spacearound">
-        <div @click="validateExpo()">
-          <app-button message="Valider votre exposition" />
+     
+      <div class="closing_modal h_100 align_center flexbox_col" >
+        <div class="bold font_size_big">
+          Êtes-vous sûr de vouloir quitter le montage sans valider l'exposition?
         </div>
-        <div @click="closeModal()">
-          <app-button message="Retourner sur le montage" />
-        </div>
-        <div @click="exit()">
-          <app-button message="oui" />
+
+        <div class="flexbox flexbox_col flexbox_justifyend flex_grow ">
+          <div @click="validateExpo()"  class="w_100">
+            <app-button message="Valider votre exposition" class="w_100" />
+          </div>
+          <div @click="closeModal()" class="p_t_20">
+            <app-button message="Retourner sur le montage" />
+          </div>
+          <div @click="exit()"  class="w_100 p_t_20">
+            <app-button message="oui" class="w_100" />
+          </div>
         </div>
       </div>
     </modal>
-  </div>
+  
 </template>
 
 <script>
@@ -60,4 +63,8 @@ export default {
 };
 </script>
 <style lang="scss">
+.closing_modal {
+  max-width: 410px;
+  margin: 30px 0px 75px 0px;
+}
 </style>
