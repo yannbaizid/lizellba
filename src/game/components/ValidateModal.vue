@@ -6,8 +6,13 @@
       @closeModalEvent="handleCloseModalEvent"
     >
       <!--ASK FOR NAME -->
-      <div v-if="currentStep == 1" class="modal_container modal_container_text">
-        <div class="bold">Complète les informations suivantes<br /></div>
+      <div
+        v-if="currentStep == 1"
+        class="modal_container h_100 w_100 flexbox_col flexbox_spacebetween modal_container_text"
+      >
+        <div class="bold font_size_big">
+          Complétez les informations suivantes<br />
+        </div>
         <div class="input_long">
           Votre nom de commissaire :<br />
           <input
@@ -32,24 +37,25 @@
       </div>
 
       <!--ASK FOR CONFIRMATION -->
-      <div v-if="currentStep == 2" class="modal_container modal_container_text">
-        <div class="bold">êtes vous sûr?<br /></div>
-        <div>
-          Vous ne pourrez plus modifier votre exposition.<br />
-          Nom de commissaire: {{ curatorName }},<br />
-          Nom de l'expo: {{ expoName }}
+      <div v-if="currentStep == 2" class="modal_container  h_100 w_100 flexbox_col flexbox_spacebetween modal_container_text">
+        <div  class="bold font_size_big">êtes vous sûr?<br />Vous ne pourrez plus modifier votre exposition.</div>
+        <div class="flex_grow flexbox_col flexbox_justifycenter flexbox_alignstart name_container">
+
+          <div>Nom de commissaire: {{ curatorName }}</div>
+       <div class="p_t_20"> Nom de l'expo: {{ expoName }}</div>
         </div>
-        <div class="flexbox flexbox_spacearound">
-          <div @click="validate()">
-            <app-button message="Valider" />
+        <div class="flexbox flexbox_spacearound w_100">
+           <div @click="cancel()">
+            <app-button message="Retour" />
           </div>
 
           <div @click="closeModal()">
             <app-button message="Annuler" />
           </div>
-          <div @click="cancel()">
-            <app-button message="Retour" />
+          <div @click="validate()">
+            <app-button message="Valider" />
           </div>
+         
         </div>
       </div>
     </modal>
@@ -111,7 +117,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 #validate_modal {
   z-index: 10;
 }
@@ -125,7 +131,17 @@ export default {
 }
 
 .input_long {
-  width: 100%;
+  width: 60%;
   text-align: start;
+
+  @media screen and (max-width: 900px) {
+    width: 80%;
+  }
+  @media screen and (max-width: 600px) {
+    width: 95%;
+  }
+}
+.name_container {
+  width:410px;
 }
 </style>

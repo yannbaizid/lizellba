@@ -30,7 +30,7 @@ export default {
     color:  #9A9A9A;
   }
   &_text {
-      border:10px;
+      border:25px 10px;
       text-decoration: none;
   }
 }
