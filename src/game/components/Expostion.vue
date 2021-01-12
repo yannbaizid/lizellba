@@ -37,7 +37,7 @@
       <v-layer id="tools">
         <v-image ref="watermark" :config="watermark"> </v-image>
         <v-rect ref="toolsFrame" :config="toolsFrameConfig" />
-        <v-group :config="iconsConfig">
+        <v-group ref="icons" :config="iconsConfig">
           <v-image ref="InfoIcon" :config="infoIcon" />
           <v-image ref="DeleteIcon" :config="deleteIcon" />
           <v-image
@@ -201,6 +201,7 @@ export default {
 
     //drag bound function for wall artworks
     dragMoveWall(image, index, event) {
+    this.iconsConfig.target=image.id;
       this.placeWallArtwork(event.target);
     },
 
@@ -276,6 +277,7 @@ export default {
 
     //drag bound function for floor artworks
     dragMoveFloor(image, index, event) {
+       this.iconsConfig.target=image.id;
       this.placeFloorArtwork(event.target);
     },
     placeFloorArtwork(target) {
@@ -390,7 +392,10 @@ export default {
 
     //return the expo snapshot as base 64
     returnExpoImage() {
+      this.hideToolsFrame();
       this.$refs.watermark.getNode().opacity(1);
+      this.$refs.icons.getNode().opacity(0);
+      this.$refs.toolsFrame.getNode().opacity(0);
       this.$refs.watermark.getNode().draw();
       const pixelRatio = totalWidth / this.$refs.stage.getNode().width();
 
