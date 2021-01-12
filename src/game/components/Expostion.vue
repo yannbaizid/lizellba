@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-stage :config="configKonva" ref="stage">
-      <v-layer id="background" @dblclick="hideToolsFrame">
+      <v-layer id="background" @click="hideToolsFrame">
         <v-line
           v-for="(poly, index) in backgroundPolys"
           v-bind:key="index"

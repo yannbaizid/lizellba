@@ -36,6 +36,7 @@ export default {
     async getGalleryPhotos () {
         return axios.get("getgalleryphotos.php").then((response) => {
                console.log('api getgalleryphotos ok' );
+               console.log(response.data);
                return response.data;
           });
     },
