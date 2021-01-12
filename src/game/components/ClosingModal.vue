@@ -17,11 +17,11 @@
           <div @click="validateExpo()"  class="w_100">
             <app-button message="Valider votre exposition" class="w_100" />
           </div>
-          <div @click="closeModal()" class="p_t_20">
-            <app-button message="Retourner sur le montage" />
+          <div @click="closeModal()" class="p_t_20 w_100">
+            <app-button message="Retour au jeu" class="w_100" />
           </div>
           <div @click="exit()"  class="w_100 p_t_20">
-            <app-button message="oui" class="w_100" />
+            <app-button message="Quitter" class="w_100" />
           </div>
         </div>
       </div>

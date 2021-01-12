@@ -67,7 +67,9 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
+import api from "@/services/api/api";
+
 const totalWidth = 1920;
 const totalHeight = 1080;
 const relativeSizeOfContent = 0.9;
@@ -737,12 +739,19 @@ export default {
 
     //LOAD images from DB
     //axios.get("http://localhost/testphp/getartwork.php").then((response) => {
-    axios
+      
+      console.log('exposition.vue api call');
+  api.getArtworks().then(artworks=> {
+    this.disponibleImages=artworks;
+    console.log(this.disponibleImages);
+
+  });
+/*     axios
       .get("http://yannbaizid.fr/yann/lizellba/getartwork.php")
       .then((response) => {
         this.disponibleImages = response.data;
         console.log(this.disponibleImages);
-      });
+      }); */
   },
 };
 </script>
