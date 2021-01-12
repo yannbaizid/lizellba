@@ -13,11 +13,11 @@
         <div class="flexbox_col flexbox_spacebetween flexbox_alignstart h_100">
           <img
             class="img_rnd photo_modal_img"
-            :src="require('@/assets/img/photo/' + photo.img_name)"
+           :src="'http://yannbaizid.fr/yann/lizellba/php/img/expos/' + photo.file_name"
             :alt="photo.img_name"
           />
           <div id="exposition_description" class="flexbox_col flexbox_spacebetween flexbox_alignstart">
-            <div id="exposition_author">{{ photo.author_name }}</div>
+            <div id="exposition_curator">{{ photo.curator_name }}</div>
             <div id="exposition_name" class="font_style_italic">{{ photo.expo_name }}</div>
           </div>
         </div>
@@ -95,7 +95,7 @@ export default {
  margin: 20px;
 
 }
-#exposition_author {
+#exposition_curator {
   border: 1px solid black;
   padding: 5px 20px 5px 20px;
 
