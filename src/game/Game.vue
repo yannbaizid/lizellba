@@ -8,7 +8,7 @@
     />
     <closing-modal
       ref="ClosingModal"
-    @askExpoValidationEvent="openValidateModal"
+      @askExpoValidationEvent="openValidateModal"
       @closeExpoEvent="exitToHome()"
     />
     <validate-modal
@@ -24,8 +24,12 @@
       />
     </div>
 
-    <Exposition ref="expositionComponent" id="exposition" class="flexbox_row flexbox_justifycenter h_100"/>
- 
+    <Exposition
+      ref="expositionComponent"
+      id="exposition"
+      class="flexbox_row flexbox_justifycenter h_100"
+    />
+
     <div id="btn_close" @click="openClosingModal()">
       <app-icon type="x" />
     </div>
@@ -41,13 +45,14 @@
 <script>
 import Exposition from "./components/Expostion";
 import Question from "./components/Question";
-import axios from "axios";
+import api from "@/services/api/api";
 import AnswerModal from "./components/AnswerModal.vue";
 import AppIcon from "../services/icons/Icon.vue";
 import TutoModal from "./components/TutoModal.vue";
 import AppButton from "../services/AppButton.vue";
 import ValidateModal from "./components/ValidateModal.vue";
 import ClosingModal from "./components/ClosingModal.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "Game",
@@ -65,17 +70,22 @@ export default {
     return {
       showQuestion: false,
       question: {},
-      //RndmQuestionurl: "http://localhost/testphp/getquestion.php",
-      RndmQuestionurl: "http://yannbaizid.fr/yann/lizellba/getquestion.php",
     };
+  },
+  computed: {
+    ...mapState(["phpLink"]),
   },
   methods: {
     chargeQuestion() {
       console.log("change question");
-      axios.get(this.RndmQuestionurl).then((response) => {
+      /*  axios.get(this.RndmQuestionurl).then((response) => {
         this.question = response.data;
         console.log(this.question);
         this.showQuestion = false;
+      }); */
+      api.getRandomQuestion().then((question) => {
+        this.question = question;
+        console.log(this.question);
       });
     },
     handleValidateExpoEvent(data) {
@@ -86,21 +96,8 @@ export default {
       console.log("curator name:" + curatorName + " exponame:" + expoName);
 
       //Send data to php
-      axios
-       // .post("http://localhost/testphp/testphpinput.php", {
-        .post("http://localhost/testphp/testphpinput.php", {
-          image: imgURL,
-          curatorName: curatorName,
-          expoName: expoName,
-        })
-        .then(function (data) {
-          console.log(data);
-        })
-
-        .catch(function () {
-          console.log("FAILURE to save!!");
-        });
-        this.exitToHome();
+      api.saveExpoImage(imgURL, curatorName, expoName);
+      this.exitToHome();
     },
     handleShowAnswerEvent(payload) {
       console.log(
@@ -117,7 +114,7 @@ export default {
       this.showQuestion = false;
       this.$refs.AnswerModal.openModal(payload.correct);
     },
-    
+
     openClosingModal() {
       this.$refs.ClosingModal.openModal();
     },
@@ -129,12 +126,13 @@ export default {
       console.log("on valide toussa!");
       this.$refs.ValidateModal.openModal();
     },
-exitToHome() {
-   this.$router.push({ name: 'Home'});
-}
+    exitToHome() {
+      this.$router.push({ name: "Home" });
+    },
   },
 
   mounted() {
+    console.log("phplink:" + this.phpLink);
     this.chargeQuestion();
   },
 };
@@ -142,16 +140,15 @@ exitToHome() {
 
 <style lang="scss">
 #question {
- 
   position: fixed;
   top: -1px;
   left: 0px;
   height: 100%;
 
   z-index: 9;
-   @media (max-width: 500px) {
-   top:1%;
-   left: 1%;
+  @media (max-width: 500px) {
+    top: 1%;
+    left: 1%;
   }
 }
 .slide-enter-active,
@@ -192,6 +189,5 @@ exitToHome() {
 
 #exposition {
   background-color: #e5e5e5;
-
 }
 </style>

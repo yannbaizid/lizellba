@@ -44,7 +44,8 @@
               </div>
             </div>
             <div @click="$refs.AnswerModal.closeModal()">
-              <app-button message="Placer l'oeuvre" />
+              <app-button v-if="this.correct == 1" message="Placer l'oeuvre" />
+              <app-button v-if="this.correct == 0" message="Continuer à jouer" />
             </div>
           </div>
         </div>
