@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div id="background" @click="hideToolsFrame"></div>
     <v-stage :config="configKonva" ref="stage">
       <v-layer id="background" @click="hideToolsFrame">
         <v-line
@@ -773,5 +774,13 @@ export default {
   border: 2px solid #32d8fd;
   padding: 10px;
   border-radius: 15px;
+}
+#background {
+  position: fixed;
+  top:0px;
+  left: 0px;
+  width:100%;
+  height: 100%;
+
 }
 </style>
