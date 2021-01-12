@@ -1,11 +1,12 @@
 <template>
   <div>
     <v-stage :config="configKonva" ref="stage">
-      <v-layer id="background" @click="hideToolsFrame">
+      <v-layer id="background" @dblclick="hideToolsFrame">
         <v-line
           v-for="(poly, index) in backgroundPolys"
           v-bind:key="index"
-          @click="changePolyColor(poly)"
+          
+          @dblclick="poly.name=='leftWall' || poly.name=='rightwall'? changePolyColor(poly): null"
           :config="poly"
         ></v-line>
       </v-layer>
@@ -16,7 +17,7 @@
           :config="image.config"
           :ref="image.id"
           @dragmove="dragMoveWall(image, index, $event)"
-          @click="displayToolsFrame(image.id, $event)"
+          @click="displayToolsFrame(image.id, 'wall', index, $event)"
         >
         </v-image>
       </v-layer>
@@ -29,8 +30,7 @@
           :config="image.config"
           :ref="image.id"
           @dragmove="dragMoveFloor(image, index, $event)"
-          @dragend="setZindex()"
-          @click="displayToolsFrame(image.id, $event)"
+          @click="displayToolsFrame(image.id, 'floor', index, $event)"
         ></v-image>
       </v-layer>
       <v-layer id="tools">
@@ -44,8 +44,11 @@
             :config="enlargeIcon"
             @click="enlargeArtwork()"
           />
-          <v-image ref="ReduceIcon" :config="reduceIcon"
-           @click="reduceArtwork()" />
+          <v-image
+            ref="ReduceIcon"
+            :config="reduceIcon"
+            @click="reduceArtwork()"
+          />
         </v-group>
       </v-layer>
     </v-stage>
@@ -118,6 +121,7 @@ export default {
         visible: false,
       },
       possibleScale: [0.6, 1, 1.5],
+      wallColors: ['#ffffff','#a0ffa0','#ffa0a0','#a0a0ff'],
     };
   },
   computed: {
@@ -152,7 +156,6 @@ export default {
           draggable: true,
           skewY: 0,
           scale: 1,
-    
 
           name: "konva" + artwork.id,
         };
@@ -181,121 +184,139 @@ export default {
 
     //change the color of a wall
     changePolyColor(poly) {
-      //TODO
+      if (poly.name=='leftWall') {
+
+        var index=this.wallColors.findIndex((x) => x == poly.fill);
+     index++;
+     if(index==this.wallColors.length) {
+       index=0;
+     }
+     poly.fill=this.wallColors[index];
+      }
       console.log(poly);
     },
 
     //drag bound function for wall artworks
     dragMoveWall(image, index, event) {
-      console.log("draging " + image.src);
+      this.placeWallArtwork(event.target);
+    },
 
-      // image.config.skewY = 0.25;
-      const y = event.target.y();
-      var x = event.target.x();
+    placeWallArtwork(target) {
+      console.log('place wall artwork');
+      var y = target.y();
+      var x = target.x();
+      var targetWidth = target.width();
+      var targetHeight = target.height();
 
       //TRANSITION ZONE FROM LEFT TO RIGHT
-      if (x > cornerWidth - event.target.width && x < cornerWidth) {
+      if (x > cornerWidth - targetWidth && x < cornerWidth) {
         if (y < 0) {
-          event.target.y(0);
+          target.y(0);
         }
-        if (y > cornerHeight - image.config.height) {
-          event.target.y(cornerHeight - image.config.height);
+        if (y > cornerHeight - targetHeight) {
+          target.y(cornerHeight - targetHeight);
         }
-        if (image.config.skewY == 0) {
-          event.target.x(cornerWidth - event.target.width);
+        if (target.skewY() == 0) {
+          target.x(cornerWidth - targetWidth);
         } else {
-          event.target.x(cornerWidth);
+          target.x(cornerWidth);
         }
       }
 
       //ARTWORK ON LEFT WALL
-      if (x < cornerWidth - event.target.width) {
-        image.config.skewY = 0;
-        event.target.skewY(0);
-        if (y > cornerHeight - image.config.height) {
-          event.target.y(cornerHeight - image.config.height);
+      if (x < cornerWidth - targetWidth) {
+        target.skewY(0);
+        if (y > cornerHeight - targetHeight) {
+          target.y(cornerHeight - targetHeight);
         }
         if (y < 0) {
-          event.target.y(0);
+          target.y(0);
         }
 
         if (x < 0) {
-          event.target.x(0);
+          target.x(0);
         }
       }
 
       //ARTWORK  ON RIGHT WALL
       if (x > cornerWidth) {
-        image.config.skewY = 0.56;
-        event.target.skewY(0.56);
-        console.log("partie droite" + height + "skew =" + image.config.skewY);
-        if (x +event.target.width > width) {
-          event.target.x(width - event.target.width);
-          x = event.target.x();
+        target.skewY(0.56);
+
+        if (x + targetWidth > width) {
+          target.x(width - targetWidth);
         }
 
         const ceilingHeight =
-          ((x - cornerWidth) / (width - cornerWidth)) * (height - cornerHeight);
+          ((target.x() - cornerWidth) / (width - cornerWidth)) *
+          (height - cornerHeight);
 
         const floorHeigth = ceilingHeight + cornerHeight;
 
-        if (y > floorHeigth - image.config.height) {
-          event.target.y(floorHeigth - image.config.height);
+        if (y > floorHeigth - targetHeight) {
+          target.y(floorHeigth - targetHeight);
         }
         if (y < ceilingHeight) {
-          event.target.y(ceilingHeight);
+          target.y(ceilingHeight);
         }
       }
-      this.wallArtworks.push(this.wallArtworks.splice(index, 1)[0]);
-      if (this.toolsFrameConfig.visible) {
-        this.setToolsFrame(event);
-      }
+
+        if (this.toolsFrameConfig.visible) {
+          this.setToolsFrame(target);
+        }
+      var artworkName = target.VueComponent.config.name;
+      const index = this.wallArtworks.findIndex(
+        (x) => x.config.name === artworkName
+      );
+      target.getParent().draw();
+      this.placeOnTop("wall", index);
     },
 
     //drag bound function for floor artworks
     dragMoveFloor(image, index, event) {
+      this.placeFloorArtwork(event.target);
+    },
+    placeFloorArtwork(target) {
       const margin = 50;
-      const artworkHeight = event.target.height;
-      const artworkWidth = event.target.width;
+      const artworkHeight = target.height();
+      const artworkWidth = target.width();
 
       //TOP LIMIT
-      if (event.target.y() + artworkHeight < cornerHeight + margin) {
-        event.target.y(cornerHeight + margin - artworkHeight);
+      if (target.y() + artworkHeight < cornerHeight + margin) {
+        target.y(cornerHeight + margin - artworkHeight);
       }
 
       //BOTTOM LIMIT
-      if (event.target.y() + artworkHeight > height) {
-        event.target.y(height - artworkHeight);
+      if (target.y() + artworkHeight > height) {
+        target.y(height - artworkHeight);
       }
       //LEFT LIMIT
-      if (event.target.x() < 0) {
-        event.target.x(0);
+      if (target.x() < 0) {
+        target.x(0);
       }
 
-      if (event.target.x() + artworkWidth > width) {
-        event.target.x(width - artworkWidth);
+      if (target.x() + artworkWidth > width) {
+        target.x(width - artworkWidth);
       }
       //RIGHT BORDER LIMIT
 
-      if (event.target.x() + artworkWidth > cornerWidth) {
+      if (target.x() + artworkWidth > cornerWidth) {
         const floorHeight =
           cornerHeight +
-          ((event.target.x() + artworkWidth - cornerWidth) /
-            (width - cornerWidth)) *
+          ((target.x() + artworkWidth - cornerWidth) / (width - cornerWidth)) *
             (height - cornerHeight);
-        if (event.target.y() + artworkHeight - margin < floorHeight) {
+        if (target.y() + artworkHeight - margin < floorHeight) {
           console.log("je tape la limite droite!");
-          event.target.y(floorHeight + margin - artworkHeight);
+          target.y(floorHeight + margin - artworkHeight);
         }
       }
 
       //LEFT BORDER LIMIT
       const floorWidth =
-        ((event.target.y() + artworkHeight - cornerHeight) /
+        ((target.y() + artworkHeight - cornerHeight) /
           (height - cornerHeight)) *
         (width - cornerWidth);
-      if (event.target.x() < floorWidth) {
-        event.target.x(floorWidth);
+      if (target.x() < floorWidth) {
+        target.x(floorWidth);
       }
       /*
       if (event.target.x()< width - cornerWidth) {
@@ -317,22 +338,38 @@ export default {
       }*/
 
       //BOTTOM LIMIT
-      if (event.target.y() + artworkHeight > height) {
+      if (target.y() + artworkHeight > height) {
         console.log("je tape la limite basse!");
-        event.target.y(height - artworkHeight);
+        target.y(height - artworkHeight);
       }
-      this.floorArtworks.push(this.floorArtworks.splice(index, 1)[0]);
       if (this.toolsFrameConfig.visible) {
-        this.setToolsFrame(event);
+        this.setToolsFrame(target);
+      }
+
+      var artworkName = target.VueComponent.config.name;
+      const index = this.floorArtworks.findIndex(
+        (x) => x.config.name === artworkName
+      );
+       target.getParent().draw();
+      this.placeOnTop("floor", index);
+    },
+    placeArtwork(target) {
+      console.log('placeArtwork');
+      if (target.getParent().attrs.id == "wall") {
+        this.placeWallArtwork(target);
+      }
+      if (target.getParent().attrs.id == "floor") {
+        this.placeFloorArtwork(target);
       }
     },
 
     //Put artwork in front. NOT WORKING, TEST METHOD
-    setZindex() {
-      this.floorArtworks.forEach((artwork) => {
-        console.log("artwork " + artwork.config.y);
-      });
-      console.log("dragend");
+    placeOnTop(type, index) {
+      if (type == "wall") {
+        this.wallArtworks.push(this.wallArtworks.splice(index, 1)[0]);
+      } else {
+        this.floorArtworks.push(this.floorArtworks.splice(index, 1)[0]);
+      }
     },
 
     //Scale the stage to fit windows size
@@ -361,21 +398,19 @@ export default {
       });
       return imgURL;
     },
-    displayToolsFrame(imageId, event) {
+    displayToolsFrame(imageId, imageType, index, event) {
       console.log("displaytoolsframe");
       console.log(event.target);
-      if (this.toolsFrameConfig.visible) {
-        this.hideToolsFrame();
-      } else {
-        this.iconsConfig.target = imageId;
-        this.showToolsFrame(event);
-      }
+      this.iconsConfig.target = imageId;
+      this.showToolsFrame(event);
+
+      //  this.placeOnTop(imageType,index);
     },
     showToolsFrame(event) {
       console.log("showtoolsframe");
       this.toolsFrameConfig.visible = true;
       this.iconsConfig.visible = true;
-      this.setToolsFrame(event);
+      this.setToolsFrame(event.target);
     },
     hideToolsFrame() {
       console.log("displaytoolsframe");
@@ -384,16 +419,15 @@ export default {
     },
 
     //set tools frame position
-    setToolsFrame(event) {
-      this.toolsFrameConfig.y = event.target.y() - this.toolsFrameConfig.margin;
-      this.toolsFrameConfig.x = event.target.x() - this.toolsFrameConfig.margin;
+    setToolsFrame(target) {
+      this.toolsFrameConfig.y = target.y() - this.toolsFrameConfig.margin;
+      this.toolsFrameConfig.x = target.x() - this.toolsFrameConfig.margin;
 
       this.toolsFrameConfig.height =
-        event.target.height() *
-          (1 + (event.target.skewY() * event.target.width()) / 180) +
+        target.height() * (1 + (target.skewY() * target.width()) / 180) +
         2 * this.toolsFrameConfig.margin;
       this.toolsFrameConfig.width =
-        event.target.width() + 2 * this.toolsFrameConfig.margin;
+        target.width() + 2 * this.toolsFrameConfig.margin;
 
       this.infoIcon.x = this.toolsFrameConfig.x - this.infoIcon.width / 2;
       this.infoIcon.y = this.toolsFrameConfig.y + 20;
@@ -430,24 +464,25 @@ export default {
       console.log("set tools frame");
     },
 
-
-
     //enlarge artwork
     enlargeArtwork() {
       var targetRef = this.iconsConfig.target;
       console.log("enlarge yur pinis " + targetRef);
-      console.log(this.$refs);
-      var baseWidth=this.$refs[targetRef][0].config.width;
-      var baseHeight=this.$refs[targetRef][0].config.height;
+      console.log(this.$refs[targetRef][0]);
+      console.log(this.$refs[targetRef][0].getNode().getParent().attrs.id);
+      var baseWidth = this.$refs[targetRef][0].config.width;
+      var baseHeight = this.$refs[targetRef][0].config.height;
       var targetScale = this.$refs[targetRef][0].config.scale;
       var scaleIndex = this.possibleScale.lastIndexOf(targetScale);
       if (scaleIndex != -1 && scaleIndex < this.possibleScale.length - 1) {
         targetScale = this.possibleScale[scaleIndex + 1];
-      this.$refs[targetRef][0].getNode().width(  baseWidth* targetScale );
-      this.$refs[targetRef][0].getNode().height(baseHeight* targetScale );
-       this.$refs[targetRef][0].config.scale=targetScale;
-      this.$refs.stage.getNode().draw();
+        this.$refs[targetRef][0].getNode().width(baseWidth * targetScale);
+        this.$refs[targetRef][0].getNode().height(baseHeight * targetScale);
+        this.$refs[targetRef][0].config.scale = targetScale;
+        this.$refs.stage.getNode().draw();
       }
+
+      this.placeArtwork(this.$refs[targetRef][0].getNode());
     },
     //reduce artwork
     reduceArtwork() {
@@ -455,17 +490,18 @@ export default {
       console.log("enlarge yur pinis " + targetRef);
       console.log("enlarge yur pinis " + this.$refs[targetRef][0].config.width);
       console.log(this.$refs);
-      var baseWidth=this.$refs[targetRef][0].config.width;
-      var baseHeight=this.$refs[targetRef][0].config.height;
+      var baseWidth = this.$refs[targetRef][0].config.width;
+      var baseHeight = this.$refs[targetRef][0].config.height;
       var targetScale = this.$refs[targetRef][0].config.scale;
       var scaleIndex = this.possibleScale.lastIndexOf(targetScale);
       if (scaleIndex != -1 && scaleIndex > 0) {
         targetScale = this.possibleScale[scaleIndex - 1];
-      this.$refs[targetRef][0].getNode().width(  baseWidth* targetScale );
-      this.$refs[targetRef][0].getNode().height(baseHeight* targetScale );
-          this.$refs[targetRef][0].config.scale=targetScale;
-      this.$refs.stage.getNode().draw();
+        this.$refs[targetRef][0].getNode().width(baseWidth * targetScale);
+        this.$refs[targetRef][0].getNode().height(baseHeight * targetScale);
+        this.$refs[targetRef][0].config.scale = targetScale;
+        this.$refs.stage.getNode().draw();
       }
+      this.placeArtwork(this.$refs[targetRef][0].getNode());
     },
   },
   created() {},
@@ -579,6 +615,8 @@ export default {
       ],
       fill: "#F2F2F2",
       closed: true,
+      name: 'rightWall',
+      color: 'white'
     });
 
     //WRONG WALL.... NO LEFT WALL
@@ -594,6 +632,8 @@ export default {
         cornerHeight,
       ],
       fill: "#FFFFFF",
+       name: 'leftWall',
+      color: 'white',
       closed: true,
     });
 
