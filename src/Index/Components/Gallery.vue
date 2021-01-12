@@ -10,7 +10,7 @@
       >
         <img
           class="gallery_img"
-          :src="require('@/assets/img/photo/' + photo.img_name)"
+          :src="'http://yannbaizid.fr/yann/lizellba/php/img/expos/' + photo.file_name"
           :alt="photo.img_name"
         />
       </div>
@@ -34,6 +34,7 @@ export default {
     api.getGalleryPhotos().then((photos) => {
       this.photos = photos;
       console.log("photos fetched from api");
+      console.log(this.photos);
     });
   },
   methods: {
