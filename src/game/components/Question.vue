@@ -16,9 +16,9 @@
             <div class="flexbox_row">
               carte {{ question.type ? question.type.name : "*type unknow*" }}
             </div>
-              <div class="appear_small"  @click="toggleQuestion()">
-                <app-icon type="x" :circle="false" />
-              </div>
+            <div class="appear_small" @click="toggleQuestion()">
+              <app-icon type="x" :circle="false" />
+            </div>
           </div>
         </div>
         <div class="container">
@@ -62,10 +62,7 @@
           @click="verifyAnswer(selectedAnswer.correct)"
           class="container w-100 flexbox_row flexbox_justifycenter"
         >
-          <app-button
-          
-            message="valider"
-          />
+          <app-button message="valider" />
         </div>
       </div>
     </div>
@@ -76,7 +73,7 @@
       :class="showQuestion ? 'hide_small' : ''"
     >
       <app-icon :size="20" v-bind:type="showQuestion ? '>' : '<'" />
-     <div class="valign_top">QUIZZ</div>
+      <div class="valign_top">QUIZZ</div>
     </div>
   </div>
 </template>
@@ -104,17 +101,14 @@ export default {
     },
     verifyAnswer(correct) {
       if (correct) {
-        this.$emit("showAnswerEvent", { correct: correct });
-        if (correct == 1) {
-          this.$emit("addArtworkEvent");
-        } else {
-          console.log("cestperdu");
-          this.correct = 0;
-        }
-        this.selectedAnswer = {};
-        this.showQuestion = false;
-        this.showAnswer = true;
+        this.$emit("validateQuestionEvent", {
+          correct: correct,
+          expoId: this.question.expo_id,
+        });
       }
+      this.selectedAnswer = {};
+      this.showQuestion = false;
+      this.showAnswer = true;
     },
     emitNewQuestionEvent() {
       this.$emit("newQuestionEvent");
@@ -172,9 +166,9 @@ export default {
     position: relative;
     top: 45%;
     margin-left: -1px;
-      @media (max-width: 500px) {
-     margin-left: -4px;
-  }
+    @media (max-width: 500px) {
+      margin-left: -4px;
+    }
 
     padding: 23px 10px;
     box-sizing: border-box;
@@ -219,7 +213,6 @@ export default {
   }
 }
 .hide_small {
- 
   @media (max-width: 500px) {
     display: none;
   }
