@@ -6,8 +6,11 @@
         <v-line
           v-for="(poly, index) in backgroundPolys"
           v-bind:key="index"
-          
-          @dblclick="poly.name=='leftWall' || poly.name=='rightwall'? changePolyColor(poly): null"
+          @dblclick="
+            poly.name == 'leftWall' || poly.name == 'rightWall'
+              ? changePolyColor(poly)
+              : null
+          "
           :config="poly"
         ></v-line>
       </v-layer>
@@ -38,8 +41,16 @@
         <v-image ref="watermark" :config="watermark"> </v-image>
         <v-rect ref="toolsFrame" :config="toolsFrameConfig" />
         <v-group ref="icons" :config="iconsConfig">
-          <v-image ref="InfoIcon" :config="infoIcon" />
-          <v-image ref="DeleteIcon" :config="deleteIcon" />
+          <v-image
+            ref="InfoIcon"
+            :config="infoIcon"
+            @click="openArtworkModal"
+          />
+          <v-image
+            ref="DeleteIcon"
+            :config="deleteIcon"
+            @click="deleteArtwork"
+          />
           <v-image
             ref="EnlargeIcon"
             :config="enlargeIcon"
@@ -53,23 +64,12 @@
         </v-group>
       </v-layer>
     </v-stage>
-    <!--  <div
-      id="tools_frame"
-      :class="toolsFrameOn ? '' : 'hidden'"
-      ref="ToolsFrame"
-      v-bind:style="{
-        top: toolsFrame.top + 'px',
-        left: toolsFrame.left + 'px',
-        width: toolsFrame.width + 'px',
-        height: toolsFrame.height + 'px',
-      }"
-    ></div> -->
   </div>
 </template>
 
 <script>
 //import axios from "axios";
-import api from "@/services/api/api";
+//import api from "@/services/api/api";
 
 const totalWidth = 1920;
 const totalHeight = 1080;
@@ -100,7 +100,6 @@ export default {
       },
       wallArtworks: [],
       floorArtworks: [],
-      disponibleImages: [],
       backgroundPolys: [],
       width: width,
       height: height,
@@ -124,7 +123,8 @@ export default {
         visible: false,
       },
       possibleScale: [0.6, 1, 1.5],
-      wallColors: ['#ffffff','#a0ffa0','#ffa0a0','#a0a0ff'],
+      wallColors: ["#ffffff", "#a0ffa0", "#ffa0a0", "#a0a0ff", "#ffffa0"],
+      rightwallColors: ["#f2f2f2", "#93f293", "#f29393", "#9393f2", "#f2f293"],
     };
   },
   computed: {
@@ -137,76 +137,77 @@ export default {
   },
 
   methods: {
-    addArtwork(text) {
+    addArtwork(artwork) {
       console.log(
-        text + " , method addartwork in exposition component fired from app.vue"
+        artwork.name +
+          " , method addartwork in exposition component fired from app.vue"
       );
 
-      if (this.disponibleImages.length > 0) {
-        let index = Math.floor(Math.random() * this.disponibleImages.length);
-        var artwork = this.disponibleImages.splice(index, 1)[0];
+      var image = new Image();
+      //image.src = "http://localhost/testphp/img/" + artwork.src;
+      image.src = require("@/assets/img/artworks/" + artwork.src);
 
-        var image = new Image();
-        //image.src = "http://localhost/testphp/img/" + artwork.src;
-        image.src = require("@/assets/img/artworks/" + artwork.src);
+      artwork.config = {
+        x: width / 5,
+        y: height / 5,
+        image: image,
+        width: 100,
+        height: 100,
+        draggable: true,
+        skewY: 0,
+        scale: 1,
 
-        artwork.config = {
-          x: width / 5,
-          y: height / 5,
-          image: image,
-          width: 100,
-          height: 100,
-          draggable: true,
-          skewY: 0,
-          scale: 1,
-
-          name: "konva" + artwork.id,
-        };
-        image.onload = () => {
-          console.log("image:" + image.src + " loaded");
-          if (image.height < image.width) {
-            artwork.config.height = 175;
-            artwork.config.width = (image.width / image.height) * 175;
-          } else {
-            artwork.config.width = 175;
-            artwork.config.height = (image.height / image.width) * 175;
-          }
-          if (artwork.type == "peinture") {
-            // set image only when it is loaded
-            this.wallArtworks.push(artwork);
-          } else {
-            artwork.config.y = height / 2;
-            artwork.config.x = width / 2;
-            this.floorArtworks.push(artwork);
-          }
-        };
-      } else {
-        alert("y a plus rien");
-      }
+        name: "konva" + artwork.id,
+      };
+      image.onload = () => {
+        console.log("image:" + image.src + " loaded");
+        if (image.height < image.width) {
+          artwork.config.height = 175;
+          artwork.config.width = (image.width / image.height) * 175;
+        } else {
+          artwork.config.width = 175;
+          artwork.config.height = (image.height / image.width) * 175;
+        }
+        if (artwork.type == "peinture") {
+          // set image only when it is loaded
+          this.wallArtworks.push(artwork);
+        } else {
+          artwork.config.y = height / 2;
+          artwork.config.x = width / 2;
+          this.floorArtworks.push(artwork);
+        }
+      };
     },
 
     //change the color of a wall
     changePolyColor(poly) {
-      if (poly.name=='leftWall') {
-
-        var index=this.wallColors.findIndex((x) => x == poly.fill);
-     index++;
-     if(index==this.wallColors.length) {
-       index=0;
-     }
-     poly.fill=this.wallColors[index];
+      if (poly.name == "leftWall") {
+        var index = this.wallColors.findIndex((x) => x == poly.fill);
+        index++;
+        if (index == this.wallColors.length) {
+          index = 0;
+        }
+        poly.fill = this.wallColors[index];
+      }
+      if (poly.name == "rightWall") {
+        index = this.rightwallColors.findIndex((x) => x == poly.fill);
+        index++;
+        if (index == this.rightwallColors.length) {
+          index = 0;
+        }
+        poly.fill = this.rightwallColors[index];
       }
       console.log(poly);
     },
 
     //drag bound function for wall artworks
     dragMoveWall(image, index, event) {
-    this.iconsConfig.target=image.id;
+      this.iconsConfig.target = image.id;
       this.placeWallArtwork(event.target);
     },
 
     placeWallArtwork(target) {
-      console.log('place wall artwork');
+      console.log("place wall artwork");
       var y = target.y();
       var x = target.x();
       var targetWidth = target.width();
@@ -264,9 +265,9 @@ export default {
         }
       }
 
-        if (this.toolsFrameConfig.visible) {
-          this.setToolsFrame(target);
-        }
+      if (this.toolsFrameConfig.visible) {
+        this.setToolsFrame(target);
+      }
       var artworkName = target.VueComponent.config.name;
       const index = this.wallArtworks.findIndex(
         (x) => x.config.name === artworkName
@@ -277,7 +278,7 @@ export default {
 
     //drag bound function for floor artworks
     dragMoveFloor(image, index, event) {
-       this.iconsConfig.target=image.id;
+      this.iconsConfig.target = image.id;
       this.placeFloorArtwork(event.target);
     },
     placeFloorArtwork(target) {
@@ -323,24 +324,6 @@ export default {
       if (target.x() < floorWidth) {
         target.x(floorWidth);
       }
-      /*
-      if (event.target.x()< width - cornerWidth) {
-
-
-
-
-        const floorHeight =
-          cornerHeight + (event.target.x() / (width - cornerWidth)) * (height - cornerHeight);
-        if (event.target.y()+artworkHeight  > floorHeight) {
-          console.log("je tape la limite gôche!  x=");
-          event.target.y(floorHeight - artworkHeight);
-        }
-      }
-      //TOP LIMIT
-      if (event.target.y() + artworkHeight < cornerHeight + margin) {
-        console.log("je tape le mur du haut!");
-        event.target.y(cornerHeight + margin - artworkHeight);
-      }*/
 
       //BOTTOM LIMIT
       if (target.y() + artworkHeight > height) {
@@ -355,11 +338,11 @@ export default {
       const index = this.floorArtworks.findIndex(
         (x) => x.config.name === artworkName
       );
-       target.getParent().draw();
+      target.getParent().draw();
       this.placeOnTop("floor", index);
     },
     placeArtwork(target) {
-      console.log('placeArtwork');
+      console.log("placeArtwork");
       if (target.getParent().attrs.id == "wall") {
         this.placeWallArtwork(target);
       }
@@ -511,6 +494,55 @@ export default {
       }
       this.placeArtwork(this.$refs[targetRef][0].getNode());
     },
+    deleteArtwork() {
+      this.hideToolsFrame();
+      console.log("deletartwork method in exposition.vue");
+      var deletedArtwork = this.findArtworkById(this.iconsConfig.target);
+      console.log(deletedArtwork.name);
+      
+
+      //whithout type info in artwork
+      const id=this.iconsConfig.target;
+      var index = this.wallArtworks.findIndex((x) => x.id == id);
+      if (index != -1) {
+        deletedArtwork = this.wallArtworks.splice(index, 1)[0];
+      } else {
+        index = this.floorArtworks.findIndex((x) => x.id == id);
+        if (index != -1) {
+          deletedArtwork = this.floorArtworks.splice(index, 1)[0];
+        } else {
+          deletedArtwork = undefined;
+        }
+      }
+
+      this.$emit('deleteArtworkEvent', { deletedArtwork: deletedArtwork });
+    },
+    openArtworkModal() {
+      console.log("exposition.vue open artwork modal");
+      var artwork = this.wallArtworks.find(
+        (x) => x.id == this.iconsConfig.target
+      );
+      if (!artwork) {
+        artwork = this.floorArtworks.find(
+          (x) => x.id == this.iconsConfig.target
+        );
+      }
+      console.log(artwork);
+      this.$emit("openArtworkModalEvent", { artwork: artwork });
+    },
+    findArtworkById(id) {
+      var artwork = {};
+      var index = this.wallArtworks.findIndex((x) => x.id == id);
+      if (index != -1) {
+        artwork = this.wallArtworks[index];
+      } else {
+        index = this.floorArtworks.findIndex((x) => x.id == id);
+        if (index != -1) {
+          artwork = this.floorArtworks[index];
+        }
+      }
+      return artwork;
+    },
   },
   created() {},
   mounted() {
@@ -623,8 +655,8 @@ export default {
       ],
       fill: "#F2F2F2",
       closed: true,
-      name: 'rightWall',
-      color: 'white'
+      name: "rightWall",
+      color: "white",
     });
 
     //WRONG WALL.... NO LEFT WALL
@@ -640,8 +672,8 @@ export default {
         cornerHeight,
       ],
       fill: "#FFFFFF",
-       name: 'leftWall',
-      color: 'white',
+      name: "leftWall",
+      color: "white",
       closed: true,
     });
 
@@ -743,16 +775,13 @@ export default {
       this.$refs.stage.getNode().draw();
     };
 
-    //LOAD images from DB
-    //axios.get("http://localhost/testphp/getartwork.php").then((response) => {
-      
-      console.log('exposition.vue api call');
-  api.getArtworks().then(artworks=> {
-    this.disponibleImages=artworks;
-    console.log(this.disponibleImages);
-
-  });
-/*     axios
+    // DEPRECATED CALL TO API. Now in game.vue
+    /*   console.log("exposition.vue api call");
+    api.getArtworks().then((artworks) => {
+      this.disponibleImages = artworks;
+      console.log(this.disponibleImages);
+    }); */
+    /*     axios
       .get("http://yannbaizid.fr/yann/lizellba/getartwork.php")
       .then((response) => {
         this.disponibleImages = response.data;
@@ -782,10 +811,9 @@ export default {
 }
 #background {
   position: fixed;
-  top:0px;
+  top: 0px;
   left: 0px;
-  width:100%;
+  width: 100%;
   height: 100%;
-
 }
 </style>

@@ -18,14 +18,17 @@
             {{ question.caption }}
           </div>
         </div>
-        <div
-          class="answer_panel_right text_align_left flexbox_col h_100"
-        >
+        <div class="answer_panel_right text_align_left flexbox_col h_100">
           <div class="answer_width flexbox_col flexbox_spacearound flex_grow">
             <div>
               <div class="bold font_size_big" v-if="this.correct == 1">
-                Bonne réponse!<br />Vous avez gagné une oeuvre à placer dans ton
-                espace d'exposition!
+                Bonne réponse!<br />
+                <span v-if="artwork.id >= 0"
+                  >Vous avez gagné une oeuvre à placer dans votre espace
+                  d'exposition!</span
+                >
+                <span v-else >Malheureusement, il ne reste plus d'oeuvre a débloquer.
+                </span>
               </div>
               <div class="bold font_size_big" v-if="this.correct == 0">
                 Mauvaise réponse!<br />Ne vous découragez pas, essayez encore!
@@ -38,14 +41,17 @@
             <div>
               <div>{{ question.answer }}</div>
               <div id="info_link" class="p_t_20">
-                <a id="answer_link"  :href="question.info_link" target="_blank">
+                <a id="answer_link" :href="question.info_link" target="_blank">
                   lien vers le site de La Criée</a
                 >
               </div>
             </div>
             <div @click="$refs.AnswerModal.closeModal()">
               <app-button v-if="this.correct == 1" message="Placer l'oeuvre" />
-              <app-button v-if="this.correct == 0" message="Continuer à jouer" />
+              <app-button
+                v-if="this.correct == 0"
+                message="Continuer à jouer"
+              />
             </div>
           </div>
         </div>
@@ -67,6 +73,7 @@ export default {
     return {
       show: false,
       correct: false,
+      artwork: {},
     };
   },
   methods: {
@@ -75,12 +82,18 @@ export default {
       this.$emit("newQuestionEvent");
       document.querySelector("body").classList.remove("overflow-hidden");
     },
-    openModal(correct) {
-      this.$refs.AnswerModal.openModal();
-
-      console.log("j'ouvre! modal! réponse correc' =" + correct);
-      console.log(this.question);
+    openModal(correct, artwork) {
       this.correct = correct;
+      console.log(artwork.id);
+      this.artwork = artwork;
+      if (artwork !== undefined) {
+        if (this.question.expo_id == artwork.expo_id) {
+          console.log("right expo fetched!!");
+        }
+      }
+      console.log("j'ouvre! modal! réponse correc' =" + this.correct);
+      this.$refs.AnswerModal.openModal();
+      console.log(this.question);
     },
     handleCloseModalEvent() {
       this.closeModal();
@@ -90,8 +103,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-
 .answer_panel_right {
   width: 60%;
 }

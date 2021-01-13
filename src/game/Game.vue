@@ -19,7 +19,7 @@
     <div id="question">
       <Question
         v-bind:question="question"
-        @showAnswerEvent="handleShowAnswerEvent"
+        @validateQuestionEvent="handleValidateAnswerEvent"
         ref="questionComponent"
       />
     </div>
@@ -28,6 +28,8 @@
       ref="expositionComponent"
       id="exposition"
       class="flexbox_row flexbox_justifycenter h_100"
+      @openArtworkModalEvent="openArtworkModal"
+      @deleteArtworkEvent="deleteArtwork"
     />
 
     <div id="btn_close" @click="openClosingModal()">
@@ -39,6 +41,7 @@
     <div id="btn_validate" @click="openValidateModal()">
       <app-button message="valider votre exposition" />
     </div>
+    <info-artwork-modal ref="InfoArtworkModal" />
   </div>
 </template>
 
@@ -52,7 +55,8 @@ import TutoModal from "./components/TutoModal.vue";
 import AppButton from "../services/AppButton.vue";
 import ValidateModal from "./components/ValidateModal.vue";
 import ClosingModal from "./components/ClosingModal.vue";
-import { mapState } from "vuex";
+
+import InfoArtworkModal from "./components/InfoArtworkModal.vue";
 
 export default {
   name: "Game",
@@ -65,16 +69,17 @@ export default {
     AppButton,
     ValidateModal,
     ClosingModal,
+    InfoArtworkModal,
   },
   data() {
     return {
       showQuestion: false,
       question: {},
+      artwork: {},
+      disponibleArtworks: [],
     };
   },
-  computed: {
-    ...mapState(["phpLink"]),
-  },
+  computed: {},
   methods: {
     chargeQuestion() {
       console.log("change question");
@@ -99,20 +104,29 @@ export default {
       api.saveExpoImage(imgURL, curatorName, expoName);
       this.exitToHome();
     },
-    handleShowAnswerEvent(payload) {
+    handleValidateAnswerEvent(payload) {
       console.log(
-        "handleShowAnswerEvent in app.vue, correct=" + payload.correct
+        "handleShowAnswerEvent in app.vue, correct=" +
+          payload.correct +
+          " expoid:" +
+          payload.expoId
       );
-      if (payload.correct == 1) {
-        this.$refs.expositionComponent.addArtwork(
-          "salut je suis app.vue et je demande à exposion.vue d'ajouter une oeuvre"
-        );
-      }
+
       this.$refs.questionComponent.closeQuestion(
         "salut je suis app.vue et je demande la fermeture de la question"
       );
+      var artwork = {};
+      if (payload.correct == 1) {
+        artwork = this.addArtwork();
+      }
       this.showQuestion = false;
-      this.$refs.AnswerModal.openModal(payload.correct);
+
+      this.$refs.AnswerModal.openModal(payload.correct, artwork);
+    },
+    openArtworkModal(payload) {
+      this.artwork = payload.artwork;
+      console.log("game.vue, openArtwork modal" + this.artwork.name);
+      this.$refs.InfoArtworkModal.openModal(payload.artwork);
     },
 
     openClosingModal() {
@@ -129,11 +143,59 @@ export default {
     exitToHome() {
       this.$router.push({ name: "Home" });
     },
+    addArtwork(expoId) {
+      console.log("handleAddArtworkevent");
+
+        var artwork = {};
+      //only if artwork still left
+      if (this.disponibleArtworks.length > 0) {
+
+        //first try to fetch artwork of the right expo.
+        const expoArtworks = this.disponibleArtworks.filter(
+          (artwork) => artwork.expo_id == expoId
+        );
+        console.log("addartwork method");
+        console.log(expoArtworks);
+        console.log(this.disponibleArtworks);
+        if (expoArtworks.length > 0) {
+          let index = Math.floor(Math.random() * expoArtworks.length);
+          artwork = expoArtworks[index];
+
+          const generalIndex = this.disponibleArtworks.findIndex(
+            (x) => x.id == artwork.id
+          );
+          artwork = this.disponibleArtworks.splice(generalIndex, 1)[0];
+        } 
+        //else, fetch any remaining artwork.
+        else  {
+          let index = Math.floor(
+            Math.random() * this.disponibleArtworks.length
+          );
+          artwork = this.disponibleArtworks.splice(index, 1)[0];
+        }
+        console.log("after splice");
+        console.log(this.disponibleArtworks);
+        console.log(artwork);
+        this.$refs.expositionComponent.addArtwork(artwork);
+      }
+
+      return artwork;
+    },
+    deleteArtwork(payload) {
+      console.log("deleteArtwork method, game.vue");
+      var deletedArtwork = payload.deletedArtwork;
+      this.disponibleArtworks.push(deletedArtwork);
+    },
   },
 
   mounted() {
     console.log("phplink:" + this.phpLink);
     this.chargeQuestion();
+
+    api.getArtworks().then((artworks) => {
+      this.disponibleArtworks = artworks;
+      console.log(this.disponibleArtworks);
+    });
   },
 };
 </script>
