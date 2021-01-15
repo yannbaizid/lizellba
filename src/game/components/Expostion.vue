@@ -85,6 +85,7 @@ const cornerWidth = (2 * width) / 3;
 const thickness = 20;
 const iconMargin = 10;
 const iconSize = 40;
+const wallHeight = 400;
 
 const angle = Math.atan((height - cornerHeight) / (width - cornerWidth));
 
@@ -151,39 +152,58 @@ export default {
       var image = new Image();
       
       //image.src = require("@/assets/img/artworks/" + artwork.src);
+      image.src = "http://localhost/img/artwork/" + artwork.src;
+     // image.src = "/img/artwork/" + artwork.src;
 
-      //image.src = "http://yannbaizid.fr/yann/lizellba/test/img/artwork/" + artwork.src;
       console.log(image.src);
-      image.src = "/img/artwork/" + artwork.src;
+      const randomX=Math.floor(Math.random() *width);
+      const randomY=Math.floor(Math.random() *width);
       artwork.config = {
-        x: width / 5,
-        y: height / 5,
+        x: randomX,
+        y: randomY,
         image: image,
         width: 100,
         height: 100,
         draggable: true,
         skewY: 0,
-        scale: 1,
+      
 
         name: "konva" + artwork.id,
       };
       image.onload = () => {
+
+        // set DImension proportional to wall height
+        artwork.config.height = (artwork.height/wallHeight)*cornerHeight;
+          artwork.config.width = (image.width / image.height) * artwork.config.height;
+
+        
         console.log("image:" + image.src + " loaded");
-        if (image.height < image.width) {
+     /*    if (image.height < image.width) {
           artwork.config.height = 175;
-          artwork.config.width = (image.width / image.height) * 175;
+          artwork.config.width = (image.width / image.height) * artwork.config.height;
         } else {
           artwork.config.width = 175;
           artwork.config.height = (image.height / image.width) * 175;
-        }
+        } */
         if (artwork.type == "wall") {
           // set image only when it is loaded
           this.wallArtworks.push(artwork);
         } else {
-          artwork.config.y = height / 2;
-          artwork.config.x = width / 2;
+         
           this.floorArtworks.push(artwork);
+     
+  
         }
+     console.log(this.$refs);
+     var targetId=artwork.id.toString();
+     console.log('targetId:'+targetId);
+    this.$nextTick(() => {
+        console.log(this.$refs[targetId][0]); 
+        
+             this.showToolsFrame();
+         this.iconsConfig.target = artwork.id;
+        this.placeArtwork(this.$refs[targetId][0].getNode());
+    });
       };
     },
 
@@ -410,7 +430,10 @@ export default {
       console.log("showtoolsframe");
       this.toolsFrameConfig.visible = true;
       this.iconsConfig.visible = true;
-      this.setToolsFrame(event.target);
+      if (event)  {
+
+        this.setToolsFrame(event.target);
+      }
     },
     hideToolsFrame() {
       console.log("displaytoolsframe");
