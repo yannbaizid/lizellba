@@ -122,7 +122,7 @@ export default {
       );
       var artwork = {};
       if (payload.correct == 1) {
-        artwork = this.addArtwork();
+        artwork = this.addArtwork( payload.expoId);
       }
       this.showQuestion = false;
 
