@@ -5,22 +5,23 @@
     type="answer"
     @closeModalEvent="handleCloseModalEvent"
   >
-    <div class="flexbox flexbox_row h_100">
+    <div v-if="artworkLoaded" class="flexbox flexbox_row h_100">
       <div class="info_panel_left flexbox_col h_100">
         <img
           id="info_image"
-          class="info_image flex_grow"
-          src="$"
+          class="info_image h_100 "
+          :src="'/img/artwork/' + artwork.src"
           alt="image loading"
         />
        
       </div>
       <div class="info_panel_right text_align_left flexbox_col h_100">
         <div class="info_width flexbox_col flexbox_spacearound flex_grow">
-          <div class="flex_grow flexbox_col flexbox_justifycenter">
-            Informations sur l'oeuvre
+          <div class="flex_grow flexbox_col flexbox_justifycenter flexbox_alignstart">
+            <div>{{artwork.artist.name}} {{artwork.artist.surname}}, <span class="italic">{{artwork.name}}</span>, {{artwork.year}}</div>
+            <div>{{artwork.caption}}</div>
                <div id="info_link" class="p_t_20">
-              <a id="answer_link" href="" target="_blank">
+              <a id="answer_link" :href="'/img/artwork'+artwork.src" target="_blank">
                 lien vers le site de La Criée</a
               >
             </div>
@@ -49,7 +50,8 @@ export default {
  
   data() {
     return {
-      artwork: Object
+      artwork: Object,
+      artworkLoaded: false,
     };
   },
   methods: {
@@ -59,9 +61,10 @@ export default {
     },
     openModal(artwork) {
         console.log(artwork);
-        console.log(this.$refs);
-        this.artwork=artwork;
+        
       this.$refs.InfoArtworkModal.openModal();
+        this.artwork=artwork;
+        this.artworkLoaded=true;
     },
     handleCloseModalEvent() {
       this.closeModal();

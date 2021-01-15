@@ -1,7 +1,7 @@
 <template>
   <div id="gallery">
-    <photo-modal ref="PhotoModal" />
-    <div id="gallery_container">
+   
+    <div id="gallery_container" class="flexbox_row flexbox_justifystart flexbox_alignstart w_100">
       <div
         class="img_thumbnail"
         v-for="(photo, index) in photos"
@@ -10,11 +10,12 @@
       >
         <img
           class="gallery_img"
-          :src="'http://yannbaizid.fr/yann/lizellba/php/img/expos/' + photo.file_name"
+          :src="'/img/expos/' + photo.file_name"
           :alt="photo.img_name"
         />
       </div>
     </div>
+     <photo-modal ref="PhotoModal" />
   </div>
 </template>
 
@@ -48,20 +49,27 @@ export default {
 
 <style lang="scss" scoped>
 .img_thumbnail {
-  width: 300px;
-  max-width: 30%;
+
+ width: 24%;
+ padding-bottom: 20px;
+ padding-right: 0.5%;
+ padding-left: 0.5%;
 }
 
 .gallery_img {
   width: 100%;
-  border-radius: 5%;
+  border-radius: 2%;
+}
+#gallery_container {
+  padding: 0px 20px;
+  box-sizing: border-box;
 }
 
 #gallery {
   &_container {
-    display: flex;
+
     flex-wrap: wrap;
-    justify-content: space-around;
+ 
   }
 }
 </style>

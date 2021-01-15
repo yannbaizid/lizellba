@@ -11,7 +11,7 @@
           <img
             id="answer_image"
             class="answer_image flex_grow"
-            :src="question.imglink"
+            :src="'/img/question/'+question.img_link"
             alt="image loading"
           />
           <div class="caption text_align_left">
