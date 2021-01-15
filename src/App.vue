@@ -97,6 +97,10 @@ body {
     flex-shrink: 1;
   }
 
+  .flex_shrink {
+    flex-shrink: 1;
+  }
+
 
   .modal_container {
 

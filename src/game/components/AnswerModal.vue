@@ -10,7 +10,7 @@
         <div class="answer_panel_left flexbox_col h_100">
           <img
             id="answer_image"
-            class="answer_image flex_grow"
+            class="answer_image flex_grow flex_shrink"
             :src="'/img/question/'+question.img_link"
             alt="image loading"
           />
