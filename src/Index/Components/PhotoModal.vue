@@ -13,7 +13,7 @@
         <div class="flexbox_col flexbox_spacebetween flexbox_alignstart h_100">
           <img
             class="img_rnd photo_modal_img"
-           :src="'http://yannbaizid.fr/yann/lizellba/php/img/expos/' + photo.file_name"
+           :src="'/img/expos/' + photo.file_name"
             :alt="photo.img_name"
           />
           <div id="exposition_description" class="flexbox_col flexbox_spacebetween flexbox_alignstart">

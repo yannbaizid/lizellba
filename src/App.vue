@@ -132,6 +132,9 @@ body {
   .bolder {
     font-weight: bold;
   }
+  .italic {
+    font-style: italic;
+  }
   .caption {
     font-weight: 300;
     font-size: 12px;

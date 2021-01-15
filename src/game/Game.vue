@@ -99,10 +99,15 @@ export default {
       const expoName = data.expoName;
       const imgURL = this.$refs.expositionComponent.returnExpoImage();
       console.log("curator name:" + curatorName + " exponame:" + expoName);
+      console.log('imagURL:'+imgURL);
 
       //Send data to php
-      api.saveExpoImage(imgURL, curatorName, expoName);
-      this.exitToHome();
+     api.saveExpoImage(imgURL, curatorName, expoName).then((data)=> {
+       console.log(data);
+       //this.exitToHome();
+        }).catch(function () {
+          alert('erreur de sauvegarde');
+        });
     },
     handleValidateAnswerEvent(payload) {
       console.log(

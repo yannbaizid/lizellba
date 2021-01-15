@@ -25,7 +25,7 @@
           <img
             id="question_content_image"
             class="app_question_image"
-            :src="question.imglink"
+            :src="'/img/question/'+question.img_link"
             alt="image loading"
           />
 
@@ -53,7 +53,7 @@
                 :checked="selectedAnswer.id == answer.id"
               />
             </div>
-            <div>{{ answer.text }} {{ answer.correct }}</div>
+            <div>{{ answer.text }}</div>
           </div>
         </div>
 

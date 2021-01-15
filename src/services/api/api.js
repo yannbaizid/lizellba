@@ -13,24 +13,19 @@ export default {
     },
 
     async getRandomQuestion() {
+      console.log('getrandomquestion');
         return axios.get("getquestion.php").then((response) => {
             return response.data;
           });
     },
 
     async saveExpoImage(imgURL, curatorName,expoName) {
-        return axios.post("testphpinput.php", {
+        return axios.post("saveExpoImage.php", {
           image: imgURL,
           curatorName: curatorName,
           expoName: expoName,
         })
-        .then(function (data) {
-          console.log(data);
-        })
-
-        .catch(function () {
-          console.log("FAILURE to save!!");
-        });
+    
     },
 
     async getGalleryPhotos () {

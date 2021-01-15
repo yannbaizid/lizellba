@@ -22,6 +22,7 @@
           :ref="image.id"
           @dragmove="dragMoveWall(image, index, $event)"
           @click="displayToolsFrame(image.id, 'wall', index, $event)"
+           
         >
         </v-image>
       </v-layer>
@@ -38,7 +39,7 @@
         ></v-image>
       </v-layer>
       <v-layer id="tools">
-        <v-image ref="watermark" :config="watermark"> </v-image>
+        <v-image ref="watermark"  :config="watermark"> </v-image>
         <v-rect ref="toolsFrame" :config="toolsFrameConfig" />
         <v-group ref="icons" :config="iconsConfig">
           <v-image
@@ -104,6 +105,7 @@ export default {
       width: width,
       height: height,
       watermark: {},
+      showWaterMark:false,
       toolsFrameOn: false,
       toolsFrameConfig: {
         x: 0,
@@ -137,6 +139,9 @@ export default {
   },
 
   methods: {
+    sayHello() {
+      console.log('hello');
+    },
     addArtwork(artwork) {
       console.log(
         artwork.name +
@@ -144,9 +149,12 @@ export default {
       );
 
       var image = new Image();
-      //image.src = "http://localhost/testphp/img/" + artwork.src;
-      image.src = require("@/assets/img/artworks/" + artwork.src);
+      
+      //image.src = require("@/assets/img/artworks/" + artwork.src);
 
+      //image.src = "http://yannbaizid.fr/yann/lizellba/test/img/artwork/" + artwork.src;
+      console.log(image.src);
+      image.src = "/img/artwork/" + artwork.src;
       artwork.config = {
         x: width / 5,
         y: height / 5,
@@ -168,7 +176,7 @@ export default {
           artwork.config.width = 175;
           artwork.config.height = (image.height / image.width) * 175;
         }
-        if (artwork.type == "peinture") {
+        if (artwork.type == "wall") {
           // set image only when it is loaded
           this.wallArtworks.push(artwork);
         } else {
@@ -375,6 +383,7 @@ export default {
 
     //return the expo snapshot as base 64
     returnExpoImage() {
+      this.showWaterMark=true;
       this.hideToolsFrame();
       this.$refs.watermark.getNode().opacity(1);
       this.$refs.icons.getNode().opacity(0);
@@ -494,6 +503,8 @@ export default {
       }
       this.placeArtwork(this.$refs[targetRef][0].getNode());
     },
+
+    //DELETE artwork
     deleteArtwork() {
       this.hideToolsFrame();
       console.log("deletartwork method in exposition.vue");
@@ -683,12 +694,16 @@ export default {
     image.src = require("@/assets/watermark.png");
 
     this.watermark = {
-      x: 50,
-      y: height - 270,
+      x: 0,
+      y: 0,
       image: image,
-      width: 300,
-      height: 300,
+      width: totalWidth,
+      height: totalHeight,
       opacity: 1,
+      scaleX: relativeSizeOfContent,
+      scaleY:relativeSizeOfContent,
+    
+      listening: false
     };
 
     image.onload = () => {
