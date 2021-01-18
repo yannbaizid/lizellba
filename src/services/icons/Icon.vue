@@ -8,7 +8,7 @@
       fill="none"
       xmlns="http://www.w3.org/2000/svg" :stroke-width="size<25? 2: 1"
     >
-      <circle v-if="circle" cx="19.5" cy="19.5" r="19" fill="white" stroke="black" />
+      <circle v-if="circle" cx="19.5" cy="19.5" r="19" :fill="fill? 'white': ''" stroke="black" />
 
       <!-- ICON "X" -->
       <g v-if="type == 'x'">

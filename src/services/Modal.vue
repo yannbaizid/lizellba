@@ -1,8 +1,8 @@
 <template>
   <div class="modal" v-if="show">
-    <div class="modal_backdrop" @click="closeModal()" />
+    <div class="modal_backdrop" @click="closable? closeModal(): ''" />
     <div class="modal_dialog" :class="type">
-      <div @click="closeModal()">
+      <div v-if="closable" @click="closeModal()">
         <app-icon type="x" :circle="false" class="float_right" id="close_icon"/>
       </div>
       <slot></slot>
@@ -23,7 +23,11 @@ export default {
     type: {
       type: String,
       default: 'default'
-    }
+    },
+    closable: {
+      type: Boolean,
+      default: true
+    },
   },
   data() {
     return {
