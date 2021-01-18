@@ -33,15 +33,16 @@
     />
 
     <div id="btn_close" @click="openClosingModal()">
-      <app-icon type="x" />
+      <app-icon type="x" :fill="false"/>
     </div>
     <div id="btn_tuto" @click="openTutoModal()">
-      <app-icon type="?" />
+      <app-icon type="?" :fill="false"/>
     </div>
     <div id="btn_validate" @click="openValidateModal()">
       <app-button message="valider votre exposition" />
     </div>
     <info-artwork-modal ref="InfoArtworkModal" />
+    <loading-modal v-show="loading" ref="LoadingModal" />
   </div>
 </template>
 
@@ -57,6 +58,7 @@ import ValidateModal from "./components/ValidateModal.vue";
 import ClosingModal from "./components/ClosingModal.vue";
 
 import InfoArtworkModal from "./components/InfoArtworkModal.vue";
+import LoadingModal from '../services/LoadingModal.vue';
 
 export default {
   name: "Game",
@@ -70,6 +72,7 @@ export default {
     ValidateModal,
     ClosingModal,
     InfoArtworkModal,
+    LoadingModal,
   },
   data() {
     return {
@@ -77,9 +80,16 @@ export default {
       question: {},
       artwork: {},
       disponibleArtworks: [],
+      loadingArtwork: false,
+      loadingQuestion: false,
+      loadingGeneral: false,
     };
   },
-  computed: {},
+  computed: {
+    loading() {
+      return (this.loadingArtwork || this.loadingQuestion ||this.loadingGeneral);
+    }
+  },
   methods: {
     chargeQuestion() {
       console.log("change question");
@@ -88,10 +98,19 @@ export default {
         console.log(this.question);
         this.showQuestion = false;
       }); */
-      api.getRandomQuestion().then((question) => {
-        this.question = question;
-        console.log(this.question);
-      });
+      this.loadingArtwork = true;
+      api
+        .getRandomQuestion()
+        .then((question) => {
+          this.question = question;
+          console.log(this.question);
+        })
+        .catch((error) => {
+          alert("erreur lors du chargement de question" + error.message);
+        })
+        .finally(() => {
+          this.loadingArtwork = false;
+        });
     },
     handleValidateExpoEvent(data) {
       console.log("game.vue, handleValidateExpo");
@@ -99,14 +118,17 @@ export default {
       const expoName = data.expoName;
       const imgURL = this.$refs.expositionComponent.returnExpoImage();
       console.log("curator name:" + curatorName + " exponame:" + expoName);
-      console.log('imagURL:'+imgURL);
+      console.log("imagURL:" + imgURL);
 
       //Send data to php
-     api.saveExpoImage(imgURL, curatorName, expoName).then((data)=> {
-       console.log(data);
-       //this.exitToHome();
-        }).catch(function () {
-          alert('erreur de sauvegarde');
+      api
+        .saveExpoImage(imgURL, curatorName, expoName)
+        .then((data) => {
+          console.log(data);
+          //this.exitToHome();
+        })
+        .catch(function () {
+          alert("erreur de sauvegarde");
         });
     },
     handleValidateAnswerEvent(payload) {
@@ -122,7 +144,7 @@ export default {
       );
       var artwork = {};
       if (payload.correct == 1) {
-        artwork = this.addArtwork( payload.expoId);
+        artwork = this.addArtwork(payload.expoId);
       }
       this.showQuestion = false;
 
@@ -151,10 +173,9 @@ export default {
     addArtwork(expoId) {
       console.log("handleAddArtworkevent");
 
-        var artwork = {};
+      var artwork = {};
       //only if artwork still left
       if (this.disponibleArtworks.length > 0) {
-
         //first try to fetch artwork of the right expo.
         const expoArtworks = this.disponibleArtworks.filter(
           (artwork) => artwork.expo_id == expoId
@@ -170,9 +191,9 @@ export default {
             (x) => x.id == artwork.id
           );
           artwork = this.disponibleArtworks.splice(generalIndex, 1)[0];
-        } 
+        }
         //else, fetch any remaining artwork.
-        else  {
+        else {
           let index = Math.floor(
             Math.random() * this.disponibleArtworks.length
           );
@@ -191,16 +212,23 @@ export default {
       var deletedArtwork = payload.deletedArtwork;
       this.disponibleArtworks.push(deletedArtwork);
     },
+    chargeArtworks() {
+      this.loadingQuestion=true;
+      api.getArtworks().then((artworks) => {
+        this.disponibleArtworks = artworks;
+        console.log(this.disponibleArtworks);
+      }).catch((error) => {
+          alert("erreur lors du chargement des oeuvres" + error.message);
+        })
+        .finally(() => {
+          this.loadingQuestion = false;
+        });
+    },
   },
-
   mounted() {
     console.log("phplink:" + this.phpLink);
     this.chargeQuestion();
-
-    api.getArtworks().then((artworks) => {
-      this.disponibleArtworks = artworks;
-      console.log(this.disponibleArtworks);
-    });
+    this.chargeArtworks();
   },
 };
 </script>
