@@ -22,7 +22,6 @@
           :ref="image.id"
           @dragmove="dragMoveWall(image, index, $event)"
           @click="displayToolsFrame(image.id, 'wall', index, $event)"
-           
         >
         </v-image>
       </v-layer>
@@ -39,7 +38,7 @@
         ></v-image>
       </v-layer>
       <v-layer id="tools">
-        <v-image ref="watermark"  :config="watermark"> </v-image>
+        <v-image ref="watermark" :config="watermark"> </v-image>
         <v-rect ref="toolsFrame" :config="toolsFrameConfig" />
         <v-group ref="icons" :config="iconsConfig">
           <v-image
@@ -100,13 +99,13 @@ export default {
         scaleX: ratio,
         scaleY: ratio,
       },
-      wallArtworks: [],
-      floorArtworks: [],
+
+      artworks: [],
       backgroundPolys: [],
       width: width,
       height: height,
       watermark: {},
-      showWaterMark:false,
+      showWaterMark: false,
       toolsFrameOn: false,
       toolsFrameConfig: {
         x: 0,
@@ -137,11 +136,17 @@ export default {
     leftWidth() {
       return totalWidth * (1 - relativeSizeOfContent);
     },
+    wallArtworks() {
+      return this.artworks.filter((artwork) => artwork.type == "wall");
+    },
+    floorArtworks() {
+      return this.artworks.filter((artwork) => artwork.type == "floor");
+    },
   },
 
   methods: {
     sayHello() {
-      console.log('hello');
+      console.log("hello");
     },
     addArtwork(artwork) {
       console.log(
@@ -150,14 +155,14 @@ export default {
       );
 
       var image = new Image();
-      
+
       //image.src = require("@/assets/img/artworks/" + artwork.src);
-      image.src = "http://localhost/img/artwork/" + artwork.src;
-     // image.src = "/img/artwork/" + artwork.src;
+      image.src = process.env.VUE_APP_IMGLINK + "artwork/" + artwork.src;
+      // image.src = "/img/artwork/" + artwork.src;
 
       console.log(image.src);
-      const randomX=Math.floor(Math.random() *width);
-      const randomY=Math.floor(Math.random() *width);
+      const randomX = Math.floor(Math.random() * width);
+      const randomY = Math.floor(Math.random() * width);
       artwork.config = {
         x: randomX,
         y: randomY,
@@ -166,19 +171,18 @@ export default {
         height: 100,
         draggable: true,
         skewY: 0,
-      
+        scale: 1,
 
         name: "konva" + artwork.id,
       };
       image.onload = () => {
-
         // set DImension proportional to wall height
-        artwork.config.height = (artwork.height/wallHeight)*cornerHeight;
-          artwork.config.width = (image.width / image.height) * artwork.config.height;
+        artwork.config.height = (artwork.height / wallHeight) * cornerHeight;
+        artwork.config.width =
+          (image.width / image.height) * artwork.config.height;
 
-        
         console.log("image:" + image.src + " loaded");
-     /*    if (image.height < image.width) {
+        /*    if (image.height < image.width) {
           artwork.config.height = 175;
           artwork.config.width = (image.width / image.height) * artwork.config.height;
         } else {
@@ -187,23 +191,21 @@ export default {
         } */
         if (artwork.type == "wall") {
           // set image only when it is loaded
-          this.wallArtworks.push(artwork);
+
+          this.artworks.push(artwork);
         } else {
-         
-          this.floorArtworks.push(artwork);
-     
-  
+          this.artworks.push(artwork);
         }
-     console.log(this.$refs);
-     var targetId=artwork.id.toString();
-     console.log('targetId:'+targetId);
-    this.$nextTick(() => {
-        console.log(this.$refs[targetId][0]); 
-        
-             this.showToolsFrame();
-         this.iconsConfig.target = artwork.id;
-        this.placeArtwork(this.$refs[targetId][0].getNode());
-    });
+        console.log(this.$refs);
+        var targetId = artwork.id.toString();
+        console.log("targetId:" + targetId);
+        this.$nextTick(() => {
+          console.log(this.$refs[targetId][0]);
+
+          this.showToolsFrame();
+          this.iconsConfig.target = artwork.id;
+          this.placeArtwork(this.$refs[targetId][0].getNode());
+        });
       };
     },
 
@@ -297,7 +299,7 @@ export default {
         this.setToolsFrame(target);
       }
       var artworkName = target.VueComponent.config.name;
-      const index = this.wallArtworks.findIndex(
+      const index = this.artworks.findIndex(
         (x) => x.config.name === artworkName
       );
       target.getParent().draw();
@@ -363,7 +365,7 @@ export default {
       }
 
       var artworkName = target.VueComponent.config.name;
-      const index = this.floorArtworks.findIndex(
+      const index = this.artworks.findIndex(
         (x) => x.config.name === artworkName
       );
       target.getParent().draw();
@@ -381,11 +383,7 @@ export default {
 
     //Put artwork in front. NOT WORKING, TEST METHOD
     placeOnTop(type, index) {
-      if (type == "wall") {
-        this.wallArtworks.push(this.wallArtworks.splice(index, 1)[0]);
-      } else {
-        this.floorArtworks.push(this.floorArtworks.splice(index, 1)[0]);
-      }
+      this.artworks.push(this.artworks.splice(index, 1)[0]);
     },
 
     //Scale the stage to fit windows size
@@ -403,7 +401,7 @@ export default {
 
     //return the expo snapshot as base 64
     returnExpoImage() {
-      this.showWaterMark=true;
+      this.showWaterMark = true;
       this.hideToolsFrame();
       this.$refs.watermark.getNode().opacity(1);
       this.$refs.icons.getNode().opacity(0);
@@ -430,8 +428,7 @@ export default {
       console.log("showtoolsframe");
       this.toolsFrameConfig.visible = true;
       this.iconsConfig.visible = true;
-      if (event)  {
-
+      if (event) {
         this.setToolsFrame(event.target);
       }
     },
@@ -503,6 +500,35 @@ export default {
         this.$refs[targetRef][0].getNode().height(baseHeight * targetScale);
         this.$refs[targetRef][0].config.scale = targetScale;
         this.$refs.stage.getNode().draw();
+        const targetType=this.artworks.find((artwork) => artwork.id == targetRef).type;
+        console.log('target type:'+targetType);
+        if (targetType=="wall" ) {
+          console.log('width of artwrok:'+this.$refs[targetRef][0].getNode().width());
+          console.log('wall width'+(width-cornerWidth));
+          if ( this.$refs[targetRef][0].getNode().width()>=width-cornerWidth ) {
+           
+           this.$refs[targetRef][0].getNode().width(width-cornerWidth) ;
+            this.$refs[targetRef][0].getNode().height((width-cornerWidth)/baseWidth*baseHeight)
+          }
+          if ( this.$refs[targetRef][0].getNode().height()>=cornerHeight ) {
+           
+           this.$refs[targetRef][0].getNode().height(cornerHeight) ;
+            this.$refs[targetRef][0].getNode().width((cornerHeight)/baseHeight*baseWidth);
+          }
+        }
+        if (targetType=="floor" ) {
+     
+          if ( this.$refs[targetRef][0].getNode().width()>=width ) {
+           
+           this.$refs[targetRef][0].getNode().width(width) ;
+            this.$refs[targetRef][0].getNode().height((width)/baseWidth*baseHeight)
+          }
+          if ( this.$refs[targetRef][0].getNode().height()>=height ) {
+           
+           this.$refs[targetRef][0].getNode().height(height) ;
+            this.$refs[targetRef][0].getNode().width((height)/baseHeight*baseWidth);
+          }
+        }
       }
 
       this.placeArtwork(this.$refs[targetRef][0].getNode());
@@ -533,49 +559,28 @@ export default {
       console.log("deletartwork method in exposition.vue");
       var deletedArtwork = this.findArtworkById(this.iconsConfig.target);
       console.log(deletedArtwork.name);
-      
 
       //whithout type info in artwork
-      const id=this.iconsConfig.target;
-      var index = this.wallArtworks.findIndex((x) => x.id == id);
+      const id = this.iconsConfig.target;
+      var index = this.artworks.findIndex((x) => x.id == id);
       if (index != -1) {
-        deletedArtwork = this.wallArtworks.splice(index, 1)[0];
+        deletedArtwork = this.artworks.splice(index, 1)[0];
       } else {
-        index = this.floorArtworks.findIndex((x) => x.id == id);
-        if (index != -1) {
-          deletedArtwork = this.floorArtworks.splice(index, 1)[0];
-        } else {
-          deletedArtwork = undefined;
-        }
+        deletedArtwork = undefined;
       }
 
-      this.$emit('deleteArtworkEvent', { deletedArtwork: deletedArtwork });
+      this.$emit("deleteArtworkEvent", { deletedArtwork: deletedArtwork });
     },
     openArtworkModal() {
       console.log("exposition.vue open artwork modal");
-      var artwork = this.wallArtworks.find(
-        (x) => x.id == this.iconsConfig.target
-      );
-      if (!artwork) {
-        artwork = this.floorArtworks.find(
-          (x) => x.id == this.iconsConfig.target
-        );
-      }
+      var artwork = this.artworks.find((x) => x.id == this.iconsConfig.target);
+
       console.log(artwork);
       this.$emit("openArtworkModalEvent", { artwork: artwork });
     },
     findArtworkById(id) {
-      var artwork = {};
-      var index = this.wallArtworks.findIndex((x) => x.id == id);
-      if (index != -1) {
-        artwork = this.wallArtworks[index];
-      } else {
-        index = this.floorArtworks.findIndex((x) => x.id == id);
-        if (index != -1) {
-          artwork = this.floorArtworks[index];
-        }
-      }
-      return artwork;
+      var index = this.artworks.findIndex((x) => x.id == id);
+      return this.artworks[index];
     },
   },
   created() {},
@@ -724,9 +729,9 @@ export default {
       height: totalHeight,
       opacity: 1,
       scaleX: relativeSizeOfContent,
-      scaleY:relativeSizeOfContent,
-    
-      listening: false
+      scaleY: relativeSizeOfContent,
+
+      listening: false,
     };
 
     image.onload = () => {

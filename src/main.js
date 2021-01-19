@@ -5,8 +5,8 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 
-// axios.defaults.baseURL="http://yannbaizid.fr/yann/lizellba/php/"
-axios.defaults.baseURL="/php/"
+ axios.defaults.baseURL=process.env.VUE_APP_PHPLINK;
+//axios.defaults.baseURL="/php/"
 
 Vue.config.productionTip = false
 Vue.use(VueKonva)
