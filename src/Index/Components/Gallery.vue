@@ -32,10 +32,12 @@ export default {
     };
   },
   mounted() {
+     console.log(process.env.VUE_APP_PHPLINK);
     api.getGalleryPhotos().then((photos) => {
       this.photos = photos;
       console.log("photos fetched from api");
       console.log(this.photos);
+     
     });
   },
   methods: {

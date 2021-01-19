@@ -11,7 +11,7 @@
           <img
             id="answer_image"
             class="answer_image flex_grow flex_shrink"
-            :src="'/img/question/'+question.img_link"
+            :src="imgLink+'question/'+question.img_link"
             alt="image loading"
           />
           <div class="caption text_align_left">
@@ -74,6 +74,7 @@ export default {
       show: false,
       correct: false,
       artwork: {},
+       imgLink: process.env.VUE_APP_IMGLINK,
     };
   },
   methods: {

@@ -25,7 +25,7 @@
           <img
             id="question_content_image"
             class="app_question_image"
-            :src="'/img/question/'+question.img_link"
+            :src="imgLink+'question/'+question.img_link"
             alt="image loading"
           />
 
@@ -93,6 +93,7 @@ export default {
       showAnswer: false,
       showQuestion: true,
       selectedAnswer: {},
+      imgLink: process.env.VUE_APP_IMGLINK,
     };
   },
   methods: {

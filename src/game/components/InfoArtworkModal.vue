@@ -10,7 +10,7 @@
         <img
           id="info_image"
           class="info_image h_100 "
-          :src="'/img/artwork/' + artwork.src"
+          :src="imgLink+'artwork/' + artwork.src"
           alt="image loading"
         />
        
@@ -52,6 +52,7 @@ export default {
     return {
       artwork: Object,
       artworkLoaded: false,
+       imgLink: process.env.VUE_APP_IMGLINK,
     };
   },
   methods: {
