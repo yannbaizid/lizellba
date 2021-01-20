@@ -30,18 +30,23 @@
       class="flexbox_row flexbox_justifycenter h_100"
       @openArtworkModalEvent="openArtworkModal"
       @deleteArtworkEvent="deleteArtwork"
+      @askDeleteConfirmationEvent="askDeleteConfirmation"
     />
 
     <div id="btn_close" @click="openClosingModal()">
-      <app-icon type="x" :fill="false"/>
+      <app-icon type="x" :fill="false" />
     </div>
     <div id="btn_tuto" @click="openTutoModal()">
-      <app-icon type="?" :fill="false"/>
+      <app-icon type="?" :fill="false" />
     </div>
     <div id="btn_validate" @click="openValidateModal()">
       <app-button message="valider votre exposition" />
     </div>
     <info-artwork-modal ref="InfoArtworkModal" />
+    <delete-artwork-modal
+      ref="DeleteArtworkModal"
+      @confirmDeleteArtworkEvent="handleConfirmDeleteArtwork"
+    />
     <loading-modal v-show="loading" ref="LoadingModal" />
   </div>
 </template>
@@ -58,7 +63,8 @@ import ValidateModal from "./components/ValidateModal.vue";
 import ClosingModal from "./components/ClosingModal.vue";
 
 import InfoArtworkModal from "./components/InfoArtworkModal.vue";
-import LoadingModal from '../services/LoadingModal.vue';
+import LoadingModal from "../services/LoadingModal.vue";
+import DeleteArtworkModal from "./components/DeleteArtworkModal.vue";
 
 export default {
   name: "Game",
@@ -73,6 +79,7 @@ export default {
     ClosingModal,
     InfoArtworkModal,
     LoadingModal,
+    DeleteArtworkModal,
   },
   data() {
     return {
@@ -83,12 +90,13 @@ export default {
       loadingArtwork: false,
       loadingQuestion: false,
       loadingGeneral: false,
+     
     };
   },
   computed: {
     loading() {
-      return (this.loadingArtwork || this.loadingQuestion ||this.loadingGeneral);
-    }
+      return this.loadingArtwork || this.loadingQuestion || this.loadingGeneral;
+    },
   },
   methods: {
     chargeQuestion() {
@@ -207,17 +215,26 @@ export default {
 
       return artwork;
     },
+    askDeleteConfirmation() {
+      this.$refs.DeleteArtworkModal.openModal();
+    },
+    handleConfirmDeleteArtwork() {
+      this.$refs.expositionComponent.deleteArtwork();
+    },
     deleteArtwork(payload) {
       console.log("deleteArtwork method, game.vue");
-      var deletedArtwork = payload.deletedArtwork;
+      const deletedArtwork = payload.deletedArtwork;
       this.disponibleArtworks.push(deletedArtwork);
     },
     chargeArtworks() {
-      this.loadingQuestion=true;
-      api.getArtworks().then((artworks) => {
-        this.disponibleArtworks = artworks;
-        console.log(this.disponibleArtworks);
-      }).catch((error) => {
+      this.loadingQuestion = true;
+      api
+        .getArtworks()
+        .then((artworks) => {
+          this.disponibleArtworks = artworks;
+          console.log(this.disponibleArtworks);
+        })
+        .catch((error) => {
           alert("erreur lors du chargement des oeuvres" + error.message);
         })
         .finally(() => {
