@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div id="background" @click="hideToolsFrame"></div>
+    <div id="background" @click="hideToolsFrame"  @tap="hideToolsFrame"></div>
     <v-stage :config="configKonva" ref="stage">
-      <v-layer id="background" @click="hideToolsFrame">
+      <v-layer id="background" @click="hideToolsFrame"  @tap="hideToolsFrame">
         <v-line
           v-for="(poly, index) in backgroundPolys"
           v-bind:key="index"
@@ -22,6 +22,7 @@
           :ref="image.id"
           @dragmove="dragMoveWall(image, index, $event)"
           @click="displayToolsFrame(image.id, 'wall', index, $event)"
+          @tap="displayToolsFrame(image.id, 'wall', index, $event)"
         >
         </v-image>
       </v-layer>
@@ -35,6 +36,7 @@
           :ref="image.id"
           @dragmove="dragMoveFloor(image, index, $event)"
           @click="displayToolsFrame(image.id, 'floor', index, $event)"
+          @tap="displayToolsFrame(image.id, 'floor', index, $event)"
         ></v-image>
       </v-layer>
       <v-layer id="tools">
@@ -45,21 +47,25 @@
             ref="InfoIcon"
             :config="infoIcon"
             @click="openArtworkModal"
+            @tap="openArtworkModal"
           />
           <v-image
             ref="DeleteIcon"
             :config="deleteIcon"
             @click="deleteArtwork"
+            @tap="deleteArtwork"
           />
           <v-image
             ref="EnlargeIcon"
             :config="enlargeIcon"
             @click="enlargeArtwork()"
+            @tap="enlargeArtwork()"
           />
           <v-image
             ref="ReduceIcon"
             :config="reduceIcon"
             @click="reduceArtwork()"
+            @tap="reduceArtwork()"
           />
         </v-group>
       </v-layer>
