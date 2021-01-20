@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div id="background" @click="hideToolsFrame"  @tap="hideToolsFrame"></div>
+    <div id="background" @click="hideToolsFrame" @tap="hideToolsFrame"></div>
     <v-stage :config="configKonva" ref="stage">
-      <v-layer id="background" @click="hideToolsFrame"  @tap="hideToolsFrame">
+      <v-layer id="background" @click="hideToolsFrame" @tap="hideToolsFrame">
         <v-line
           v-for="(poly, index) in backgroundPolys"
           v-bind:key="index"
@@ -52,8 +52,8 @@
           <v-image
             ref="DeleteIcon"
             :config="deleteIcon"
-            @click="deleteArtwork"
-            @tap="deleteArtwork"
+            @click="askDeleteConfirmation"
+            @tap="askDeleteConfirmation"
           />
           <v-image
             ref="EnlargeIcon"
@@ -506,33 +506,43 @@ export default {
         this.$refs[targetRef][0].getNode().height(baseHeight * targetScale);
         this.$refs[targetRef][0].config.scale = targetScale;
         this.$refs.stage.getNode().draw();
-        const targetType=this.artworks.find((artwork) => artwork.id == targetRef).type;
-        console.log('target type:'+targetType);
-        if (targetType=="wall" ) {
-          console.log('width of artwrok:'+this.$refs[targetRef][0].getNode().width());
-          console.log('wall width'+(width-cornerWidth));
-          if ( this.$refs[targetRef][0].getNode().width()>=width-cornerWidth ) {
-           
-           this.$refs[targetRef][0].getNode().width(width-cornerWidth) ;
-            this.$refs[targetRef][0].getNode().height((width-cornerWidth)/baseWidth*baseHeight)
+        const targetType = this.artworks.find(
+          (artwork) => artwork.id == targetRef
+        ).type;
+        console.log("target type:" + targetType);
+        if (targetType == "wall") {
+          console.log(
+            "width of artwrok:" + this.$refs[targetRef][0].getNode().width()
+          );
+          console.log("wall width" + (width - cornerWidth));
+          if (
+            this.$refs[targetRef][0].getNode().width() >=
+            width - cornerWidth
+          ) {
+            this.$refs[targetRef][0].getNode().width(width - cornerWidth);
+            this.$refs[targetRef][0]
+              .getNode()
+              .height(((width - cornerWidth) / baseWidth) * baseHeight);
           }
-          if ( this.$refs[targetRef][0].getNode().height()>=cornerHeight ) {
-           
-           this.$refs[targetRef][0].getNode().height(cornerHeight) ;
-            this.$refs[targetRef][0].getNode().width((cornerHeight)/baseHeight*baseWidth);
+          if (this.$refs[targetRef][0].getNode().height() >= cornerHeight) {
+            this.$refs[targetRef][0].getNode().height(cornerHeight);
+            this.$refs[targetRef][0]
+              .getNode()
+              .width((cornerHeight / baseHeight) * baseWidth);
           }
         }
-        if (targetType=="floor" ) {
-     
-          if ( this.$refs[targetRef][0].getNode().width()>=width ) {
-           
-           this.$refs[targetRef][0].getNode().width(width) ;
-            this.$refs[targetRef][0].getNode().height((width)/baseWidth*baseHeight)
+        if (targetType == "floor") {
+          if (this.$refs[targetRef][0].getNode().width() >= width) {
+            this.$refs[targetRef][0].getNode().width(width);
+            this.$refs[targetRef][0]
+              .getNode()
+              .height((width / baseWidth) * baseHeight);
           }
-          if ( this.$refs[targetRef][0].getNode().height()>=height ) {
-           
-           this.$refs[targetRef][0].getNode().height(height) ;
-            this.$refs[targetRef][0].getNode().width((height)/baseHeight*baseWidth);
+          if (this.$refs[targetRef][0].getNode().height() >= height) {
+            this.$refs[targetRef][0].getNode().height(height);
+            this.$refs[targetRef][0]
+              .getNode()
+              .width((height / baseHeight) * baseWidth);
           }
         }
       }
@@ -560,6 +570,10 @@ export default {
     },
 
     //DELETE artwork
+
+    askDeleteConfirmation() {
+      this.$emit("askDeleteConfirmationEvent");
+    },
     deleteArtwork() {
       this.hideToolsFrame();
       console.log("deletartwork method in exposition.vue");
