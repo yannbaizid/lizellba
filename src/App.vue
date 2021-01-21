@@ -52,6 +52,9 @@ body {
     &_right {
       float: right;
     }
+    &_left {
+      float: left;
+    }
   }
 
   //flexbox logic
@@ -190,6 +193,14 @@ body {
       padding-bottom: 20px;
     }
   }
+.m {
+  &_20 {
+    margin:20px;
+  }
+}
+.border_box {
+  box-sizing: border-box;
+}
 .box_20 {
   margin: 20px;
   box-sizing: border-box;
