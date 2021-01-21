@@ -11,14 +11,31 @@
           @click.native="closeModal()"
         />
         <div class="flexbox_col flexbox_spacebetween flexbox_alignstart h_100">
-          <img
-            class="img_rnd photo_modal_img"
-           :src="'/img/expos/' + photo.file_name"
-            :alt="photo.img_name"
-          />
-          <div id="exposition_description" class="flexbox_col flexbox_spacebetween flexbox_alignstart">
-            <div id="exposition_curator">{{ photo.curator_name }}</div>
-            <div id="exposition_name" class="font_style_italic">{{ photo.expo_name }}</div>
+          <div class="flexbox_row flexbox_spacebetween w_100">
+            <div class="float_left" v-if="photo.id<idRange.max" >&#12296;</div>
+            <img
+              class="img_rnd photo_modal_img w_100 flex_shrink"
+              :src="imgLink + '/expos/' + photo.file_name"
+              :alt="photo.img_name"
+            />
+            <div v-if="photo.id>idRange.min">></div>
+          </div>
+          <div class="flexbox_row flexbox_spacebetween w_100">
+            <div
+              id="exposition_description"
+              class="flexbox_col flexbox_spacebetween flexbox_alignstart m_20"
+            >
+              <div id="exposition_curator">{{ photo.curator_name }}</div>
+              <div id="exposition_name" class="font_style_italic">
+                {{ photo.expo_name }}
+              </div>
+            </div>
+            <div class="m_20">
+              <a
+                :download="'lizellba_expo' + photo.id"
+                :href="imgLink + '/expos/' + photo.file_name"
+              ></a>
+            </div>
           </div>
         </div>
       </div>
@@ -32,12 +49,16 @@ import AppIcon from "../../services/icons/Icon.vue";
 export default {
   components: { AppIcon },
   name: "PhotoModal",
-  props: {},
+
   data() {
     return {
       show: false,
       photo: {},
+      imgLink: process.env.VUE_APP_IMGLINK,
     };
+  },
+  props: {
+    idRange: Object
   },
   methods: {
     closeModal() {
@@ -48,9 +69,14 @@ export default {
       this.show = true;
       document.querySelector("body").classList.add("overflow-hidden");
       console.log("j'ouvr photo modal");
-      console.log(this.photo);
       this.photo = photo;
+      console.log(this.photo);
+      console.log(this.idRange);
     },
+  },
+  mounted() {
+    console.log("photomodal mounted");
+    
   },
 };
 </script>
@@ -83,7 +109,7 @@ export default {
     display: flex;
     flex-direction: column;
     z-index: 2;
-   // height: 645px;
+    // height: 645px;
     padding: 0px;
     @media screen and (max-width: 992px) {
       width: 90%;
@@ -91,22 +117,14 @@ export default {
   }
 }
 
-#exposition_description {
- margin: 20px;
-
-}
 #exposition_curator {
   border: 1px solid black;
   padding: 5px 20px 5px 20px;
-
 }
 #exposition_name {
   padding: 5px 0px;
-
 }
 .photo_modal_img {
-
   padding: 0px 20px;
-  width:100%;
 }
 </style>

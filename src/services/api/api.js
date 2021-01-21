@@ -42,4 +42,17 @@ export default {
        });
  },
 
+    async getGalleryPhotoIdRange () {
+        return axios.get("getgalleryphotos.php",{params: {function: 'idrange'}}).then((response) => {
+            return response.data;
+       });
+ },
+
+
+ async getNextGalleryPhotos (limit,page) {
+  return axios.get("getgalleryphotos.php",{params: {limit: limit, page:(page)}}).then((response) => {
+      return response.data;
+ });
+},
+
 }

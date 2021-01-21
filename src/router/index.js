@@ -23,6 +23,16 @@ const routes = [
     name: 'test',
     component: TestModal
   },
+  {
+    path: '/gallery/photo/:photoId',
+    name: 'ExpoPhoto',
+    component: Index,
+  },
+  {
+    path: '/gallery/:page/photo/:photoId',
+    name: 'ExpoPhoto',
+    component: Index,
+  },
 
   {
     path: '/about',
