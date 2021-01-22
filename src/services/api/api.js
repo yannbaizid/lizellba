@@ -54,5 +54,15 @@ export default {
       return response.data;
  });
 },
+ async getPreviousGalleryPhoto (id) {
+  return axios.get("getgalleryphotos.php",{params: {function: 'prev', id: id }}).then((response) => {
+      return response.data;
+ });
+},
+ async getNexGalleryPhoto (id) {
+  return axios.get("getgalleryphotos.php",{params: {function: 'next', id: id }}).then((response) => {
+      return response.data;
+ });
+},
 
 }

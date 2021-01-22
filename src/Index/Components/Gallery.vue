@@ -25,7 +25,12 @@
         alt="loading gif"
       />
     </div>
-    <photo-modal ref="PhotoModal" :idRange="idRange"/>
+    <photo-modal
+      ref="PhotoModal"
+      :idRange="idRange"
+      @previousPhotoEvent="handlePreviousPhoto"
+      @nextPhotoEvent="handleNextPhoto"
+    />
   </div>
 </template>
 
@@ -45,11 +50,17 @@ export default {
       currentPage: 0,
       pageCount: 1,
       limit: 1,
+      displayedPhoto: {},
     };
   },
   computed: {
     allPhotosLoaded() {
       return this.photos.length == this.idRange.total;
+    },
+    displayedPhotoIndex() {
+      return this.photos.findIndex(
+        (photo) => photo.id == this.displayedPhoto.id
+      );
     },
   },
   mounted() {
@@ -62,6 +73,62 @@ export default {
     window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
+    async handleNextPhoto() {
+      console.log(
+        "handle next photo in gallery.vue. Id=" + this.displayedPhotoIndex
+      );
+
+      if (this.displayedPhoto.id > this.idRange.min) {
+        if (this.displayedPhotoIndex + 1 < this.photos.length) {
+          console.log("next photo found in list");
+          this.displayedPhoto = this.photos[this.displayedPhotoIndex + 1];
+          this.$refs.PhotoModal.openModal(this.displayedPhoto);
+        } else {
+          this.loadingPhotos = true;
+          await this.getNextPhotos();
+          console.log('hop jessaye de passer à la suite');
+          if (this.displayedPhotoIndex + 1 < this.photos.length) {
+             console.log('hop jy arrive en plus');
+            this.displayedPhoto=this.photos[this.displayedPhotoIndex+1];
+             this.$refs.PhotoModal.openModal(this.displayedPhoto);
+          }
+        }
+      }
+    },
+    handlePreviousPhoto() {
+      console.log(
+        "handle previous photo in gallery.vue. Id=" + this.displayedPhoto.id
+      );
+
+      var displayedPhotoIndex = this.photos.findIndex(
+        (photo) => photo.id == this.displayedPhoto.id
+      );
+      if (displayedPhotoIndex > 0) {
+        console.log("previous photo found in list");
+        this.displayedPhoto = this.photos[displayedPhotoIndex - 1];
+        this.$refs.PhotoModal.openModal(this.displayedPhoto);
+      } else if (this.displayedPhoto.id < this.idRange.max) {
+        this.loadingPhoto = true;
+        api
+          .getPreviousGalleryPhoto(this.displayedPhoto.id)
+          .then((photo) => {
+            console.log("previous photo fecthed from api");
+            if (photo.id) {
+              this.displayedPhoto = photo;
+              console.log(this.displayedPhoto);
+              this.$refs.PhotoModal.openModal(this.displayedPhoto);
+            } else {
+              console.log("no previous photo found");
+            }
+          })
+          .catch((error) => {
+            alert("erreur lors du chargement de la photo" + error.message);
+          })
+          .finally(() => {
+            this.loadingPhoto = false;
+          });
+      }
+    },
     handleScroll() {
       if (!this.loadingPhotos) {
         let bottomOfWindow =
@@ -73,11 +140,11 @@ export default {
         }
       }
     },
-    getNextPhotos() {
+    async getNextPhotos() {
       if (this.currentPage <= this.pageCount) {
         this.loadingPhotos = true;
         this.currentPage++;
-        api
+       return api
           .getNextGalleryPhotos(this.limit, this.currentPage)
           .then((photos) => {
             console.log(
@@ -86,7 +153,6 @@ export default {
                 ",currentPage:" +
                 this.currentPage
             );
-            console.log(photos);
             this.photos = this.photos.concat(photos);
             console.log(this.photos);
           })
@@ -137,22 +203,20 @@ export default {
         });
     },
     showPhotoModal(photoId) {
-      var photoDisplayed = {};
       if (this.photos.find((photo) => photo.id == photoId)) {
-        photoDisplayed = this.photos.find((photo) => photo.id == photoId);
-        this.$refs.PhotoModal.openModal(photoDisplayed);
+        this.displayedPhoto = this.photos.find((photo) => photo.id == photoId);
+        this.$refs.PhotoModal.openModal(this.displayedPhoto);
         console.log("gallery.vue, showphotomodal, photo found in list");
-     
       } else {
         this.loadingPhoto = true;
         api
           .getGalleryPhoto(photoId)
           .then((photo) => {
-            photoDisplayed = photo;
             console.log("photo fecthed from api");
             if (photo.id) {
-              console.log(photoDisplayed);
-              this.$refs.PhotoModal.openModal(photoDisplayed);
+              this.displayedPhoto = photo;
+              console.log(this.displayedPhoto);
+              this.$refs.PhotoModal.openModal(this.displayedPhoto);
             } else {
               console.log("no photo with dat ID");
             }
