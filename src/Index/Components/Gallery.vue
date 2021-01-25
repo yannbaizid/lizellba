@@ -2,6 +2,7 @@
   <div id="gallery">
     <div
       id="gallery_container"
+      ref="GalleryContainer"
       class="flexbox_row flexbox_justifystart flexbox_alignstart w_100"
     >
       <div
@@ -135,11 +136,23 @@ export default {
     },
     handleScroll() {
       if (!this.loadingPhotos) {
+/* 
+        let bottomOfWindow= document.documentElement.scrollTop+document.documentElement.offsetHeight> this.$refs.GalleryContainer.offsetTop+this.$refs.GalleryContainer.offsetHeight;
+        console.log(bottomOfWindow);
+         console.log(document.documentElement);
+        console.log(window); 
+        console.log(document.documentElement.scrollTop+document.documentElement.offsetHeight);
+        console.log(this.$refs.GalleryContainer.offsetTop+this.$refs.GalleryContainer.offsetHeight)
+        if (bottomOfWindow) {
+            this.getNextPhotos();
+        } */
         let bottomOfWindow =
           document.documentElement.scrollTop + window.innerHeight ===
-          document.documentElement.scrollHeight;
+          document.documentElement.offsetHeight-20;
         if (bottomOfWindow) {
           console.log("t'en as trop pris, mec");
+          console.log(document.documentElement);
+          console.log(this.$refs.GalleryContainer);
           this.getNextPhotos();
         }
       }
@@ -159,6 +172,12 @@ export default {
             );
             this.photos = this.photos.concat(photos);
             console.log(this.photos);
+
+            var img=new Image();
+            img.onload=()=>{
+              this.loadingPhotos=false;
+            }
+            img.src=this.photos[this.photos.length-1];
           })
           .catch((error) => {
             alert(
@@ -201,9 +220,10 @@ export default {
         })
         .catch((error) => {
           alert("erreur lors du chargement des photos" + error.message);
+          this.loadingPhotos = false;
         })
         .finally(() => {
-          this.loadingPhotos = false;
+         
         });
     },
     showPhotoModal(photoId) {
