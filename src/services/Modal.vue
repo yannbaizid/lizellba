@@ -1,12 +1,12 @@
 <template>
   <div class="modal" v-if="show">
     <div class="modal_backdrop" @click="closable? closeModal(): ''" />
-    <div class="modal_dialog" :class="type">
+    <article class="modal_dialog" :class="type">
       <div v-if="closable" @click="closeModal()">
         <app-icon type="x" :circle="false" class="float_right" id="close_icon"/>
       </div>
       <slot></slot>
-    </div>
+    </article>
   </div>
 </template>
 
@@ -93,6 +93,10 @@ export default {
 
 .default {
    height: 393px;
+}
+
+.content_size {
+height: auto;
 }
 
 .answer {
