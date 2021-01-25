@@ -121,6 +121,7 @@ export default {
         });
     },
     handleValidateExpoEvent(data) {
+      this.loadingGeneral=true;
       console.log("game.vue, handleValidateExpo");
       const curatorName = data.curatorName;
       const expoName = data.expoName;
@@ -131,13 +132,22 @@ export default {
       //Send data to php
       api
         .saveExpoImage(imgURL, curatorName, expoName)
-        .then((data) => {
-          console.log(data);
+        .then((response) => {
+          console.log(response.data);
+          var photoId=response.data;
+          this.$router.push({ name: 'Home', params: { 'photoId': photoId } });
+          this.loadingGeneral=false;
           //this.exitToHome();
         })
-        .catch(function () {
-          alert("erreur de sauvegarde");
+        .catch( (error)=> {
+          alert("erreur de sauvegarde\n"+error.message);
+          console.log(error);
+          this.loadingGeneral=false;
+        })
+        .finally(()=>{this.loadingGeneral=false;
+           this.$router.push({ name: 'Home', params: { 'photoId': 26 } });
         });
+
     },
     handleValidateAnswerEvent(payload) {
       console.log(
