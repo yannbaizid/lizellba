@@ -1,7 +1,13 @@
 <template>
   <div>
     <div id="background" @click="hideToolsFrame" @tap="hideToolsFrame"></div>
-    <v-stage :config="configKonva" ref="stage">
+    <v-stage
+      :config="configKonva"
+      ref="stage"
+      @touchmove="handleStagePinch"
+      @touchend="handleTouchEnd"
+      @dragmove="dragMoveStage"
+    >
       <v-layer id="background" @click="hideToolsFrame" @tap="hideToolsFrame">
         <v-line
           v-for="(poly, index) in backgroundPolys"
@@ -79,7 +85,7 @@
 
 const totalWidth = 1920;
 const totalHeight = 1080;
-const relativeSizeOfContent = 0.9;
+const relativeSizeOfContent = 0.87;
 let height = totalHeight * relativeSizeOfContent;
 let width = totalWidth * relativeSizeOfContent;
 let heightRatio = window.innerHeight / height;
@@ -91,7 +97,8 @@ const thickness = 20;
 const iconMargin = 10;
 const iconSize = 40;
 const wallHeight = 400;
-
+var lastDist = 0;
+var lastCenter = 0;
 const angle = Math.atan((height - cornerHeight) / (width - cornerWidth));
 
 export default {
@@ -104,6 +111,52 @@ export default {
         height: totalHeight,
         scaleX: ratio,
         scaleY: ratio,
+        draggable: true,
+        dragBoundFunc: (pos) => {
+          var newX = 0;
+          var newY = 0;
+
+          if (totalWidth * this.configKonva.scaleX <= this.screenWidth) {
+            console.log("y a tout qui rent");
+            newX = (this.screenWidth - width * this.configKonva.scaleX) / 2;
+          } else {
+            console.log("ca depasse");
+            newX =
+              pos.x + totalWidth * this.configKonva.scaleX < this.screenWidth
+                ? this.screenWidth - totalWidth * this.configKonva.scaleX
+                : pos.x;
+          }
+          console.log(
+            "scaleY" +
+              this.configKonva.scaleY +
+              ", totalH" +
+              totalHeight +
+              ",screenheight" +
+              this.screenHeight
+          );
+          if (totalHeight * this.configKonva.scaleY <= this.screenHeight) {
+            console.log("y a tout qui rent en Y");
+            newY = (this.screenHeight - height * this.configKonva.scaleY) / 2;
+          } else {
+            console.log("ca depasse en Y");
+            newY =
+              pos.y + totalHeight * this.configKonva.scaleY < this.screenHeight
+                ? this.screenHeight - totalHeight * this.configKonva.scaleY
+                : pos.y;
+
+            if (
+              newY >
+              (this.screenHeight - height * this.configKonva.scaleY) / 2
+            ) {
+              newY = (this.screenHeight - height * this.configKonva.scaleY) / 2;
+            }
+          }
+
+          return {
+            x: newX,
+            y: newY,
+          };
+        },
       },
 
       artworks: [],
@@ -113,6 +166,8 @@ export default {
       watermark: {},
       showWaterMark: false,
       toolsFrameOn: false,
+      screenHeight: 1080,
+      screenWidth: 1920,
       toolsFrameConfig: {
         x: 0,
         y: 0,
@@ -151,6 +206,87 @@ export default {
   },
 
   methods: {
+    getDistance(p1, p2) {
+      return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+    },
+
+    getCenter(p1, p2) {
+      return {
+        x: (p1.x + p2.x) / 2,
+        y: (p1.y + p2.y) / 2,
+      };
+    },
+    handleStagePinch(e) {
+      console.log(e);
+      var touch1 = e.evt.touches[0];
+      var touch2 = e.evt.touches[1];
+      if (touch1 && touch2) {
+        this.configKonva.draggable = false;
+        console.log(this.$refs.stage.getNode());
+
+        console.log("touch 1 et 2!!!");
+        var p1 = { x: touch1.clientX, y: touch1.clientY };
+        var p2 = { x: touch2.clientX, y: touch2.clientY };
+        console.log("p1:" + p1.x + ",p2:" + p2.x);
+        var dist = this.getDistance(p1, p2);
+        var newCenter = this.getCenter(p1, p2);
+        if (!lastDist) {
+          lastDist = this.getDistance(p1, p2);
+        }
+
+        if (!lastCenter) {
+          lastCenter = newCenter;
+          return;
+        }
+        var scale = this.configKonva.scaleX * (dist / lastDist);
+        if (
+          scale >= 1 &&
+          totalWidth * scale > this.screenWidth &&
+          totalHeight * scale > this.screenHeight
+        ) {
+          console.log("dont scale up too much!");
+        } else if (
+          totalHeight * scale < this.screenHeight &&
+          totalWidth * scale < this.screenWidth
+        ) {
+          console.log("don't reduce it too much");
+        } else {
+          this.configKonva.scaleX = scale;
+          this.configKonva.scaleY = scale;
+
+          // local coordinates of center point
+          var pointTo = {
+            x: (newCenter.x - this.configKonva.x) / this.configKonva.scaleX,
+            y: (newCenter.y - this.configKonva.y) / this.configKonva.scaleX,
+          };
+
+          // calculate new position of the stage
+          var dx = newCenter.x - lastCenter.x;
+          var dy = newCenter.y - lastCenter.y;
+
+          var newPos = {
+            x: newCenter.x - pointTo.x * scale + dx,
+            y: newCenter.y - pointTo.y * scale + dy,
+          };
+
+          this.configKonva.x = newPos.x;
+          this.configKonva.y = newPos.y;
+          this.$refs.stage.getNode().batchDraw();
+        }
+
+        lastDist = dist;
+        lastCenter = newCenter;
+      }
+    },
+    handleTouchEnd() {
+      console.log("evenement touchend");
+      lastDist = 0;
+      lastCenter = null;
+      this.configKonva.draggable = true;
+      console.log(
+        "scale:" + this.configKonva.scaleX + ",width:" + this.configKonva.width
+      );
+    },
     sayHello() {
       console.log("hello");
     },
@@ -163,7 +299,7 @@ export default {
       var image = new Image();
 
       //image.src = require("@/assets/img/artworks/" + artwork.src);
-      image.src = process.env.VUE_APP_IMGLINK + "artwork/" + artwork.src;
+
       // image.src = "/img/artwork/" + artwork.src;
 
       console.log(image.src);
@@ -181,6 +317,7 @@ export default {
 
         name: "konva" + artwork.id,
       };
+      image.src = process.env.VUE_APP_IMGLINK + "artwork/" + artwork.src;
       image.onload = () => {
         // set DImension proportional to wall height
         artwork.config.height = (artwork.height / wallHeight) * cornerHeight;
@@ -195,13 +332,9 @@ export default {
           artwork.config.width = 175;
           artwork.config.height = (image.height / image.width) * 175;
         } */
-        if (artwork.type == "wall") {
-          // set image only when it is loaded
 
-          this.artworks.push(artwork);
-        } else {
-          this.artworks.push(artwork);
-        }
+        this.artworks.push(artwork);
+
         console.log(this.$refs);
         var targetId = artwork.id.toString();
         console.log("targetId:" + targetId);
@@ -394,15 +527,33 @@ export default {
 
     //Scale the stage to fit windows size
     fitStageIntoParentContainer() {
-      heightRatio = window.innerHeight / totalHeight;
-      widthRatio = window.innerWidth / totalWidth;
+      this.screenHeight = Math.min(screen.height, window.innerHeight);
+      this.screenWidth = Math.min(screen.width, window.innerWidth);
+      console.log(
+        "resizing. thisscrren height" +
+          this.screenHeight +
+          ",thisscreenwidth" +
+          this.screenWidth +
+          ",windowheight" +
+          window.innerHeight +
+          ",window width" +
+          window.innerWidth
+      );
+      console.log(
+        "screenwidth" + screen.width + ", screenheigh" + screen.height
+      );
+      heightRatio = this.screenHeight / totalHeight;
+      widthRatio = this.screenWidth / totalWidth;
       ratio = Math.min(heightRatio, widthRatio);
       this.configKonva.scaleX = ratio;
       this.configKonva.scaleY = ratio;
-      this.configKonva.width = totalWidth * ratio;
-      this.configKonva.height = totalHeight * ratio;
-      this.configKonva.x = ((totalWidth - width) / 2) * ratio;
-      this.configKonva.y = ((totalHeight - height) / 2) * ratio;
+
+      this.configKonva.width = this.screenWidth;
+      this.configKonva.height = this.screenHeight;
+      // this.configKonva.width = totalWidth * ratio;
+      //this.configKonva.height = totalHeight * ratio;
+      this.configKonva.x = (this.screenWidth - width * ratio) / 2;
+      this.configKonva.y = (this.screenHeight - height * ratio) / 2;
     },
 
     //return the expo snapshot as base 64
@@ -605,6 +756,8 @@ export default {
   },
   created() {},
   mounted() {
+    console.log("window and document.document element");
+    console.log(screen.height);
     window.addEventListener("resize", this.fitStageIntoParentContainer);
 
     this.fitStageIntoParentContainer();
