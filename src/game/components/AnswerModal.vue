@@ -15,7 +15,7 @@
             alt="image loading"
           />
           <div class="caption text_align_left">
-            {{ question.caption }}
+            {{ question.caption_details? question.caption_details : question.caption }}
           </div>
         </div>
         <div class="answer_panel_right text_align_left flexbox_col h_100">
