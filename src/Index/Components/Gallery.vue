@@ -63,8 +63,12 @@ export default {
       );
     },
   },
-  mounted() {
-    this.getIdRange();
+  async mounted() {
+    await this.getIdRange();
+    await this.getNextPhotos();
+    if (this.$route.params.photoId) {
+      this.showPhotoModal(this.$route.params.photoId);
+    }
   },
   created() {
     window.addEventListener("scroll", this.handleScroll);
@@ -168,8 +172,8 @@ export default {
       }
     },
 
-    getIdRange() {
-      api
+    async getIdRange() {
+     return api
         .getGalleryPhotoIdRange()
         .then((idRange) => {
           console.log(idRange);
@@ -179,7 +183,7 @@ export default {
           );
           this.pageCount = Math.ceil(this.idRange.total / this.limit);
           console.log("page count:" + this.pageCount);
-          this.getNextPhotos();
+         
         })
         .catch((error) => {
           alert("erreur lors du chargement de IdRange" + error.message);
