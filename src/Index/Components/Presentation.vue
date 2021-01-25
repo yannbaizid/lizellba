@@ -1,7 +1,6 @@
 <template>
   <div id="presentation">
-
-      <img  id="presentation_logo" src="../../assets/logo.png" alt="logo">
+    <img id="presentation_logo" src="../../assets/logo.png" alt="logo" />
 
     <h3 id="presentation_subtitle" class="font_size_big">
       Aujourd'hui vous êtes commissaire d'exposition pour La Criée, centre d'art
@@ -10,7 +9,11 @@
     <router-link to="/game">
       <app-button message="Commencer le jeu" />
     </router-link>
-    <div id="intro_container" class=" flexbox_row flexbox_justifycenter flexbox_alignstart">
+
+    <div
+      id="intro_container"
+      class="flexbox_row  flexbox_wrap flexbox_justifycenter flexbox_alignstart"
+    >
       <div class="text_column text_align_left">
         Aujourd'hui vous êtes commissaire d'exposition pour La Criée centre
         d'art contemporain à Rennes ! Le jeu LiZellBa vous propose de créer une
@@ -18,7 +21,7 @@
         artistique Lili, la rozell et le marimba (2019-2022) Pour cela, résolvez
         les énigmes proposées et obtenez des reproductions d’oeuvres
       </div>
-      <div class="text_column  text_align_left">
+      <div class="text_column text_align_left">
         Pour composer votre exposition, choisissez les œuvres que vous voulez
         présenter et leur disposition dans l'espace. Vous pouvez jouer sur les
         formes, les couleurs ou chercher des correspondances entre les questions
@@ -48,14 +51,12 @@ export default {
     width: 100%;
     display: inline-block;
     vertical-align: bottom;
- 
   }
   &_subtitle {
     width: 546px;
     max-width: 60%;
     margin: auto;
-     padding:  50px 0px;
- 
+    padding: 50px 0px;
   }
 }
 
@@ -68,5 +69,9 @@ export default {
   max-width: 600px;
   padding: 20px;
 
+  @media (max-width: 500px) {
+    width: 95%;
+padding: 0px 20px 20px 20px;
+  }
 }
 </style>
