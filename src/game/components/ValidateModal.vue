@@ -95,7 +95,6 @@ export default {
         if (this.currentStep == 1) {
           this.currentStep++;
         } else if (this.currentStep == 2) {
-          alert("et hop, cest validé");
 
           this.$emit("validateExpoEvent", {
             curatorName: this.curatorName,
