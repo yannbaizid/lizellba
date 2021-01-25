@@ -9,7 +9,7 @@
     >
       <div class="h_100 flexbox_col w_100 flexbox_spacebetween">
         <div
-          class="tuto_style align_center flex_grow flexbox_col flexbox_spacebetween"
+          class="tuto_style align_center flex_grow flex_shrink flexbox_col w_100 flexbox_spacebetween"
         >
           <div class="font_size_big">Étape {{ index + 1 }}/{{ tutoSteps.length }}</div>
           <div class="bold font_size_big">{{ tutoSteps[index][0] }}</div>
@@ -100,6 +100,8 @@ export default {
 }
 
 #tuto_img {
+  
   height: 200px;
+  max-width: 100%;
 }
 </style>

@@ -90,6 +90,9 @@ body {
     &_alignstart {
       align-items: flex-start;
     }
+    &_wrap {
+      flex-wrap: wrap;
+    }
   }
 
   .flex_grow {
