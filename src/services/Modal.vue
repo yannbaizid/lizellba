@@ -80,6 +80,7 @@ export default {
     border: 1px solid #000000;
    
     min-height: 390px;
+    max-height: 95%;
     background-color: #ffffff;
     border-radius: 2px;
     padding: 0px 20px;
@@ -88,25 +89,37 @@ export default {
     flex-direction: column;
     z-index: 2;
     max-width: 98%;
+    overflow: auto;
+      @media (max-width: 500px) {
+    width: 95%;
+    height: 95%;  }
   }
 }
 
 .default {
+       @media (min-width: 500px) {
    height: 393px;
+       }
 }
 
 .content_size {
+   @media (min-width: 500px) {
 height: auto;
+   }
+     
+
 }
 
 .answer {
+     @media (min-width: 500px) {
   height: 522px;
-  padding-bottom: 20px;
+  padding-bottom: 20px;}
 }
 
 .gallery {
+     @media (min-width: 500px) {
   height: 600px;
-  padding-bottom: 20px;
+  padding-bottom: 20px;}
 }
 
 #close_icon {
