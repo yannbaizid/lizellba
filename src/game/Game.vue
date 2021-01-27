@@ -4,7 +4,7 @@
     <answer-modal
       ref="AnswerModal"
       v-bind:question="question"
-      @newQuestionEvent="chargeQuestion()"
+      @newQuestionEvent="getRandomQuestion()"
     />
     <closing-modal
       ref="ClosingModal"
@@ -85,6 +85,7 @@ export default {
   data() {
     return {
       showQuestion: false,
+      questions: [],
       question: {},
       artwork: {},
       disponibleArtworks: [],
@@ -102,13 +103,37 @@ export default {
     },
   },
   methods: {
-    chargeQuestion() {
+    chargeQuestions() {
       console.log("change question");
       /*  axios.get(this.RndmQuestionurl).then((response) => {
         this.question = response.data;
         console.log(this.question);
         this.showQuestion = false;
       }); */
+      this.loadingQuestion = true;
+      api
+        .getQuestions()
+        .then((questions) => {
+          this.questions = questions;
+          console.log('hola les questions');
+          console.log(this.questions);
+          this.getRandomQuestion();
+        })
+        .catch((error) => {
+          alert("erreur lors du chargement de question" + error.message);
+              this.loadingQuestion = false;
+        })
+        .finally(() => {
+       this.loadingQuestion = false;
+        });
+    },
+/*     chargeRandomQuestion() {
+      console.log("change question");
+      /*  axios.get(this.RndmQuestionurl).then((response) => {
+        this.question = response.data;
+        console.log(this.question);
+        this.showQuestion = false;
+      }); 
       this.loadingArtwork = true;
       api
         .getRandomQuestion()
@@ -122,7 +147,23 @@ export default {
         .finally(() => {
           this.loadingArtwork = false;
         });
+    }, */
+    getRandomQuestion() {
+      this.loadingQuestion=true;
+      console.log('getrandomquestion');
+      if (this.questions.length>0) {
+       var index=Math.floor(Math.random()*this.questions.length);
+       console.log('index'+index);
+       console.log(this.questions[index]);
+       this.question=this.questions.splice(index,1) [0];
+      console.log(this.question);
+      }
+      else {
+        this.chargeQuestions();
+      }
+      this.loadingQuestion=false;
     },
+
   async  handleValidateExpoEvent(data) {
       this.loadingGeneral=true;
       console.log("game.vue, handleValidateExpo");
@@ -264,7 +305,7 @@ export default {
   },
   mounted() {
     console.log("phplink:" + this.phpLink);
-    this.chargeQuestion();
+    this.chargeQuestions();
     this.chargeArtworks();
   },
 };
