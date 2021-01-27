@@ -65,7 +65,7 @@ export default {
       "Pour cela 2 parties composent l'écran. À gauche un volet rétractable affiche des questions. Derrière se trouve votre espace d'exposition. Répondez aux questions, vous obtiendrez des œuvres pour mettre en place votre exposition. N'oubliez pas de lire les légendes, elles pourraient vous aider à répondre ! Continuez à répondre aux questions jusqu'à ce que vous soyez satisfait.e des œuvres qui composent votre exposition.",
     ]);
     this.tutoSteps.push([
-      "Il est désormais temps de faire le montage de votre exposition!",
+      "Il est désormais temps de faire le montage de votre exposition !",
       "Sélectionnez et placez les œuvres où vous voulez dans l'espace. Vous pouvez aussi les redimensionner grâce au cadre de sélection qui apparaît en cliquant sur chacune d’entre elles.",
     ]);
     this.tutoSteps.push([

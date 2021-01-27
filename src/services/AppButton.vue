@@ -22,7 +22,7 @@ export default {
   box-sizing: border-box;
   border-radius: 50px;
   padding: 10px 25px;
-  background-color: white;
+  //background-color: white;
   display: inline-block;
   &:hover {
     cursor: pointer;

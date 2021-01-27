@@ -41,7 +41,7 @@
       <app-icon type="?" :fill="false" />
     </div>
     <div id="btn_validate" @click="openValidateModal()">
-      <app-button message="valider votre exposition" />
+      <app-button :fill="false" message="Valider votre exposition" />
     </div>
     <info-artwork-modal ref="InfoArtworkModal" />
     <delete-artwork-modal
