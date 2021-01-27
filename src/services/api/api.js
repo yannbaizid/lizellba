@@ -18,6 +18,12 @@ export default {
             return response.data;
           });
     },
+    async getQuestions() {
+      console.log('getAllQuestions');
+        return axios.get("questionmanager.php").then((response) => {
+            return response.data;
+          });
+    },
 
     async saveExpoImage(imgURL, curatorName,expoName) {
         return axios.post("saveExpoImage.php", {
