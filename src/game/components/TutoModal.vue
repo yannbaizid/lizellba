@@ -70,7 +70,7 @@ export default {
     ]);
     this.tutoSteps.push([
       "Le montage est fini, vous pouvez maintenant prendre en photo votre exposition grâce au bouton “valider votre exposition” en bas à droite de l’écran.",
-      "En tant que commissaire d'exposition, n'oubliez pas de lui donner un titre et noter votre nom en remplissant les champs proposés dans la page suivante.<br>Félicitations, votre exposition est désormais accessible depuis la page d’accueil !",
+      "En tant que commissaire d'exposition, n'oubliez pas de lui donner un titre et noter votre nom en remplissant les champs proposés dans la page suivante. Félicitations, votre exposition est désormais accessible depuis la page d’accueil !",
     ]);
   },
   methods: {

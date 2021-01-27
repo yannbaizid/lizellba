@@ -13,7 +13,7 @@
         >
           <div class="flexbox_row flex_grow flexbox_spacebetween">
             <div><question-icon :type="question.type.name" /></div>
-            <div class="flexbox_row">
+            <div class="flexbox_row h_100">
               carte {{ question.type ? question.type.name : "*type unknow*" }}
             </div>
             <div class="appear_small" @click="toggleQuestion()">
@@ -195,7 +195,7 @@ export default {
   color: #692f88;
 }
 
-.icone {
+.icône {
   color: #004f91;
 }
 
