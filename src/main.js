@@ -11,6 +11,7 @@ import axios from 'axios'
 Vue.config.productionTip = false
 Vue.use(VueKonva)
 
+
 new Vue({
   router,
   store,

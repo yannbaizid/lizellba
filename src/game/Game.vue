@@ -15,6 +15,7 @@
       id="validateModal"
       ref="ValidateModal"
       @validateExpoEvent="handleValidateExpoEvent"
+      :artworksUnlocked="artworksUnlocked"
     />
     <div id="question">
       <Question
@@ -90,6 +91,8 @@ export default {
       loadingArtwork: false,
       loadingQuestion: false,
       loadingGeneral: false,
+      artworksUnlocked: 0,
+
      
     };
   },
@@ -162,6 +165,7 @@ export default {
       );
       var artwork = {};
       if (payload.correct == 1) {
+ 
         artwork = this.addArtwork(payload.expoId);
       }
       this.showQuestion = false;
@@ -221,6 +225,8 @@ export default {
         console.log(this.disponibleArtworks);
         console.log(artwork);
         this.$refs.expositionComponent.addArtwork(artwork);
+        this.artworksUnlocked++;
+        console.log('current artwork count:'+this.artworksUnlocked);
       }
 
       return artwork;
@@ -232,9 +238,10 @@ export default {
       this.$refs.expositionComponent.deleteArtwork();
     },
     deleteArtwork(payload) {
-      console.log("deleteArtwork method, game.vue");
       const deletedArtwork = payload.deletedArtwork;
       this.disponibleArtworks.push(deletedArtwork);
+      this.artworksUnlocked--;
+      console.log("deleteArtwork method, game.vue. current artworks count:"+this.artworksUnlocked);
     },
     chargeArtworks() {
       this.loadingQuestion = true;

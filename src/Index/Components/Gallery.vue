@@ -9,7 +9,7 @@
         class="img_thumbnail"
         v-for="(photo, index) in photos"
         :key="index"
-        @click="showPhotoModal(photo.id)"
+        @click="showPhotoModal(photo.id,false)"
       >
         <img
           class="gallery_img"
@@ -50,8 +50,9 @@ export default {
       idRange: {},
       currentPage: 0,
       pageCount: 1,
-      limit: 1,
+      limit: 8,
       displayedPhoto: {},
+
     };
   },
   computed: {
@@ -67,8 +68,14 @@ export default {
   async mounted() {
     await this.getIdRange();
     await this.getNextPhotos();
+
     if (this.$route.params.photoId) {
-      this.showPhotoModal(this.$route.params.photoId);
+      console.log("mounted i show"+this.$route);
+      console.log(this.$route.query);
+  
+      this.showPhotoModal(this.$route.params.photoId,this.$route.query.credits);
+      this.$route.query.credits=null;
+
     }
   },
   created() {
@@ -135,6 +142,7 @@ export default {
       }
     },
     handleScroll() {
+
       if (!this.loadingPhotos) {
 /* 
         let bottomOfWindow= document.documentElement.scrollTop+document.documentElement.offsetHeight> this.$refs.GalleryContainer.offsetTop+this.$refs.GalleryContainer.offsetHeight;
@@ -146,9 +154,13 @@ export default {
         if (bottomOfWindow) {
             this.getNextPhotos();
         } */
+        console.log(document.documentElement);
+        console.log(window.innerHeight);
+        console.log(document.documentElement.scrollTop+' cH:'+document.documentElement.clientHeight+' sH'+document.documentElement.scrollHeight);
+
         let bottomOfWindow =
-          document.documentElement.scrollTop + window.innerHeight ===
-          document.documentElement.offsetHeight-20;
+          document.documentElement.scrollTop +document.documentElement.clientHeight>=
+          document.documentElement.scrollHeight-20;
         if (bottomOfWindow) {
           console.log("t'en as trop pris, mec");
           console.log(document.documentElement);
@@ -226,10 +238,10 @@ export default {
          
         });
     },
-    showPhotoModal(photoId) {
+    showPhotoModal(photoId,showCredits) {
       if (this.photos.find((photo) => photo.id == photoId)) {
         this.displayedPhoto = this.photos.find((photo) => photo.id == photoId);
-        this.$refs.PhotoModal.openModal(this.displayedPhoto);
+        this.$refs.PhotoModal.openModal(this.displayedPhoto,showCredits);
         console.log("gallery.vue, showphotomodal, photo found in list");
       } else {
         this.loadingPhoto = true;
@@ -240,7 +252,7 @@ export default {
             if (photo.id) {
               this.displayedPhoto = photo;
               console.log(this.displayedPhoto);
-              this.$refs.PhotoModal.openModal(this.displayedPhoto);
+              this.$refs.PhotoModal.openModal(this.displayedPhoto,showCredits);
             } else {
               console.log("no photo with dat ID");
             }
@@ -263,7 +275,7 @@ export default {
           ", route id:" +
           this.$route.params.photoId
       );
-      this.showPhotoModal(id);
+      this.showPhotoModal(id,false);
     },
   },
 };

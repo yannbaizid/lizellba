@@ -12,6 +12,16 @@
         id="photo_container"
       >
         <div
+          v-if="showEndCredits"
+          @click="showEndCredits = false"
+          ref="endCredits"
+          id="endCredits"
+          class="bold font_size_big flexbox_col flexbox_justifycenter"
+        >
+          Votre exposition a bien été validée,<br />Vous pouvez la retouver sur
+          la page d'accueil
+        </div>
+        <div
           id="previous_button"
           class="navigation_button"
           v-if="photo.id < idRange.max"
@@ -141,6 +151,7 @@ export default {
       show: false,
       photo: {},
       imgLink: process.env.VUE_APP_IMGLINK,
+      showEndCredits: false,
     };
   },
   computed: {
@@ -150,6 +161,10 @@ export default {
   },
   props: {
     idRange: Object,
+    initialEndCredits: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     onNext() {
@@ -162,11 +177,16 @@ export default {
       this.show = false;
       document.querySelector("body").classList.remove("overflow-hidden");
     },
-    openModal(photo) {
+    openModal(photo,showCredits) {
       this.photo = photo;
+      if (showCredits) {
+        console.log('salut openmodal');
+        this.showEndCredits=true;
+      }
       console.log(this.photo);
       console.log(this.idRange);
       this.$refs.PhotoModal.openModal();
+
 
       console.log("j'ouvr photo modal");
     },
@@ -188,8 +208,6 @@ export default {
 }
 #exposition_name {
   padding: 5px 0px;
-}
-.photo_modal_img {
 }
 
 .navigation_button {
@@ -221,5 +239,14 @@ export default {
 
 #photo_container {
   position: relative;
+}
+
+#endCredits {
+  position: absolute;
+  background-color: #4f4f4f80;
+  height: 100%;
+  width: 100%;
+  z-index: 6;
+  color: white;
 }
 </style>

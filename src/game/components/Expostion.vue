@@ -6,7 +6,6 @@
       ref="stage"
       @touchmove="handleStagePinch"
       @touchend="handleTouchEnd"
-      @dragmove="dragMoveStage"
     >
       <v-layer id="background" @click="hideToolsFrame" @tap="hideToolsFrame">
         <v-line
@@ -113,28 +112,26 @@ export default {
         scaleY: ratio,
         draggable: true,
         dragBoundFunc: (pos) => {
-          var newX = 0;
-          var newY = 0;
+          var newX = this.configKonva.x;
+          var newY = this.configKonva.y;
 
           if (totalWidth * this.configKonva.scaleX <= this.screenWidth) {
-            console.log("y a tout qui rent");
+            console.log("y a tout qui rent en X");
+            //width of scaled exposition is shorter than screen width  => no dragging on X axis
             newX = (this.screenWidth - width * this.configKonva.scaleX) / 2;
           } else {
-            console.log("ca depasse");
+            console.log("ca depasse en X");
             newX =
               pos.x + totalWidth * this.configKonva.scaleX < this.screenWidth
                 ? this.screenWidth - totalWidth * this.configKonva.scaleX
                 : pos.x;
+            if (newX > ((totalWidth - width) * this.configKonva.scaleX) / 2) {
+              newX = ((totalWidth - width) * this.configKonva.scaleX) / 2;
+            }
           }
-          console.log(
-            "scaleY" +
-              this.configKonva.scaleY +
-              ", totalH" +
-              totalHeight +
-              ",screenheight" +
-              this.screenHeight
-          );
+
           if (totalHeight * this.configKonva.scaleY <= this.screenHeight) {
+            //height of scaled exposition is shorter than screen height  => no dragging on Y axis
             console.log("y a tout qui rent en Y");
             newY = (this.screenHeight - height * this.configKonva.scaleY) / 2;
           } else {
@@ -144,11 +141,8 @@ export default {
                 ? this.screenHeight - totalHeight * this.configKonva.scaleY
                 : pos.y;
 
-            if (
-              newY >
-              (this.screenHeight - height * this.configKonva.scaleY) / 2
-            ) {
-              newY = (this.screenHeight - height * this.configKonva.scaleY) / 2;
+            if (newY > ((totalHeight - height) * this.configKonva.scaleY) / 2) {
+              newY = ((totalHeight - height) * this.configKonva.scaleY) / 2;
             }
           }
 
@@ -186,8 +180,8 @@ export default {
         visible: false,
       },
       possibleScale: [0.6, 1, 1.5],
-      wallColors: ["#ffffff", "#a0ffa0", "#ffa0a0", "#a0a0ff", "#ffffa0"],
-      rightwallColors: ["#f2f2f2", "#93f293", "#f29393", "#9393f2", "#f2f293"],
+      wallColors: ["#FFFFFF", "#9d87c8", "#b0ffb0", "#ffa0a0", "#ffffa0"],
+      rightwallColors: ["#F2F2F2", "#907ABB", "#93f293", "#f29393", "#f2f293"],
     };
   },
   computed: {
@@ -279,13 +273,16 @@ export default {
       }
     },
     handleTouchEnd() {
+      if (
+        totalHeight * this.configKonva.scaleY < this.screenHeight &&
+        totalWidth * this.configKonva.scaleX < this.screenWidth
+      ) {
+        this.fitStageIntoParentContainer();
+      }
       console.log("evenement touchend");
       lastDist = 0;
       lastCenter = null;
       this.configKonva.draggable = true;
-      console.log(
-        "scale:" + this.configKonva.scaleX + ",width:" + this.configKonva.width
-      );
     },
     sayHello() {
       console.log("hello");
@@ -352,6 +349,14 @@ export default {
     changePolyColor(poly) {
       if (poly.name == "leftWall") {
         var index = this.wallColors.findIndex((x) => x == poly.fill);
+        console.log(
+          "index begore:" +
+            index +
+            " index 0:" +
+            this.wallColors[0] +
+            " polyfill:" +
+            poly.fill
+        );
         index++;
         if (index == this.wallColors.length) {
           index = 0;
@@ -556,6 +561,16 @@ export default {
       this.configKonva.y = (this.screenHeight - height * ratio) / 2;
     },
 
+    setExpoToInitialSize() {
+      
+      this.configKonva.height = totalHeight;
+      this.configKonva.width = totalWidth;
+      this.configKonva.scaleX = 1;
+      this.configKonva.scaleY = 1;
+      this.configKonva.x = (totalWidth - width) / 2;
+      this.configKonva.y = (totalHeight - height) / 2;
+    },
+
     //return the expo snapshot as base 64
     returnExpoImage() {
       this.showWaterMark = true;
@@ -564,11 +579,21 @@ export default {
       this.$refs.icons.getNode().opacity(0);
       this.$refs.toolsFrame.getNode().opacity(0);
       this.$refs.watermark.getNode().draw();
-      const pixelRatio = totalWidth / this.$refs.stage.getNode().width();
-
+      this.setExpoToInitialSize();
+      console.log(this.configKonva);
+      //const pixelRatio = totalWidth / this.$refs.stage.getNode().width();
+      console.log(
+        "returnexpoimage" +
+          this.configKonva.width +
+          " height:" +
+          this.configKonva.height
+      );
+      console.log(this.$refs.stage.getNode());
       var imgURL = this.$refs.stage.getNode().toDataURL({
         mimeType: "image/jpeg",
-        pixelRatio: pixelRatio,
+        width: 1920,
+        height: 1080,
+        pixelRatio: 1,
         quality: 1,
       });
       return imgURL;
