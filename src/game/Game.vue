@@ -123,12 +123,15 @@ export default {
           this.loadingArtwork = false;
         });
     },
-    handleValidateExpoEvent(data) {
+  async  handleValidateExpoEvent(data) {
       this.loadingGeneral=true;
       console.log("game.vue, handleValidateExpo");
       const curatorName = data.curatorName;
       const expoName = data.expoName;
-      const imgURL = this.$refs.expositionComponent.returnExpoImage();
+     var imgURL =""
+      await this.$refs.expositionComponent.returnExpoImage().then((response)=>{console.log(response);
+      imgURL=response;
+      });
       console.log("curator name:" + curatorName + " exponame:" + expoName);
       console.log("imagURL:" + imgURL);
 
@@ -148,7 +151,7 @@ export default {
           this.loadingGeneral=false;
         })
         .finally(()=>{this.loadingGeneral=false;
-           this.$router.push({ name: 'Home', params: { 'photoId': 26 } });
+         
         });
 
     },
@@ -317,6 +320,6 @@ export default {
 }
 
 #exposition {
-  background-color: #e5e5e5;
+ /*  background-color: #e5e5e5; */
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div id="background" @click="hideToolsFrame" @tap="hideToolsFrame"></div>
+    <div @click="hideToolsFrame" @tap="hideToolsFrame"></div>
+
     <v-stage
       :config="configKonva"
       ref="stage"
@@ -8,6 +9,7 @@
       @touchend="handleTouchEnd"
     >
       <v-layer id="background" @click="hideToolsFrame" @tap="hideToolsFrame">
+        <v-line ref="backgroundPoly" :config="backgroundPoly" />
         <v-line
           v-for="(poly, index) in backgroundPolys"
           v-bind:key="index"
@@ -75,6 +77,7 @@
         </v-group>
       </v-layer>
     </v-stage>
+  
   </div>
 </template>
 
@@ -85,7 +88,7 @@
 const totalWidth = 1920;
 const totalHeight = 1080;
 const relativeSizeOfContent = 0.87;
-let height = totalHeight * relativeSizeOfContent;
+const height = totalHeight * relativeSizeOfContent;
 let width = totalWidth * relativeSizeOfContent;
 let heightRatio = window.innerHeight / height;
 let widthRatio = window.innerWidth / width;
@@ -162,6 +165,8 @@ export default {
       toolsFrameOn: false,
       screenHeight: 1080,
       screenWidth: 1920,
+      savedImage: null,
+      imageSaved: false,
       toolsFrameConfig: {
         x: 0,
         y: 0,
@@ -185,6 +190,36 @@ export default {
     };
   },
   computed: {
+    backgroundPoly() {
+      console.log(
+        "hey jsuile. screenwi" +
+          this.screenWidth +
+          ",heigh:" +
+          this.screenHeight +
+          " x:" +
+          -(this.screenHeight - width * this.configKonva.scaleX) / 2
+      );
+      return {
+        points: [
+          0,
+          0,
+          this.configKonva.width / this.configKonva.scaleX,
+          0,
+          this.configKonva.width / this.configKonva.scaleX,
+          this.configKonva.height / this.configKonva.scaleX,
+          0,
+          this.configKonva.height / this.configKonva.scaleX,
+        ],
+        x:
+          -(this.configKonva.width - width * this.configKonva.scaleX) /
+          (2 * this.configKonva.scaleX),
+        y:
+          -(this.configKonva.height - height * this.configKonva.scaleY) /
+          (2 * this.configKonva.scaleY),
+        fill: "#E5E5E5",
+        closed: true,
+      };
+    },
     topHeight() {
       return (totalHeight * (1 - relativeSizeOfContent)) / 2;
     },
@@ -534,7 +569,7 @@ export default {
     fitStageIntoParentContainer() {
       this.screenHeight = Math.min(screen.height, window.innerHeight);
       this.screenWidth = Math.min(screen.width, window.innerWidth);
-      console.log(
+      /*  console.log(
         "resizing. thisscrren height" +
           this.screenHeight +
           ",thisscreenwidth" +
@@ -546,7 +581,7 @@ export default {
       );
       console.log(
         "screenwidth" + screen.width + ", screenheigh" + screen.height
-      );
+      ); */
       heightRatio = this.screenHeight / totalHeight;
       widthRatio = this.screenWidth / totalWidth;
       ratio = Math.min(heightRatio, widthRatio);
@@ -562,7 +597,6 @@ export default {
     },
 
     setExpoToInitialSize() {
-      
       this.configKonva.height = totalHeight;
       this.configKonva.width = totalWidth;
       this.configKonva.scaleX = 1;
@@ -572,7 +606,9 @@ export default {
     },
 
     //return the expo snapshot as base 64
-    returnExpoImage() {
+    async returnExpoImage() {
+      window.removeEventListener("resize", this.fitStageIntoParentContainer);
+
       this.showWaterMark = true;
       this.hideToolsFrame();
       this.$refs.watermark.getNode().opacity(1);
@@ -580,6 +616,7 @@ export default {
       this.$refs.toolsFrame.getNode().opacity(0);
       this.$refs.watermark.getNode().draw();
       this.setExpoToInitialSize();
+      this.$refs.stage.getNode().draw();
       console.log(this.configKonva);
       //const pixelRatio = totalWidth / this.$refs.stage.getNode().width();
       console.log(
@@ -589,14 +626,16 @@ export default {
           this.configKonva.height
       );
       console.log(this.$refs.stage.getNode());
-      var imgURL = this.$refs.stage.getNode().toDataURL({
-        mimeType: "image/jpeg",
-        width: 1920,
-        height: 1080,
-        pixelRatio: 1,
-        quality: 1,
-      });
-      return imgURL;
+     await  this.$nextTick();
+
+        var imgURL = this.$refs.stage.getNode().toDataURL({
+          mimeType: "image/jpeg",
+          width: 1920,
+          height: 1080,
+          pixelRatio: 1,
+          quality: 1,
+        });
+        return imgURL;
     },
     displayToolsFrame(imageId, imageType, index, event) {
       console.log("displaytoolsframe");
@@ -789,20 +828,6 @@ export default {
 
     //initialize background
     //add backgound:
-    this.backgroundPolys.push({
-      points: [
-        -100,
-        -100,
-        width + 100,
-        -500,
-        width + 100,
-        height + 100,
-        -100,
-        height + 100,
-      ],
-      fill: "#E5E5E5",
-      closed: true,
-    });
 
     const smallWidth = thickness * Math.cos(angle);
     const smallHeight = thickness * Math.sin(angle);
@@ -1028,6 +1053,7 @@ export default {
         this.disponibleImages = response.data;
         console.log(this.disponibleImages);
       }); */
+    this.fitStageIntoParentContainer();
   },
 };
 </script>
@@ -1056,5 +1082,12 @@ export default {
   left: 0px;
   width: 100%;
   height: 100%;
+}
+
+#testbutton {
+  position: fixed;
+  bottom: 20px;
+  right: 200px;
+  z-index: 8;
 }
 </style>
