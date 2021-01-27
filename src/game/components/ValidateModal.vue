@@ -5,9 +5,18 @@
       id="validate_modal"
       @closeModalEvent="handleCloseModalEvent"
     >
+      <div
+        v-if="artworksUnlocked <1"
+        class="modal_container h_100 w_100 flexbox_col flexbox_justifycenter modal_container_text"
+      >
+        <div class="bold font_size_big">
+          Vous devez disposer d'au moins une oeuvre avant de pouvoir valider
+          votre exposition.
+        </div>
+      </div>
       <!--ASK FOR NAME -->
       <div
-        v-if="currentStep == 1"
+        v-if="currentStep == 1 && artworksUnlocked > 0"
         class="modal_container h_100 w_100 flexbox_col flexbox_spacebetween modal_container_text"
       >
         <div class="bold font_size_big">
@@ -37,15 +46,21 @@
       </div>
 
       <!--ASK FOR CONFIRMATION -->
-      <div v-if="currentStep == 2" class="modal_container  h_100 w_100 flexbox_col flexbox_spacebetween modal_container_text">
-        <div  class="bold font_size_big">êtes vous sûr?<br />Vous ne pourrez plus modifier votre exposition.</div>
-        <div class="flex_grow flexbox_col flexbox_justifycenter flexbox_alignstart name_container">
-
+      <div
+        v-if="currentStep == 2 && artworksUnlocked > 0"
+        class="modal_container h_100 w_100 flexbox_col flexbox_spacebetween modal_container_text"
+      >
+        <div class="bold font_size_big">
+          êtes vous sûr?<br />Vous ne pourrez plus modifier votre exposition.
+        </div>
+        <div
+          class="flex_grow flexbox_col flexbox_justifycenter flexbox_alignstart name_container"
+        >
           <div>Nom de commissaire: {{ curatorName }}</div>
-       <div class="p_t_20"> Nom de l'expo: {{ expoName }}</div>
+          <div class="p_t_20">Nom de l'expo: {{ expoName }}</div>
         </div>
         <div class="flexbox flexbox_spacearound w_100">
-           <div @click="cancel()">
+          <div @click="cancel()">
             <app-button message="Retour" />
           </div>
 
@@ -55,7 +70,6 @@
           <div @click="validate()">
             <app-button message="Valider" />
           </div>
-         
         </div>
       </div>
     </modal>
@@ -76,10 +90,15 @@ export default {
       currentStep: 1,
     };
   },
+  props: {
+    artworksUnlocked: Number,
+  },
   mounted() {},
   methods: {
     openModal() {
-      console.log("Open da shit");
+      console.log(
+        "Open da shit. Current artwork count:" + this.artworksUnlocked
+      );
       this.$refs.ValidateModal.openModal();
     },
     handleCloseModalEvent() {
@@ -95,7 +114,6 @@ export default {
         if (this.currentStep == 1) {
           this.currentStep++;
         } else if (this.currentStep == 2) {
-
           this.$emit("validateExpoEvent", {
             curatorName: this.curatorName,
             expoName: this.expoName,
@@ -141,6 +159,6 @@ export default {
   }
 }
 .name_container {
-  width:410px;
+  width: 410px;
 }
 </style>

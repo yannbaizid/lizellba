@@ -11,11 +11,15 @@
           <img
             id="answer_image"
             class="answer_image flex_grow flex_shrink"
-            :src="imgLink+'question/'+question.img_link"
+            :src="imgLink + 'question/' + question.img_link"
             alt="image loading"
           />
           <div class="caption text_align_left">
-            {{ question.caption_details? question.caption_details : question.caption }}
+            {{
+              question.caption_details
+                ? question.caption_details
+                : question.caption
+            }}
           </div>
         </div>
         <div class="answer_panel_right text_align_left flexbox_col h_100">
@@ -27,7 +31,8 @@
                   >Vous avez gagné une oeuvre à placer dans votre espace
                   d'exposition!</span
                 >
-                <span v-else >Malheureusement, il ne reste plus d'oeuvre a débloquer.
+                <span v-else
+                  >Malheureusement, il ne reste plus d'oeuvre a débloquer.
                 </span>
               </div>
               <div class="bold font_size_big" v-if="this.correct == 0">
@@ -74,7 +79,7 @@ export default {
       show: false,
       correct: false,
       artwork: {},
-       imgLink: process.env.VUE_APP_IMGLINK,
+      imgLink: process.env.VUE_APP_IMGLINK,
     };
   },
   methods: {
@@ -117,7 +122,7 @@ export default {
 }
 .answer_image {
   width: 100%;
-
+  display: block;
   background-color: #f4f4f4;
   object-fit: contain;
 }
