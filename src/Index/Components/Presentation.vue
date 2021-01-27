@@ -3,7 +3,7 @@
     <img id="presentation_logo" src="../../assets/logo.png" alt="logo" />
 
     <h3 id="presentation_subtitle" class="font_size_big">
-      Aujourd'hui vous êtes commissaire d'exposition pour La Criée, centre d'art
+      Aujourd'hui vous êtes commissaire d'exposition pour La Criée centre d'art
       contemporain à Rennes !
     </h3>
     <router-link to="/game">

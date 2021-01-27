@@ -26,17 +26,17 @@
           <div class="answer_width flexbox_col flexbox_spacearound flex_grow">
             <div>
               <div class="bold font_size_big" v-if="this.correct == 1">
-                Bonne réponse!<br />
+                Bonne réponse !<br />
                 <span v-if="artwork.id >= 0"
-                  >Vous avez gagné une oeuvre à placer dans votre espace
-                  d'exposition!</span
+                  >Vous avez gagné une œuvre à placer dans votre espace
+                  d'exposition !</span
                 >
                 <span v-else
-                  >Malheureusement, il ne reste plus d'oeuvre a débloquer.
+                  >Malheureusement, il ne reste plus d'œuvre a débloquer.<br>Vous pouvez néanmoins continuer à répondre aux questions si vous le souhaitez, ou finaliser votre montage.
                 </span>
               </div>
               <div class="bold font_size_big" v-if="this.correct == 0">
-                Mauvaise réponse!<br />Ne vous découragez pas, essayez encore!
+                Mauvaise réponse !<br />Ne vous découragez pas, essayez encore!
               </div>
             </div>
             <!--         <div v-for="answer in question.answers" :key="answer.id">
@@ -47,7 +47,7 @@
               <div>{{ question.answer }}</div>
               <div id="info_link" class="p_t_20">
                 <a id="answer_link" :href="question.info_link" target="_blank">
-                  lien vers le site de La Criée</a
+                  Lien vers le site de La Criée</a
                 >
               </div>
             </div>
