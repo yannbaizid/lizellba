@@ -40,7 +40,7 @@
             </div>
  -->
             <div>
-              <div>{{ question.answer }}</div>
+              <div v-html="question.answer"></div>
               <div id="info_link" class="p_t_20">
                 <a id="answer_link" :href="question.info_link" target="_blank">
                   Lien vers le site de La Criée</a
