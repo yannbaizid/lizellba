@@ -19,6 +19,8 @@
               : null
           "
           :config="poly"
+          @mouseover=" poly.name == 'leftWall' || poly.name == 'rightWall'? handleMouseOver() : null"
+          @mouseout="handleMouseOut"
         ></v-line>
       </v-layer>
       <v-layer id="wall">
@@ -77,7 +79,6 @@
         </v-group>
       </v-layer>
     </v-stage>
-  
   </div>
 </template>
 
@@ -108,6 +109,8 @@ export default {
   props: {},
   data() {
     return {
+      paintCursor:
+        "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/9632/happy.png');",
       configKonva: {
         width: totalWidth,
         height: totalHeight,
@@ -235,6 +238,15 @@ export default {
   },
 
   methods: {
+    handleMouseOver() {
+      document.body.style.cursor =
+        'url("http://lizellba.la-criee.org/img/icons/paintCursor.svg"),pointer';
+      console.log(document.body.style.cursor);
+      console.log("mouseover");
+    },
+    handleMouseOut() {
+      document.body.style.cursor = "default";
+    },
     getDistance(p1, p2) {
       return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
     },
@@ -626,16 +638,16 @@ export default {
           this.configKonva.height
       );
       console.log(this.$refs.stage.getNode());
-     await  this.$nextTick();
+      await this.$nextTick();
 
-        var imgURL = this.$refs.stage.getNode().toDataURL({
-          mimeType: "image/jpeg",
-          width: 1920,
-          height: 1080,
-          pixelRatio: 1,
-          quality: 1,
-        });
-        return imgURL;
+      var imgURL = this.$refs.stage.getNode().toDataURL({
+        mimeType: "image/jpeg",
+        width: 1920,
+        height: 1080,
+        pixelRatio: 1,
+        quality: 1,
+      });
+      return imgURL;
     },
     displayToolsFrame(imageId, imageType, index, event) {
       console.log("displaytoolsframe");
