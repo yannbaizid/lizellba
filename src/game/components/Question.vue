@@ -33,8 +33,8 @@
         
           </div>
         </div>
-        <div id="question_content_question" class="container bolder">
-          {{ question.question ? question.question : "*question loading*" }}
+        <div id="question_content_question" class="container bolder" v-html="question.question">
+        
         </div>
 
         <div id="question_content_answerlist" class="container w_100">
