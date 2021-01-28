@@ -88,7 +88,7 @@ export default {
 }
 .info_image {
   width: 100%;
-
+max-height: 424px;
   background-color: #f4f4f4;
   object-fit: contain;
 }
