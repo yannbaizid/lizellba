@@ -121,6 +121,7 @@ export default {
   display: block;
   background-color: #f4f4f4;
   object-fit: contain;
+  max-height: 400px;
 }
 
 .answer_width {
