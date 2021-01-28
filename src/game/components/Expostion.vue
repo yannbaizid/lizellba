@@ -19,7 +19,11 @@
               : null
           "
           :config="poly"
-          @mouseover=" poly.name == 'leftWall' || poly.name == 'rightWall'? handleMouseOver() : null"
+          @mouseover="
+            poly.name == 'leftWall' || poly.name == 'rightWall'
+              ? handleMouseOver()
+              : null
+          "
           @mouseout="handleMouseOut"
         ></v-line>
       </v-layer>
@@ -358,9 +362,12 @@ export default {
         draggable: true,
         skewY: 0,
         scale: 1,
-
-        name: "konva" + artwork.id,
+        opacity: 1,
+        name: artwork.id,
       };
+      if (artwork.optional_info == "movie") {
+        artwork.config.opacity = 0.8;
+      }
       image.src = process.env.VUE_APP_IMGLINK + "artwork/" + artwork.src;
       image.onload = () => {
         // set DImension proportional to wall height
@@ -429,6 +436,7 @@ export default {
 
     placeWallArtwork(target) {
       console.log("place wall artwork");
+
       var y = target.y();
       var x = target.x();
       var targetWidth = target.width();
@@ -503,19 +511,43 @@ export default {
       this.placeFloorArtwork(event.target);
     },
     placeFloorArtwork(target) {
-      const margin = 50;
+      var artwork = this.artworks.find(
+        (x) => x.config.name === target.VueComponent.config.name
+      );
+
+      // deprecated
+      // const margin = 50;
       const artworkHeight = target.height();
       const artworkWidth = target.width();
+      const verticalMargin = (artwork.margin_vertical * artworkHeight) / 100;
+      const leftMargin = (artwork.margin_left * artworkWidth) / 100;
+      const rightMargin = (artwork.margin_right * artworkWidth) / 100;
+      console.log(
+        "margin v:" +
+          verticalMargin +
+          "margin l: " +
+          leftMargin +
+          " ,margin r: " +
+          rightMargin
+      );
 
       //TOP LIMIT
-      if (target.y() + artworkHeight < cornerHeight + margin) {
-        target.y(cornerHeight + margin - artworkHeight);
+      if (target.y() + artworkHeight - verticalMargin < cornerHeight) {
+        target.y(cornerHeight - artworkHeight + verticalMargin);
       }
 
       //BOTTOM LIMIT
       if (target.y() + artworkHeight > height) {
         target.y(height - artworkHeight);
       }
+
+      
+      //BOTTOM LIMIT
+      if (target.y() + artworkHeight > height) {
+        console.log("je tape la limite basse!");
+        target.y(height - artworkHeight);
+      }
+
       //LEFT LIMIT
       if (target.x() < 0) {
         target.x(0);
@@ -525,8 +557,18 @@ export default {
         target.x(width - artworkWidth);
       }
       //RIGHT BORDER LIMIT
+      const rightFloorWidth = Math.min(
+        ((target.y() + artworkHeight - cornerHeight) /
+          (height - cornerHeight)) *
+          (width - cornerWidth) +
+        cornerWidth, width);
+    
+      if (target.x() + rightMargin + artworkWidth > rightFloorWidth) {
+    console.log('ca tape à droite');
+    target.x(rightFloorWidth- rightMargin- artworkWidth);
+      }
 
-      if (target.x() + artworkWidth > cornerWidth) {
+      /*     if (target.x() + artworkWidth > cornerWidth) {
         const floorHeight =
           cornerHeight +
           ((target.x() + artworkWidth - cornerWidth) / (width - cornerWidth)) *
@@ -536,21 +578,16 @@ export default {
           target.y(floorHeight + margin - artworkHeight);
         }
       }
-
+ */
       //LEFT BORDER LIMIT
       const floorWidth =
         ((target.y() + artworkHeight - cornerHeight) /
           (height - cornerHeight)) *
         (width - cornerWidth);
-      if (target.x() < floorWidth) {
-        target.x(floorWidth);
+      if (target.x() + leftMargin < floorWidth) {
+        target.x(floorWidth - leftMargin);
       }
 
-      //BOTTOM LIMIT
-      if (target.y() + artworkHeight > height) {
-        console.log("je tape la limite basse!");
-        target.y(height - artworkHeight);
-      }
       if (this.toolsFrameConfig.visible) {
         this.setToolsFrame(target);
       }
