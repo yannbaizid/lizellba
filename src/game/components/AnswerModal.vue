@@ -14,12 +14,8 @@
             :src="imgLink + 'question/' + question.img_link"
             alt="image loading"
           />
-          <div class="caption text_align_left">
-            {{
-              question.caption_details
-                ? question.caption_details
-                : question.caption
-            }}
+          <div class="caption text_align_left" v-html="question.caption">
+ 
           </div>
         </div>
         <div class="answer_panel_right text_align_left flexbox_col h_100">

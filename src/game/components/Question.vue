@@ -29,8 +29,8 @@
             alt="image loading"
           />
 
-          <div class="caption">
-            {{ question.caption ? question.caption : "" }}
+          <div class="caption" v-html="question.caption">
+        
           </div>
         </div>
         <div id="question_content_question" class="container bolder">
