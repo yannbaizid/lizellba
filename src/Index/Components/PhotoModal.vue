@@ -205,9 +205,11 @@ export default {
 #exposition_curator {
   border: 1px solid black;
   padding: 5px 20px 5px 20px;
+  margin-top: 20px;
 }
 #exposition_name {
-  padding: 5px 0px;
+  padding-top:  5px;
+  margin-bottom: 20px;
 }
 
 .navigation_button {
