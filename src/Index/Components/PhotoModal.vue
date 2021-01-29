@@ -74,7 +74,7 @@
       <div class="flexbox_row flexbox_spacebetween w_100">
         <div
           id="exposition_description"
-          class="flexbox_col flexbox_spacebetween flexbox_alignstart m_20"
+          class="flexbox_col flexbox_spacebetween flexbox_alignstart "
         >
           <div id="exposition_curator">{{ photo.curator_name }}</div>
           <div id="exposition_name" class="font_style_italic">
@@ -213,12 +213,12 @@ export default {
 .navigation_button {
   padding: 10px;
   border-radius: 2px;
-  background-color: rgba(247, 247, 247, 0.1);
+  background-color: rgba(247, 247, 247, 0.3);
   stroke: black;
   &:hover {
     cursor: pointer;
     stroke: #9a9a9a;
-    background-color: rgba(252, 252, 252, 0.1);
+    background-color: rgba(252, 252, 252, 0.3);
   }
 
   svg {
