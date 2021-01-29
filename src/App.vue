@@ -90,6 +90,9 @@ body {
     &_alignstart {
       align-items: flex-start;
     }
+    &_alignend {
+      align-items: flex-end;
+    }
     &_wrap {
       flex-wrap: wrap;
     }
