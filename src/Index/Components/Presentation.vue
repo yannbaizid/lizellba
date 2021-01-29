@@ -15,19 +15,15 @@
       class="flexbox_row  flexbox_wrap flexbox_justifycenter flexbox_alignstart"
     >
       <div class="text_column text_align_left">
-        Aujourd'hui vous êtes commissaire d'exposition pour La Criée centre
-        d'art contemporain à Rennes ! Le jeu LiZellBa vous propose de créer une
-        exposition fictive à partir de la découverte des œuvres du cycle
-        artistique Lili, la rozell et le marimba (2019-2022) Pour cela, résolvez
-        les énigmes proposées et obtenez des reproductions d’oeuvres
+     LiZellBa vous propose de créer une exposition fictive à partir de la découverte des œuvres du cycle artistique Lili, la rozell et le marimba (2019-2022). Résolvez les énigmes proposées et obtenez des reproductions d’œuvres. Composez votre exposition, prêtez attention aux formes, aux dimensions et aux couleurs. Chercher des correspondances entre les œuvres et laissez libre cours à votre imagination !
       </div>
-      <div class="text_column text_align_left">
+ <!--      <div class="text_column text_align_left">
         Pour composer votre exposition, choisissez les œuvres que vous voulez
         présenter et leur disposition dans l'espace. Vous pouvez jouer sur les
         formes, les couleurs ou chercher des correspondances entre les questions
         abordées. Les œuvres racontent des histoires, jouez avec celles-ci pour
         créer votre exposition!
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -69,7 +65,10 @@ export default {
   max-width: 600px;
   padding: 20px;
 
-  @media (max-width: 500px) {
+  @media (max-width: 900px) {
+    width: 70%;
+  }
+  @media (max-width: 700px) {
     width: 95%;
 padding: 0px 20px 20px 20px;
   }

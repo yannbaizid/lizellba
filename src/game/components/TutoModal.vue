@@ -18,7 +18,7 @@
           
         </div>
         <div class="w_100">
-          <div class="flexbox_row flexbox_justifycenter w_100">
+          <div class="flexbox_row flexbox_justifycenter w_100 flexbox_alignend">
             <div v-if="index == tutoSteps.length - 1" @click="closeModal()">
               <app-button
                 :message="!visited ? 'Commencer le jeu' : 'Retour au jeu'"
@@ -27,7 +27,7 @@
             <div
               v-if="index > 0 && index < tutoSteps.length - 1"
               @click="index--"
-              class="align_left"
+              class="align_left flexbox_col flexbox_shrink flexbox_alignend"
             >
               <app-icon type="<" />
             </div>
@@ -61,16 +61,16 @@ export default {
   },
   mounted() {
     this.tutoSteps.push([
-      "Le jeu se déroule en 2 temps : un premier temps pour collecter des œuvres et un second temps pour faire le montage de votre exposition.",
-      "Pour cela 2 parties composent l'écran. À gauche un volet rétractable affiche des questions. Derrière se trouve votre espace d'exposition. Répondez aux questions, vous obtiendrez des œuvres pour mettre en place votre exposition. N'oubliez pas de lire les légendes, elles pourraient vous aider à répondre ! Continuez à répondre aux questions jusqu'à ce que vous soyez satisfait.e des œuvres qui composent votre exposition.",
+      "1. La collecte des œuvres –miniatures",
+      "Deux parties composent l'écran. À gauche un volet rétractable affiche des questions. Derrière se trouve votre espace d'exposition. Répondez aux questions, vous obtiendrez des œuvres pour créer votre exposition. N'oubliez pas de lire les légendes, elles pourraient vous aider à répondre ! Continuez à répondre aux questions jusqu'à ce que votre exposition vous plaise.",
     ]);
     this.tutoSteps.push([
-      "Il est désormais temps de faire le montage de votre exposition !",
+      "2. Le montage de votre exposition",
       "Sélectionnez et placez les œuvres où vous voulez dans l'espace. Vous pouvez aussi les redimensionner grâce au cadre de sélection qui apparaît en cliquant sur chacune d’entre elles.",
     ]);
     this.tutoSteps.push([
-      "Le montage est fini, vous pouvez maintenant prendre en photo votre exposition grâce au bouton “valider votre exposition” en bas à droite de l’écran.",
-      "En tant que commissaire d'exposition, n'oubliez pas de lui donner un titre et noter votre nom en remplissant les champs proposés dans la page suivante. Félicitations, votre exposition est désormais accessible depuis la page d’accueil !",
+      "3. La prise de vue",
+      "L'accrochage est terminé ? Vous pouvez prendre en photo votre exposition grâce au bouton “Valider votre exposition” en bas à droite de l’écran. En tant que commissaire d'exposition, donnez-lui un titre et notez votre nom en remplissant les champs proposés dans la page suivante. Félicitations, votre exposition est désormais accessible depuis la page d’accueil !",
     ]);
   },
   methods: {
