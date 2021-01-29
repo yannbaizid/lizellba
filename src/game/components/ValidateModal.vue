@@ -6,7 +6,7 @@
       @closeModalEvent="handleCloseModalEvent"
     >
       <div
-        v-if="artworksUnlocked <1"
+        v-if="artworksUnlocked < 1"
         class="modal_container h_100 w_100 flexbox_col flexbox_justifycenter modal_container_text"
       >
         <div class="bold font_size_big">
@@ -23,7 +23,8 @@
           Complétez les informations suivantes<br />
         </div>
         <div class="input_long">
-          Votre nom de commissaire :<br />
+          Votre nom de commissaire :
+          <span v-show="curatorNameTooLong">(40 caractères maximum)</span><br />
           <input
             class="validate_input"
             v-model="curatorName"
@@ -32,6 +33,7 @@
           />
           <br />
           Nom de votre exposition :
+          <span v-show="expoNameTooLong">(50 caractères maximum)</span>
           <br />
           <input
             class="validate_input"
@@ -90,6 +92,14 @@ export default {
       currentStep: 1,
     };
   },
+  computed: {
+    curatorNameTooLong() {
+      return this.curatorName.length > 40;
+    },
+    expoNameTooLong() {
+      return this.expoName.length > 50;
+    },
+  },
   props: {
     artworksUnlocked: Number,
   },
@@ -106,19 +116,21 @@ export default {
       console.log("handleclosemodalevent");
     },
     validate() {
-      if (!(this.curatorName && this.expoName)) {
-        alert(
-          "Vous devez rentrer un nom d'exposition et un nom de commissaire"
-        );
-      } else {
-        if (this.currentStep == 1) {
-          this.currentStep++;
-        } else if (this.currentStep == 2) {
-          this.$emit("validateExpoEvent", {
-            curatorName: this.curatorName,
-            expoName: this.expoName,
-          });
-          this.$refs.ValidateModal.closeModal();
+      if (!this.curatorNameTooLong && !this.expoNameTooLong) {
+        if (!(this.curatorName && this.expoName)) {
+          alert(
+            "Vous devez rentrer un nom d'exposition et un nom de commissaire"
+          );
+        } else {
+          if (this.currentStep == 1) {
+            this.currentStep++;
+          } else if (this.currentStep == 2) {
+            this.$emit("validateExpoEvent", {
+              curatorName: this.curatorName,
+              expoName: this.expoName,
+            });
+            this.$refs.ValidateModal.closeModal();
+          }
         }
       }
     },
