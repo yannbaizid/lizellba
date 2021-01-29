@@ -192,8 +192,8 @@ export default {
         visible: false,
       },
       possibleScale: [0.6, 1, 1.5],
-      wallColors: ["#FFFFFF", "#9d87c8", "#b0ffb0", "#ffa0a0", "#ffffa0"],
-      rightwallColors: ["#F2F2F2", "#907ABB", "#93f293", "#f29393", "#f2f293"],
+      wallColors: ["#FFFFFF", "#9d87c8", "#b0f0b0", "#f0a0a0", "#f0f0a0"],
+      rightwallColors: ["#F2F2F2", "#907ABB", "#93E393", "#E39393", "#E3E393"],
     };
   },
   computed: {
@@ -371,7 +371,7 @@ export default {
       image.src = process.env.VUE_APP_IMGLINK + "artwork/" + artwork.src;
       image.onload = () => {
         // set DImension proportional to wall height
-        artwork.config.height = (artwork.height / wallHeight) * cornerHeight;
+        artwork.config.height = Math.min((artwork.height / wallHeight) * cornerHeight,width-cornerWidth);
         artwork.config.width =
           (image.width / image.height) * artwork.config.height;
 
@@ -541,7 +541,6 @@ export default {
         target.y(height - artworkHeight);
       }
 
-      
       //BOTTOM LIMIT
       if (target.y() + artworkHeight > height) {
         console.log("je tape la limite basse!");
@@ -561,11 +560,13 @@ export default {
         ((target.y() + artworkHeight - cornerHeight) /
           (height - cornerHeight)) *
           (width - cornerWidth) +
-        cornerWidth, width);
-    
+          cornerWidth,
+        width
+      );
+
       if (target.x() + rightMargin + artworkWidth > rightFloorWidth) {
-    console.log('ca tape à droite');
-    target.x(rightFloorWidth- rightMargin- artworkWidth);
+        console.log("ca tape à droite");
+        target.x(rightFloorWidth - rightMargin - artworkWidth);
       }
 
       /*     if (target.x() + artworkWidth > cornerWidth) {
@@ -829,6 +830,27 @@ export default {
         this.$refs[targetRef][0].getNode().height(baseHeight * targetScale);
         this.$refs[targetRef][0].config.scale = targetScale;
         this.$refs.stage.getNode().draw();
+      }
+      const targetType = this.artworks.find(
+        (artwork) => artwork.id == targetRef
+      ).type;
+      if (targetType == "wall") {
+        console.log(
+          "width of artwrok:" + this.$refs[targetRef][0].getNode().width()
+        );
+        console.log("wall width" + (width - cornerWidth));
+        if (this.$refs[targetRef][0].getNode().width() >= width - cornerWidth) {
+          this.$refs[targetRef][0].getNode().width(width - cornerWidth);
+          this.$refs[targetRef][0]
+            .getNode()
+            .height(((width - cornerWidth) / baseWidth) * baseHeight);
+        }
+        if (this.$refs[targetRef][0].getNode().height() >= cornerHeight) {
+          this.$refs[targetRef][0].getNode().height(cornerHeight);
+          this.$refs[targetRef][0]
+            .getNode()
+            .width((cornerHeight / baseHeight) * baseWidth);
+        }
       }
       this.placeArtwork(this.$refs[targetRef][0].getNode());
     },
