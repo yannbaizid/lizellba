@@ -165,7 +165,9 @@ export default {
           console.log("t'en as trop pris, mec");
           console.log(document.documentElement);
           console.log(this.$refs.GalleryContainer);
-          this.getNextPhotos();
+          this.loadingPhotos = true;
+          setTimeout(this.getNextPhotos(), 1000);
+          
         }
       }
     },
@@ -200,6 +202,10 @@ export default {
           .finally(() => {
             this.loadingPhotos = false;
           });
+      }
+      else {
+        this.loadingPhotos=false;
+
       }
     },
 
