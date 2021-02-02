@@ -59,7 +59,7 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 10;
+  z-index:10;
   overflow-x: hidden;
   overflow-y: auto;
   display: flex;
@@ -73,12 +73,12 @@ export default {
     bottom: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1;
+    z-index: 7;
   }
   &_dialog {
     width: 774px;
     border: 1px solid #000000;
-   
+   position: fixed;
     min-height: 390px;
     max-height: 95%;
     background-color: #ffffff;
@@ -87,7 +87,7 @@ export default {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    z-index: 2;
+    z-index: 8;
     max-width: 98%;
     overflow: auto;
       @media (max-width: 500px) {
