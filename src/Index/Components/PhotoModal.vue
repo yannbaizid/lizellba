@@ -46,7 +46,7 @@
         </div>
         <img
           class="img_rnd photo_modal_img w_100 flex_shrink"
-          :src="imgLink + '/expos/' + photo.file_name"
+          :src="imgLink + 'expos/' + photo.file_name"
           :alt="photo.img_name"
         />
         <div
@@ -180,11 +180,17 @@ export default {
     openModal(photo,showCredits) {
       this.photo = photo;
       if (showCredits) {
-        console.log('salut openmodal');
+        console.log('openModal in photomodal, showCredits=true');
         this.showEndCredits=true;
       }
       console.log(this.photo);
       console.log(this.idRange);
+      console.log("test id<id Range.max : "+this.photo.id+" ,"+this.idRange.max+" ,");
+      console.log(Number(this.photo.id)<Number(this.idRange.max));
+      console.log('with a 0 for measure:'+(this.photo.id+0)<(this.idRange.max+0));
+      console.log('photoId inferior to 100'+(this.photo.id<100));
+      console.log('99 inferior to idrangeMax :'+(99<this.idRange.max));
+      console.log('99 inferior to 100:'+(99<100));
       this.$refs.PhotoModal.openModal();
 
 

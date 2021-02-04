@@ -21,7 +21,7 @@
             <div>{{artwork.artist.name}} {{artwork.artist.surname}}, <span class="italic">{{artwork.name}}</span>, {{artwork.year}}</div>
             <div>{{artwork.caption}}</div>
                <div id="info_link" class="p_t_20">
-              <a id="answer_link" :href="artwork.info_link" target="_blank">
+              <a id="answer_link" :href="artwork.expo.link" target="_blank">
                 Lien vers le site de La Criée</a
               >
             </div>
