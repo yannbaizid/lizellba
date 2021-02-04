@@ -9,7 +9,7 @@
         class="img_thumbnail"
         v-for="(photo, index) in photos"
         :key="index"
-        @click="showPhotoModal(photo.id,false)"
+        @click="showPhotoModal(photo.id, false)"
       >
         <img
           class="gallery_img"
@@ -32,6 +32,7 @@
       @previousPhotoEvent="handlePreviousPhoto"
       @nextPhotoEvent="handleNextPhoto"
     />
+    <div ref="BottomDiv"></div>
   </div>
 </template>
 
@@ -52,7 +53,6 @@ export default {
       pageCount: 1,
       limit: 8,
       displayedPhoto: {},
-
     };
   },
   computed: {
@@ -70,12 +70,14 @@ export default {
     await this.getNextPhotos();
 
     if (this.$route.params.photoId) {
-      console.log("mounted i show"+this.$route);
+      console.log("mounted i show" + this.$route);
       console.log(this.$route.query);
-  
-      this.showPhotoModal(this.$route.params.photoId,this.$route.query.credits);
-      this.$route.query.credits=null;
 
+      this.showPhotoModal(
+        this.$route.params.photoId,
+        this.$route.query.credits
+      );
+      this.$route.query.credits = null;
     }
   },
   created() {
@@ -98,11 +100,11 @@ export default {
         } else {
           this.loadingPhotos = true;
           await this.getNextPhotos();
-          console.log('hop jessaye de passer à la suite');
+          console.log("hop jessaye de passer à la suite");
           if (this.displayedPhotoIndex + 1 < this.photos.length) {
-             console.log('hop jy arrive en plus');
-            this.displayedPhoto=this.photos[this.displayedPhotoIndex+1];
-             this.$refs.PhotoModal.openModal(this.displayedPhoto);
+            console.log("hop jy arrive en plus");
+            this.displayedPhoto = this.photos[this.displayedPhotoIndex + 1];
+            this.$refs.PhotoModal.openModal(this.displayedPhoto);
           }
         }
       }
@@ -142,9 +144,9 @@ export default {
       }
     },
     handleScroll() {
-
+     
       if (!this.loadingPhotos) {
-/* 
+        /* 
         let bottomOfWindow= document.documentElement.scrollTop+document.documentElement.offsetHeight> this.$refs.GalleryContainer.offsetTop+this.$refs.GalleryContainer.offsetHeight;
         console.log(bottomOfWindow);
          console.log(document.documentElement);
@@ -154,20 +156,40 @@ export default {
         if (bottomOfWindow) {
             this.getNextPhotos();
         } */
-        console.log(document.documentElement);
-        console.log(window.innerHeight);
-        console.log(document.documentElement.scrollTop+' cH:'+document.documentElement.clientHeight+' sH'+document.documentElement.scrollHeight);
+       /*  console.log(e);
+        console.log("bottom div");
 
-        let bottomOfWindow =
-          document.documentElement.scrollTop +document.documentElement.clientHeight>=
-          document.documentElement.scrollHeight-20;
-        if (bottomOfWindow) {
-          console.log("t'en as trop pris, mec");
-          console.log(document.documentElement);
-          console.log(this.$refs.GalleryContainer);
-          this.loadingPhotos = true;
-          setTimeout(this.getNextPhotos(), 1000);
+        console.log(this.$refs.GalleryContainer);
+        console.log(this.$refs.BottomDiv);
+        console.log(document.documentElement);
+        console.log(window.scrollHeight);
+        console.log(
+          document.documentElement.scrollTop +
+            " cH:" +
+            document.documentElement.clientHeight +
+            " sH" +
+            document.documentElement.scrollHeight +
+            ", min sH and w.IH :" +
+            Math.min(screen.height, window.innerHeight)
+        ); */
+
+        /*   let bottomOfWindow =
+          document.documentElement.scrollTop + window.innerHeight >=
+          document.documentElement.scrollHeight - 100; */
+
+    /*    var  bottomOfWindow =
+          document.documentElement.scrollHeight -
+            document.documentElement.scrollTop -
+            document.documentElement.clientHeight <
+          100; */
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight -10) {
           
+          console.log("t'en as trop pris, mec");
+
+          this.loadingPhotos = true;
+          this.$nextTick().then(() => {
+            this.getNextPhotos();
+          });
         }
       }
     },
@@ -175,7 +197,7 @@ export default {
       if (this.currentPage <= this.pageCount) {
         this.loadingPhotos = true;
         this.currentPage++;
-       return api
+        return api
           .getNextGalleryPhotos(this.limit, this.currentPage)
           .then((photos) => {
             console.log(
@@ -187,11 +209,12 @@ export default {
             this.photos = this.photos.concat(photos);
             console.log(this.photos);
 
-            var img=new Image();
-            img.onload=()=>{
-              this.loadingPhotos=false;
-            }
-            img.src=this.photos[this.photos.length-1];
+            var img = new Image();
+            img.onload = () => {
+              this.loadingPhotos = false;
+              console.log("inside getNextPhotos, last image loaded");
+            };
+            img.src = this.photos[this.photos.length - 1];
           })
           .catch((error) => {
             alert(
@@ -202,25 +225,25 @@ export default {
           .finally(() => {
             this.loadingPhotos = false;
           });
-      }
-      else {
-        this.loadingPhotos=false;
-
+      } else {
+        this.loadingPhotos = false;
       }
     },
 
     async getIdRange() {
-     return api
+      return api
         .getGalleryPhotoIdRange()
         .then((idRange) => {
           console.log(idRange);
           this.idRange = idRange;
+          this.idRange.max=Number(this.idRange.max);
+          this.idRange.min=Number(this.idRange.min);
+          this.idRange.total=Number(this.idRange.total);
           console.log(
             "id range fecthed, min:" + this.idRange.min + ", max:" + idRange.max
           );
           this.pageCount = Math.ceil(this.idRange.total / this.limit);
           console.log("page count:" + this.pageCount);
-         
         })
         .catch((error) => {
           alert("erreur lors du chargement de IdRange" + error.message);
@@ -240,14 +263,12 @@ export default {
           alert("erreur lors du chargement des photos" + error.message);
           this.loadingPhotos = false;
         })
-        .finally(() => {
-         
-        });
+        .finally(() => {});
     },
-    showPhotoModal(photoId,showCredits) {
+    showPhotoModal(photoId, showCredits) {
       if (this.photos.find((photo) => photo.id == photoId)) {
         this.displayedPhoto = this.photos.find((photo) => photo.id == photoId);
-        this.$refs.PhotoModal.openModal(this.displayedPhoto,showCredits);
+        this.$refs.PhotoModal.openModal(this.displayedPhoto, showCredits);
         console.log("gallery.vue, showphotomodal, photo found in list");
       } else {
         this.loadingPhoto = true;
@@ -258,7 +279,7 @@ export default {
             if (photo.id) {
               this.displayedPhoto = photo;
               console.log(this.displayedPhoto);
-              this.$refs.PhotoModal.openModal(this.displayedPhoto,showCredits);
+              this.$refs.PhotoModal.openModal(this.displayedPhoto, showCredits);
             } else {
               console.log("no photo with dat ID");
             }
@@ -281,7 +302,7 @@ export default {
           ", route id:" +
           this.$route.params.photoId
       );
-      this.showPhotoModal(id,false);
+      this.showPhotoModal(id, false);
     },
   },
 };
