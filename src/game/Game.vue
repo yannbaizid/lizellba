@@ -93,8 +93,6 @@ export default {
       loadingQuestion: false,
       loadingGeneral: false,
       artworksUnlocked: 0,
-
-     
     };
   },
   computed: {
@@ -115,19 +113,19 @@ export default {
         .getQuestions()
         .then((questions) => {
           this.questions = questions;
-          console.log('hola les questions');
+          console.log("hola les questions");
           console.log(this.questions);
           this.getRandomQuestion();
         })
         .catch((error) => {
           alert("erreur lors du chargement de question" + error.message);
-              this.loadingQuestion = false;
+          this.loadingQuestion = false;
         })
         .finally(() => {
-       this.loadingQuestion = false;
+          this.loadingQuestion = false;
         });
     },
-/*     chargeRandomQuestion() {
+    /*     chargeRandomQuestion() {
       console.log("change question");
       /*  axios.get(this.RndmQuestionurl).then((response) => {
         this.question = response.data;
@@ -149,53 +147,63 @@ export default {
         });
     }, */
     getRandomQuestion() {
-      this.loadingQuestion=true;
-      console.log('getrandomquestion');
-      if (this.questions.length>0) {
-       var index=Math.floor(Math.random()*this.questions.length);
-       console.log('index'+index);
-       console.log(this.questions[index]);
-       this.question=this.questions.splice(index,1) [0];
-      console.log(this.question);
-      }
-      else {
+      this.loadingQuestion = true;
+      console.log("getrandomquestion");
+      if (this.questions.length > 0) {
+        var index = Math.floor(Math.random() * this.questions.length);
+        console.log("index" + index);
+        console.log(this.questions[index]);
+        this.question = this.questions.splice(index, 1)[0];
+        console.log(this.question);
+      } else {
         this.chargeQuestions();
       }
-      this.loadingQuestion=false;
+      this.loadingQuestion = false;
     },
 
-  async  handleValidateExpoEvent(data) {
-      this.loadingGeneral=true;
+    handleValidateExpoEvent(data) {
+      this.loadingGeneral = true;
       console.log("game.vue, handleValidateExpo");
       const curatorName = data.curatorName;
       const expoName = data.expoName;
-     var imgURL =""
-      await this.$refs.expositionComponent.returnExpoImage().then((response)=>{console.log(response);
-      imgURL=response;
+      var imgURL = "";
+      this.$refs.expositionComponent.returnExpoImage().then((response) => {
+        console.log(response);
+        imgURL = response;
+        this.sendImageToServer(imgURL, curatorName, expoName);
       });
+    },
+    sendImageToServer(imgURL, curatorName, expoName) {
+      console.error("game.vue, return of returnExpoImage : " + imgURL);
+
       console.log("curator name:" + curatorName + " exponame:" + expoName);
       console.log("imagURL:" + imgURL);
-
+      console.error("Game.vue, handleValidate :" + imgURL);
       //Send data to php
       api
         .saveExpoImage(imgURL, curatorName, expoName)
         .then((response) => {
           console.log(response.data);
-          var photoId=response.data;
-          this.$router.push({ name: 'Home', params: { 'photoId': photoId } });
-          this.loadingGeneral=false;
+          var photoId = response.data;
+
+          this.$router.push({
+            name: "Home",
+            params: { photoId: photoId },
+            query: { credits: true },
+          });
+          this.loadingGeneral = false;
           //this.exitToHome();
         })
-        .catch( (error)=> {
-          alert("erreur de sauvegarde\n"+error.message);
+        .catch((error) => {
+          alert("erreur de sauvegarde\n" + error.message);
           console.log(error);
-          this.loadingGeneral=false;
+          this.loadingGeneral = false;
         })
-        .finally(()=>{this.loadingGeneral=false;
-         
+        .finally(() => {
+          this.loadingGeneral = false;
         });
-
     },
+
     handleValidateAnswerEvent(payload) {
       console.log(
         "handleShowAnswerEvent in app.vue, correct=" +
@@ -209,7 +217,6 @@ export default {
       );
       var artwork = {};
       if (payload.correct == 1) {
- 
         artwork = this.addArtwork(payload.expoId);
       }
       this.showQuestion = false;
@@ -270,7 +277,7 @@ export default {
         console.log(artwork);
         this.$refs.expositionComponent.addArtwork(artwork);
         this.artworksUnlocked++;
-        console.log('current artwork count:'+this.artworksUnlocked);
+        console.log("current artwork count:" + this.artworksUnlocked);
       }
 
       return artwork;
@@ -285,7 +292,10 @@ export default {
       const deletedArtwork = payload.deletedArtwork;
       this.disponibleArtworks.push(deletedArtwork);
       this.artworksUnlocked--;
-      console.log("deleteArtwork method, game.vue. current artworks count:"+this.artworksUnlocked);
+      console.log(
+        "deleteArtwork method, game.vue. current artworks count:" +
+          this.artworksUnlocked
+      );
     },
     chargeArtworks() {
       this.loadingQuestion = true;
@@ -318,7 +328,7 @@ export default {
   left: 0px;
   height: 100%;
 
-  z-index: 9;
+  z-index: 5;
   @media (max-width: 500px) {
     top: 1%;
     left: 1%;
@@ -343,24 +353,24 @@ export default {
   position: fixed;
   right: 20px;
   top: 20px;
-  z-index: 7;
+  z-index: 5;
 }
 
 #btn_tuto {
   position: fixed;
   right: 80px;
   top: 20px;
-  z-index: 7;
+  z-index: 5;
 }
 
 #btn_validate {
   position: fixed;
   right: 40px;
   bottom: 40px;
-  z-index: 7;
+  z-index: 5;
 }
 
 #exposition {
- /*  background-color: #e5e5e5; */
+  background-color: #e5e5e5;
 }
 </style>
