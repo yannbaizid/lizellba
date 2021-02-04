@@ -30,7 +30,7 @@ const routes = [
   },
   {
     path: '/gallery/:page/photo/:photoId',
-    name: 'ExpoPhoto',
+    name: 'ExpoPhotoPage',
     component: Index,
   },
 
