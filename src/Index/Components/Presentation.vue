@@ -33,7 +33,7 @@
     >
       <div ref="IntroText" class="text_column text_align_left">
         LiZellBa vous propose de créer une exposition fictive à partir de la
-        découverte des œuvres du cycle artistique Lili, la rozell et le marimba
+        découverte des œuvres du cycle artistique <i>Lili, la rozell et le marimba</i>
         (2019-2022). Résolvez les énigmes proposées et obtenez des reproductions
         d’œuvres. Composez votre exposition, prêtez attention aux formes, aux
         dimensions et aux couleurs. Chercher des correspondances entre les
