@@ -6,11 +6,11 @@
     <div id="gallery">
       <gallery />
     </div>
-    <div id="index_footer" class="align_left">
-      <div id="typo_credits" class="font_size_small text_align_left">
-        Graphisme: Fanny Martel. Développement: Yann Baïzid. Conception additionnelle: Léa Bénétou. Crédit typographique pour le logo Lizellba : Jocelyn Cottencin.
+    <footer id="index_footer" class="align_left">
+      <div id="typo_credits" class="font_size_small text_align_left flexbox_row flexbox_wrap">
+        <div>Graphisme: Fanny Martel. </div><div>Développement: Yann Baïzid. </div><div>Conception additionnelle: Léa Bénétou. </div><div>Crédit typographique pour le logo Lizellba : Jocelyn Cottencin.</div>
       </div>
-    </div>
+    </footer>
   </div>
 </template>
 
