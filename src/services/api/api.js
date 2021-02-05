@@ -30,6 +30,8 @@ export default {
       image: imgURL,
       curatorName: curatorName,
       expoName: expoName,
+      typeId: 1,
+      pwd: 'Twin!Peaks!S3'
     })
 
   },
