@@ -113,8 +113,17 @@ export default {
   props: {},
   data() {
     return {
-      paintCursor:
-        "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/9632/happy.png');",
+      artworks: [],
+      backgroundPolys: [],
+      width: width,
+      height: height,
+      watermark: {},
+      showWaterMark: false,
+      toolsFrameOn: false,
+      screenHeight: 1080,
+      screenWidth: 1920,
+      savedImage: null,
+      imageSaved: false,
       configKonva: {
         width: totalWidth,
         height: totalHeight,
@@ -162,18 +171,6 @@ export default {
           };
         },
       },
-
-      artworks: [],
-      backgroundPolys: [],
-      width: width,
-      height: height,
-      watermark: {},
-      showWaterMark: false,
-      toolsFrameOn: false,
-      screenHeight: 1080,
-      screenWidth: 1920,
-      savedImage: null,
-      imageSaved: false,
       toolsFrameConfig: {
         x: 0,
         y: 0,
@@ -198,14 +195,6 @@ export default {
   },
   computed: {
     backgroundPoly() {
-      console.log(
-        "hey jsuile. screenwi" +
-          this.screenWidth +
-          ",heigh:" +
-          this.screenHeight +
-          " x:" +
-          -(this.screenHeight - width * this.configKonva.scaleX) / 2
-      );
       return {
         points: [
           0,
@@ -227,6 +216,7 @@ export default {
         closed: true,
       };
     },
+
     topHeight() {
       return (totalHeight * (1 - relativeSizeOfContent)) / 2;
     },
@@ -244,7 +234,7 @@ export default {
   methods: {
     handleMouseOver() {
       document.body.style.cursor =
-        'url("http://lizellba.la-criee.org/img/icons/paintCursor.svg"),pointer';
+        'url("http://lizellba.la-criee.org/img/icons/paintCursor.svg") 0 20,pointer';
       console.log(document.body.style.cursor);
       console.log("mouseover");
     },
@@ -368,10 +358,13 @@ export default {
       if (artwork.optional_info == "movie") {
         artwork.config.opacity = 0.8;
       }
-      image.src = process.env.VUE_APP_IMGLINK + "artwork/" + artwork.src;
+
       image.onload = () => {
         // set DImension proportional to wall height
-        artwork.config.height = Math.min((artwork.height / wallHeight) * cornerHeight,width-cornerWidth);
+        artwork.config.height = Math.min(
+          (artwork.height / wallHeight) * cornerHeight,
+          width - cornerWidth
+        );
         artwork.config.width =
           (image.width / image.height) * artwork.config.height;
 
@@ -397,6 +390,7 @@ export default {
           this.placeArtwork(this.$refs[targetId][0].getNode());
         });
       };
+      image.src = process.env.VUE_APP_IMGLINK + "artwork/" + artwork.src;
     },
 
     //change the color of a wall
@@ -617,6 +611,7 @@ export default {
 
     //Scale the stage to fit windows size
     fitStageIntoParentContainer() {
+      console.log("fitstage");
       this.screenHeight = Math.min(screen.height, window.innerHeight);
       this.screenWidth = Math.min(screen.width, window.innerWidth);
       /*  console.log(
@@ -656,7 +651,7 @@ export default {
     },
 
     //return the expo snapshot as base 64
-    async returnExpoImage() {
+    returnExpoImage() {
       window.removeEventListener("resize", this.fitStageIntoParentContainer);
 
       this.showWaterMark = true;
@@ -670,22 +665,27 @@ export default {
       console.log(this.configKonva);
       //const pixelRatio = totalWidth / this.$refs.stage.getNode().width();
       console.log(
-        "returnexpoimage" +
+        "returnexpoimage method in exposition.vue. width:" +
           this.configKonva.width +
           " height:" +
           this.configKonva.height
       );
-      console.log(this.$refs.stage.getNode());
-      await this.$nextTick();
-
-      var imgURL = this.$refs.stage.getNode().toDataURL({
-        mimeType: "image/jpeg",
-        width: 1920,
-        height: 1080,
-        pixelRatio: 1,
-        quality: 1,
+      return this.$nextTick().then(() => {
+        var imgURL = this.$refs.stage.getNode().toDataURL({
+          mimeType: "image/jpeg",
+          width: 1920,
+          height: 1080,
+          pixelRatio: 1,
+          quality: 1,
+        });
+        return imgURL;
       });
-      return imgURL;
+
+      /*       this.$refs.watermark.getNode().opacity(0);
+      this.$refs.icons.getNode().opacity(1);
+      this.$refs.toolsFrame.getNode().opacity(1);
+      this.fitStageIntoParentContainer();
+      this.$refs.watermark.getNode().draw(); */
     },
     displayToolsFrame(imageId, imageType, index, event) {
       console.log("displaytoolsframe");
