@@ -43,8 +43,8 @@ body {
       float: left;
     }
     &_center {
-      margin-left:auto;
-      margin-right:auto;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 
@@ -110,12 +110,8 @@ body {
     flex-shrink: 1;
   }
 
-
   .modal_container {
-
     margin: 0px auto 40px auto;
- 
-
   }
 
   .h_100 {
@@ -152,6 +148,9 @@ body {
     font-weight: 300;
     font-size: 12px;
     line-height: 15px;
+    @media (max-width: 500px) {
+      font-size: 10px;
+    }
   }
   #app {
     font-family: Livvic;
@@ -165,14 +164,32 @@ body {
 
   //font size
   .font_size_normal {
-    font-size: 15px;
+    font-size: 17px;
+    @media (max-width: 1500px) {
+      font-size: 15px;
+    }
+    @media (max-width: 500px) {
+      font-size: 0.8em;
+    }
   }
 
   .font_size_big {
-    font-size: 20px;
+    font-size: 23px;
+      @media (max-width: 1500px) {
+        font-size: 20px;
+      }
+    @media (max-width: 500px) {
+      font-size: 18px;
+    }
   }
   .font_size_small {
-    font-size: 12px;
+    font-size: 15px;
+    @media (max-width:1500px) {
+      font-size: 12px;
+    }
+    @media (max-width: 500px) {
+      font-size: 10px;
+    }
   }
   //font style
   .font_style_italic {
@@ -182,7 +199,6 @@ body {
   .text_align_left {
     text-align: left;
   }
-
 
   //image styling
 
@@ -199,18 +215,20 @@ body {
       padding-bottom: 20px;
     }
   }
-.m {
-  &_20 {
-    margin:20px;
+  .m {
+    &_20 {
+      margin: 20px;
+    }
+    &x_20 {
+      margin: 1em 0px;
+    }
   }
-}
-.border_box {
-  box-sizing: border-box;
-}
-.box_20 {
-  margin: 20px;
-  box-sizing: border-box;
-}
- 
+  .border_box {
+    box-sizing: border-box;
+  }
+  .box_20 {
+    margin: 20px;
+    box-sizing: border-box;
+  }
 }
 </style>

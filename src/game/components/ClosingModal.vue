@@ -8,12 +8,12 @@
     >
       <!--ASK FOR CONFIRMATION -->
      
-      <div class="closing_modal h_100 align_center flexbox_col" >
+      <div class="closing_modal h_100 align_center flexbox_col flexbox_spacearound" >
         <div class="bold font_size_big">
           Êtes-vous sûr de vouloir quitter le montage sans valider l'exposition?
         </div>
 
-        <div class="flexbox flexbox_col flexbox_justifyend flex_grow ">
+        <div class="flexbox flexbox_col flexbox_justifycenter ">
           <div @click="validateExpo()"  class="w_100">
             <app-button message="Valider votre exposition" class="w_100" />
           </div>

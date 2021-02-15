@@ -1,5 +1,5 @@
 <template>
-  <div class="btn">
+  <div class="btn" :class="'btn_background_'+background">
     <div class="btn_text">
       {{ message }}
     </div>
@@ -12,6 +12,10 @@ export default {
   props: {
     message: String,
     link: String,
+    background: {
+      type: String,
+      default: 'none'
+    }
   },
 };
 </script>
@@ -28,6 +32,9 @@ export default {
     cursor: pointer;
     border: 1px solid #9A9A9A;
     color:  #9A9A9A;
+  }
+  &_background_white {
+    background-color: white;
   }
   &_text {
       border:25px 10px;

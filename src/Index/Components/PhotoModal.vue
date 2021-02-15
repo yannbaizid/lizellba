@@ -74,7 +74,7 @@
       <div class="flexbox_row flexbox_spacebetween w_100">
         <div
           id="exposition_description"
-          class="flexbox_col flexbox_spacebetween flexbox_alignstart "
+          class="flexbox_col flexbox_spacebetween flexbox_alignstart"
         >
           <div id="exposition_curator">{{ photo.curator_name }}</div>
           <div id="exposition_name" class="font_style_italic">
@@ -134,6 +134,16 @@
               <circle cx="19.5" cy="19.5" r="19" stroke="black" />
             </svg>
           </div>
+<!--      <ShareNetwork
+    network="facebook"
+    :url="photo.id? 'http://lizellba.la-criee.org/#/gallery/photo/143' : 'https://lizellba.la-criee.org/'"
+    title="Lizellba!"
+    description="et zou, une belle expo pour lizellba"
+    quote="The hot reload is so fast it\'s near instant. - Evan You"
+    hashtags="La_criee"
+  >
+    Share on Facebook
+</ShareNetwork> -->
         </div>
       </div>
     </div>
@@ -158,6 +168,7 @@ export default {
     shareApi() {
       return navigator.share;
     },
+
   },
   props: {
     idRange: Object,
@@ -177,22 +188,29 @@ export default {
       this.show = false;
       document.querySelector("body").classList.remove("overflow-hidden");
     },
-    openModal(photo,showCredits) {
+    openModal(photo, showCredits) {
       this.photo = photo;
       if (showCredits) {
-        console.log('openModal in photomodal, showCredits=true');
-        this.showEndCredits=true;
+        console.log("openModal in photomodal, showCredits=true");
+        this.showEndCredits = true;
       }
       console.log(this.photo);
       console.log(this.idRange);
-      console.log("test id<id Range.max : "+this.photo.id+" ,"+this.idRange.max+" ,");
-      console.log(Number(this.photo.id)<Number(this.idRange.max));
-      console.log('with a 0 for measure:'+(this.photo.id+0)<(this.idRange.max+0));
-      console.log('photoId inferior to 100'+(this.photo.id<100));
-      console.log('99 inferior to idrangeMax :'+(99<this.idRange.max));
-      console.log('99 inferior to 100:'+(99<100));
+      console.log(
+        "test id<id Range.max : " +
+          this.photo.id +
+          " ," +
+          this.idRange.max +
+          " ,"
+      );
+      console.log(Number(this.photo.id) < Number(this.idRange.max));
+      console.log(
+        "with a 0 for measure:" + (this.photo.id + 0) < this.idRange.max + 0
+      );
+      console.log("photoId inferior to 100" + (this.photo.id < 100));
+      console.log("99 inferior to idrangeMax :" + (99 < this.idRange.max));
+      console.log("99 inferior to 100:" + (99 < 100));
       this.$refs.PhotoModal.openModal();
-
 
       console.log("j'ouvr photo modal");
     },
@@ -200,6 +218,41 @@ export default {
       alert("bientôt");
     },
     handleCloseModalEvent() {},
+  },
+  metaInfo: {
+ 
+      title: `Lizellba `,
+      meta: [
+        {
+          name: "description",
+          content:
+            "Connect and follow " +
+
+            " on Epiloge - " 
+
+        },
+        {
+          property: "og:title",
+          content: "LiZellBa, "
+        },
+        { property: "og:site_name", content: "LiZellBa" },
+        {
+          property: "og:description",
+          content:
+            "Vue de l'eposition fictive \"" +
+            "\" créée sur LiZellBa - un jeu de La Criée centre d'art contemporain",
+        },
+        { property: "og:type", content: "article" },
+        {
+          property: "og:url",
+          content: "https://epiloge.com/@" 
+        },
+        {
+          property: "og:image",
+          content: 'http://lizellba.la-criee.org/img/expos/20210206201153_456.jpg'
+        },
+      ],
+
   },
   mounted() {
     console.log("photomodal mounted");
@@ -214,7 +267,7 @@ export default {
   margin-top: 20px;
 }
 #exposition_name {
-  padding-top:  5px;
+  padding-top: 5px;
   margin-bottom: 20px;
 }
 

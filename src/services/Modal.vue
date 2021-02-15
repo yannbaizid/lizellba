@@ -1,9 +1,14 @@
 <template>
   <div class="modal" v-if="show">
-    <div class="modal_backdrop" @click="closable? closeModal(): ''" />
+    <div class="modal_backdrop" @click="closable ? closeModal() : ''" />
     <article class="modal_dialog" :class="type">
       <div v-if="closable" @click="closeModal()">
-        <app-icon type="x" :circle="false" class="float_right" id="close_icon"/>
+        <app-icon
+          type="x"
+          :circle="false"
+          class="float_right"
+          id="close_icon"
+        />
       </div>
       <slot></slot>
     </article>
@@ -22,11 +27,11 @@ export default {
     },
     type: {
       type: String,
-      default: 'default'
+      default: "default",
     },
     closable: {
       type: Boolean,
-      default: true
+      default: true,
     },
   },
   data() {
@@ -59,7 +64,7 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index:10;
+  z-index: 10;
   overflow-x: hidden;
   overflow-y: auto;
   display: flex;
@@ -76,10 +81,10 @@ export default {
     z-index: 7;
   }
   &_dialog {
-    width: 774px;
+    width: 964px;
     border: 1px solid #000000;
-   position: fixed;
-    min-height: 390px;
+    position: fixed;
+    //min-height: 487px;
     max-height: 95%;
     background-color: #ffffff;
     border-radius: 2px;
@@ -90,40 +95,61 @@ export default {
     z-index: 8;
     max-width: 98%;
     overflow: auto;
-      @media (max-width: 500px) {
-    width: 95%;
-    height: 95%;  }
+    @media (max-width: 500px) {
+      width: 95%;
+      height: 95%;
+    }
+  @media (max-width: 1500px) {
+    width: 774px;
+  }
   }
 }
 
 .default {
-       @media (min-width: 500px) {
-   height: 393px;
-       }
+  padding-bottom: 20px;
+  @media (min-width: 500px) {
+    height: 483px;
+  }
+  @media (min-width: 500px)
+   and (max-width: 1500px) {
+    height: 393px;
+  }
+   max-height: 95vh;
+
 }
 
 .content_size {
-   @media (min-width: 500px) {
-height: auto;
-   }
-     
-
+  @media (min-width: 500px) {
+    height: auto;
+  }
 }
 
 .answer {
-     @media (min-width: 500px) {
-  height: 522px;
-  padding-bottom: 20px;}
+  @media (min-width: 500px) {
+    height: 652px;
+    padding-bottom: 20px;
+  }
+    @media (min-width: 500px)
+   and (max-width: 1500px) {
+    height: 522px;
+  }
+   max-height: 95%;
 }
 
 .gallery {
-     @media (min-width: 500px) {
-  height: 600px;
-  padding-bottom: 20px;}
+ 
+    @media (min-width: 500px) {
+    height: 725px;
+    padding-bottom: 20px;
+  }
+    @media (min-width: 500px)
+   and (max-width: 1500px) {
+    height: 600px;
+  }
+   max-height: 95%;
 }
 
 #close_icon {
   margin-right: -20px;
 }
-
 </style>

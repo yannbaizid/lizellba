@@ -328,7 +328,7 @@ export default {
   left: 0px;
   height: 100%;
 
-  z-index: 5;
+  z-index: 6;
   @media (max-width: 500px) {
     top: 1%;
     left: 1%;
