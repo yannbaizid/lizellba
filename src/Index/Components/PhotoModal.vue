@@ -134,7 +134,7 @@
               <circle cx="19.5" cy="19.5" r="19" stroke="black" />
             </svg>
           </div>
-<!--      <ShareNetwork
+          <!--      <ShareNetwork
     network="facebook"
     :url="photo.id? 'http://lizellba.la-criee.org/#/gallery/photo/143' : 'https://lizellba.la-criee.org/'"
     title="Lizellba!"
@@ -168,7 +168,6 @@ export default {
     shareApi() {
       return navigator.share;
     },
-
   },
   props: {
     idRange: Object,
@@ -215,44 +214,43 @@ export default {
       console.log("j'ouvr photo modal");
     },
     handleShare() {
-      alert("bientôt");
+      navigator.share({
+        title: "Vernissage de l'exposition "+this.photo.expo_name,
+        text: "Venez visitez l'exposition virtuelle "+this.photo.expo_name+", montée sur Lizellba, un jeu de La Criee centre d'art contemporain.",
+        url: "/#/gallery/photo/"+this.photo.id,
+      });
     },
     handleCloseModalEvent() {},
   },
   metaInfo: {
- 
-      title: `Lizellba `,
-      meta: [
-        {
-          name: "description",
-          content:
-            "Connect and follow " +
-
-            " on Epiloge - " 
-
-        },
-        {
-          property: "og:title",
-          content: "LiZellBa, "
-        },
-        { property: "og:site_name", content: "LiZellBa" },
-        {
-          property: "og:description",
-          content:
-            "Vue de l'eposition fictive \"" +
-            "\" créée sur LiZellBa - un jeu de La Criée centre d'art contemporain",
-        },
-        { property: "og:type", content: "article" },
-        {
-          property: "og:url",
-          content: "https://epiloge.com/@" 
-        },
-        {
-          property: "og:image",
-          content: 'http://lizellba.la-criee.org/img/expos/20210206201153_456.jpg'
-        },
-      ],
-
+    title: `Lizellba `,
+    meta: [
+      {
+        name: "description",
+        content: "Visitez les expositions virtuelles montées sur le jeu Lizellba",
+      },
+      {
+        property: "og:title",
+        content: "LiZellBa, ",
+      },
+      { property: "og:site_name", content: "LiZellBa" },
+      {
+        property: "og:description",
+        content:
+          "Vue de l'eposition fictive \"" +
+          "\" créée sur LiZellBa - un jeu de La Criée centre d'art contemporain",
+      },
+      { property: "og:type", content: "article" },
+      {
+        property: "og:url",
+        content: "https://epiloge.com/@",
+      },
+      {
+        property: "og:image",
+        content:
+          "http://lizellba.la-criee.org/img/expos/20210206201153_456.jpg",
+      },
+    ],
   },
   mounted() {
     console.log("photomodal mounted");
