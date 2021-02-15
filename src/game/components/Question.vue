@@ -62,7 +62,7 @@
           @click="verifyAnswer(selectedAnswer.correct)"
           class="container w-100 flexbox_row flexbox_justifycenter"
         >
-          <app-button message="Valider" />
+          <app-button message="Valider" background="white" />
         </div>
       </div>
     </div>

@@ -22,6 +22,7 @@
             <div v-if="index == tutoSteps.length - 1" @click="closeModal()">
               <app-button
                 :message="!visited ? 'Commencer le jeu' : 'Retour au jeu'"
+                 background="white"
               />
             </div>
             <div

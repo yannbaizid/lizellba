@@ -43,7 +43,7 @@
           />
         </div>
         <div @click="validate()">
-          <app-button message="Valider" />
+          <app-button message="Valider"  background="white" />
         </div>
       </div>
 
@@ -63,14 +63,14 @@
         </div>
         <div class="flexbox flexbox_spacearound w_100">
           <div @click="cancel()">
-            <app-button message="Retour" />
+            <app-button message="Modifier"  background="white"/>
           </div>
 
           <div @click="closeModal()">
-            <app-button message="Annuler" />
+            <app-button message="Annuler"  background="white"/>
           </div>
           <div @click="validate()">
-            <app-button message="Valider" />
+            <app-button message="Valider"  background="white"/>
           </div>
         </div>
       </div>
@@ -172,5 +172,6 @@ export default {
 }
 .name_container {
   width: 410px;
+  max-width: 90vh;
 }
 </style>
