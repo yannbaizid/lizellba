@@ -81,7 +81,7 @@
             {{ photo.expo_name }}
           </div>
         </div>
-        <div class="m_20">
+        <div >
           <a
             :download="'lizellba_expo' + photo.id"
             :href="imgLink + '/expos/' + photo.file_name"
@@ -118,7 +118,7 @@
               />
             </svg>
           </a>
-          <div v-if="shareApi" @click="handleShare">
+          <div v-if="shareApi" @click="handleShare" class="p_l_1">
             <svg
               width="39"
               height="39"
@@ -134,16 +134,56 @@
               <circle cx="19.5" cy="19.5" r="19" stroke="black" />
             </svg>
           </div>
-          <!--      <ShareNetwork
-    network="facebook"
-    :url="photo.id? 'http://lizellba.la-criee.org/#/gallery/photo/143' : 'https://lizellba.la-criee.org/'"
-    title="Lizellba!"
-    description="et zou, une belle expo pour lizellba"
-    quote="The hot reload is so fast it\'s near instant. - Evan You"
-    hashtags="La_criee"
+        <ShareNetwork class="p_l_1"
+    network="twitter"
+    :url="photo.id? 'http://lizellba.la-criee.org/sharephoto.php?photo='+photo.id : 'https://lizellba.la-criee.org/'"
+    :title="'Venez visitez \''+photo.expo_name+'\' , une exposition réalisée par '+photo.curator_name+' sur LiZellBa, un jeu de La Criée centre d\'art contemporain'"
+  twitter-user="la_criee"
+    hashtags="lacrieecentredart,LiZellBa"
   >
-    Share on Facebook
-</ShareNetwork> -->
+   
+<svg version="1.1" stroke-width="10" id="White" fill="none" height="39" width="39" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
+
+<path stroke="black"  class="st0" d="M400,200c0,110.5-89.5,200-200,200S0,310.5,0,200S89.5,0,200,0S400,89.5,400,200z M163.4,305.5
+	c88.7,0,137.2-73.5,137.2-137.2c0-2.1,0-4.2-0.1-6.2c9.4-6.8,17.6-15.3,24.1-25c-8.6,3.8-17.9,6.4-27.7,7.6
+	c10-6,17.6-15.4,21.2-26.7c-9.3,5.5-19.6,9.5-30.6,11.7c-8.8-9.4-21.3-15.2-35.2-15.2c-26.6,0-48.2,21.6-48.2,48.2
+	c0,3.8,0.4,7.5,1.3,11c-40.1-2-75.6-21.2-99.4-50.4c-4.1,7.1-6.5,15.4-6.5,24.2c0,16.7,8.5,31.5,21.5,40.1c-7.9-0.2-15.3-2.4-21.8-6
+	c0,0.2,0,0.4,0,0.6c0,23.4,16.6,42.8,38.7,47.3c-4,1.1-8.3,1.7-12.7,1.7c-3.1,0-6.1-0.3-9.1-0.9c6.1,19.2,23.9,33.1,45,33.5
+	c-16.5,12.9-37.3,20.6-59.9,20.6c-3.9,0-7.7-0.2-11.5-0.7C110.8,297.5,136.2,305.5,163.4,305.5"/>
+</svg>
+
+
+</ShareNetwork> 
+        <ShareNetwork class="p_l_1"
+    network="facebook"
+    :url="photo.id? 'http://lizellba.la-criee.org/sharephoto.php?photo='+photo.id : 'https://lizellba.la-criee.org/'"
+    title="Lizellba"
+    description="Lizellba, un jeu de La Criée."
+    :quote="'Venez visitez \''+photo.expo_name+'\' , une exposition réalisée par '+photo.curator_name+' sur LiZellBa, un jeu de La Criée centre d\'art contemporain'"
+
+    hashtags="lacrieecentredart,LiZellBa"
+  >
+    <svg width="39" height="39" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="19.5" cy="19.5" r="19" stroke="black"/>
+<path d="M22.9782 11.6671H24.9786V8.17625C24.6336 8.12865 23.4464 8.02144 22.064 8.02144C19.1799 8.02144 17.2039 9.83933 17.2039 13.1805V16.2554H14.0214V20.1583H17.2043V29.9786H21.1066V20.1592H24.1607L24.6456 16.2562H21.1058V13.5673C21.1066 12.4395 21.4097 11.6671 22.9782 11.6671Z" stroke="black" stroke-miterlimit="10"/>
+</svg>
+
+</ShareNetwork> 
+       <!--  <ShareNetwork class="p_l_1"
+    network="twitter"
+    :url="photo.id? 'http://lizellba.la-criee.org/sharephoto.php?photo='+photo.id : 'https://lizellba.la-criee.org/'"
+    :title="'Venez visitez \''+photo.expo_name+'\' , une exposition réalisée par '+photo.curator_name+' sur LiZellBa, un jeu de La Criée centre d\'art contemporain'"
+    description="Lizellba, un jeu de La Criée."
+    :quote="'Venez visitez \''+photo.expo_name+'\' , une exposition réalisée par '+photo.curator_name+' sur LiZellBa, un jeu de La Criée centre d\'art contemporain'"
+
+    hashtags="lacrieecentredart,LiZellBa"
+  >
+    <svg width="39" height="39" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="19.5" cy="19.5" r="19" stroke="black"/>
+<path d="M22.9782 11.6671H24.9786V8.17625C24.6336 8.12865 23.4464 8.02144 22.064 8.02144C19.1799 8.02144 17.2039 9.83933 17.2039 13.1805V16.2554H14.0214V20.1583H17.2043V29.9786H21.1066V20.1592H24.1607L24.6456 16.2562H21.1058V13.5673C21.1066 12.4395 21.4097 11.6671 22.9782 11.6671Z" stroke="black" stroke-miterlimit="10"/>
+</svg>
+
+</ShareNetwork>  -->
         </div>
       </div>
     </div>
@@ -216,8 +256,8 @@ export default {
     handleShare() {
       navigator.share({
         title: "Vernissage de l'exposition "+this.photo.expo_name,
-        text: "Venez visitez l'exposition virtuelle "+this.photo.expo_name+", montée sur Lizellba, un jeu de La Criee centre d'art contemporain.",
-        url: "/#/gallery/photo/"+this.photo.id,
+        text: 'Venez visitez \''+this.photo.expo_name+'\' , une exposition réalisée par '+this.photo.curator_name+' sur LiZellBa, un jeu de La Criée',
+        url: this.photo.id? 'http://lizellba.la-criee.org/sharephoto.php?photo='+this.photo.id : 'https://lizellba.la-criee.org/',
       });
     },
     handleCloseModalEvent() {},
@@ -243,7 +283,7 @@ export default {
       { property: "og:type", content: "article" },
       {
         property: "og:url",
-        content: "https://epiloge.com/@",
+        content: "http://lizellba.la-criee.org/",
       },
       {
         property: "og:image",
