@@ -5,7 +5,7 @@
       class="flexbox_col"
       v-if="showQuestion"
     >
-      <div class="h_800 box_20 flexbox_col flexbox_spacebetween flex_grow">
+      <div class="h_100 box_20 flexbox_col flexbox_spacebetween flex_grow">
         <div
           id="question_content_header"
           class="container w_100 bold"
@@ -60,7 +60,7 @@
         <div
           id="question_content_validate"
           @click="verifyAnswer(selectedAnswer.correct)"
-          class="container w-100 flexbox_row flexbox_justifycenter"
+          class="container w-100 flexbox_row flexbox_justifycenter m_wide_20"
         >
           <app-button message="Valider" background="white" />
         </div>
@@ -129,9 +129,15 @@ export default {
   }
   &_content_image {
     width: 100%;
-    height: 356px;
+    height: 300px;
     background-color: #f4f4f4;
     object-fit: contain;
+       @media (max-height: 800px) {
+      height: 200px;
+    }
+           @media (max-height: 650px) {
+      height: 150px;
+    }
   }
   &_content_container {
     height: 100%;

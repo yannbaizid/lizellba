@@ -214,7 +214,9 @@ export default {
               this.loadingPhotos = false;
               console.log("inside getNextPhotos, last image loaded");
             };
-            img.src = this.photos[this.photos.length - 1];
+  
+            console.log('loading :'+process.env.VUE_APP_IMGLINK+'expos/' + this.photos[this.photos.length - 1].file_name);
+            img.src =process.env.VUE_APP_IMGLINK+'expos/' + this.photos[this.photos.length - 1].file_name;
           })
           .catch((error) => {
             alert(
@@ -223,7 +225,7 @@ export default {
             );
           })
           .finally(() => {
-            this.loadingPhotos = false;
+          //  this.loadingPhotos = false;
           });
       } else {
         this.loadingPhotos = false;
