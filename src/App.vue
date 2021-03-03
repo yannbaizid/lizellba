@@ -175,16 +175,16 @@ body {
 
   .font_size_big {
     font-size: 23px;
-      @media (max-width: 1500px) {
-        font-size: 20px;
-      }
+    @media (max-width: 1500px) {
+      font-size: 20px;
+    }
     @media (max-width: 500px) {
       font-size: 18px;
     }
   }
   .font_size_small {
     font-size: 15px;
-    @media (max-width:1500px) {
+    @media (max-width: 1500px) {
       font-size: 12px;
     }
     @media (max-width: 500px) {
@@ -214,13 +214,22 @@ body {
     &_b_20 {
       padding-bottom: 20px;
     }
+    &_l_1 {
+      padding-left: 1em;
+    }
   }
   .m {
     &_20 {
       margin: 20px;
     }
+    &_wide_20 {
+      margin: 20px;
+      @media (max-width: 500px) {
+        margin: 0px;
+      }
+    }
     &x_20 {
-      margin: 1em 0px;
+      margin: 0px 20px;
     }
   }
   .border_box {

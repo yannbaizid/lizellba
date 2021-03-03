@@ -49,6 +49,15 @@
         stroke-linecap="round"
         stroke-linejoin="round"
       />
+        <!-- ICON "UP" -->
+      <path
+        v-if="type == 'up'"
+        transform="rotate(-90, 19.5, 19.5)"
+        d="M17 13L22.7143 19L17 25"
+        stroke="black"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
       <!-- ICON "+" and "-" -->
       <line
         v-if="type == '+' || type == '-'"
