@@ -1,6 +1,6 @@
 <template>
   <div id="gallery">
-    <div class="my_20 mx_05 flexbox_row flexbox_justifycenter flexbox_wrap">
+    <div v-if="showTypeSelection" class="my_20 mx_05 flexbox_row flexbox_justifycenter flexbox_wrap">
      
       <div @click="handleTypeSelection(0)" class="mx_02">
         <app-button message="Tous" :active="photoType == 0 ? true : false" />
@@ -17,7 +17,7 @@
           :active="photoType == 2 ? true : false"
         />
       </div>
-    </div>
+    </div> 
     <div
       id="gallery_container"
       ref="GalleryContainer"
@@ -78,6 +78,7 @@ export default {
       limit: 16,
       displayedPhoto: {},
       photoType: 0,
+      showTypeSelection: false,
     };
   },
   computed: {
@@ -305,6 +306,7 @@ export default {
       api
         .getGalleryPhotos(this.photoType, this.currentPage, this.limit)
         .then((photos) => {
+          this.photos=new Array(photos.length);
           this.photos = photos;
           console.log("photos fetched from api");
           console.log(this.photos);

@@ -96,6 +96,9 @@ a {
   &_wrap {
     flex-wrap: wrap;
   }
+  &_wrapreverse {
+    flex-wrap: wrap-reverse;
+  }
 }
 
 .flex_grow {
@@ -216,6 +219,9 @@ a {
   }
   &_l_1 {
     padding-left: 1em;
+  }
+  &x_20 {
+    padding: 0px 20px;
   }
 }
 .m {
