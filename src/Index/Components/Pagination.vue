@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flexbox_row">
+    <div class="flexbox_row flexbox_justifycenter">
       <div class="flexbox_row flexbox_justifycenter h_100 app_navarrow">
         <div
           @click=" handlePageSelection(currentPage-1)"
@@ -73,7 +73,6 @@
         </div>
       </div>
     </div>
-    currentpage: {{ currentPage }} {{ pageRange }}
   </div>
 </template>
 
@@ -81,36 +80,7 @@
 export default {
   computed: {
     pageRange: function () {
-      /*    let pageRangeTotalSize = 2 * this.pageRangeSize + 1;
-      console.log("page rangtotal" + pageRangeTotalSize);
-
-      let pageRange = [];
-      let pageRangeMin = Math.min(
-        this.currentPage,
-        Math.max(
-          1,
-          this.currentPage -
-            this.pageRangeSize -
-            (this.pageCount - this.currentPage < this.pageRangeSize
-              ? this.pageRangeSize - (this.pageCount - this.currentPage)
-              : 0)
-        )
-      );
-      console.log("test");
-      let pageRangeMax = Math.max(
-        this.currentPage,
-        Math.min(
-          this.pageCount,
-          this.currentPage +
-            this.pageRangeSize +
-            (this.currentPage <= this.pageRangeSize
-              ? this.pageRangeSize + 1 - this.currentPage
-              : 0)
-        )
-      );
-      for (let i = pageRangeMin; i <= pageRangeMax; i++) {
-        pageRange.push(i);
-      } */
+   
       let pageRangeLengthMax = 7;
       let pageRangeLength= Math.min(pageRangeLengthMax,this.pageCount);
       console.log('pagelength'+pageRangeLength);
@@ -167,7 +137,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .active {
   color: red;
 }

@@ -8,7 +8,7 @@
     </div>
     <footer id="index_footer" class="align_left flexbox_row w_100 flexbox_spacebetween">
       <div id="typo_credits" class="font_size_small text_align_left flexbox_row flexbox_wrap">
-        <div>Graphisme: Fanny Martel. </div><div>Développement: Yann Baïzid. </div><div>Conception additionnelle: Léa Bénétou. </div><div>Crédit typographique pour le logo Lizellba : Jocelyn Cottencin.</div>
+        <div class="mr_02">Graphisme: Fanny Martel.</div><div  class="mr_02">Développement: Yann Baïzid. </div><div  class="mr_02">Conception additionnelle: Léa Bénétou. </div><div>Crédit typographique pour le logo Lizellba : Jocelyn Cottencin.</div>
       </div>
     <div class="mx_20" @click="handleScrollTopClick">
     <app-icon type="up" :circle="false"></app-icon>

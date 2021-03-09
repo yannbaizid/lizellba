@@ -1,5 +1,8 @@
 <template>
-  <div class="btn" :class="'btn_background_'+background">
+  <div
+    class="btn"
+    :class="['btn_background_' + background,active?'btn_active':'']"
+  >
     <div class="btn_text">
       {{ message }}
     </div>
@@ -14,8 +17,12 @@ export default {
     link: String,
     background: {
       type: String,
-      default: 'none'
-    }
+      default: "none",
+    },
+    active: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
@@ -28,17 +35,21 @@ export default {
   padding: 10px 25px;
   //background-color: white;
   display: inline-block;
+  &_active {
+    border: 1px solid #9a9a9a;
+    color: #9a9a9a;
+  }
   &:hover {
     cursor: pointer;
-    border: 1px solid #9A9A9A;
-    color:  #9A9A9A;
+    border: 1px solid #9a9a9a;
+    color: #9a9a9a;
   }
   &_background_white {
     background-color: white;
   }
   &_text {
-      border:25px 10px;
-      text-decoration: none;
+    border: 25px 10px;
+    text-decoration: none;
   }
 }
 </style>

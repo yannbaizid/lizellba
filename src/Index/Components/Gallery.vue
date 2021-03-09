@@ -1,9 +1,27 @@
 <template>
   <div id="gallery">
+    <div class="my_20 mx_05 flexbox_row flexbox_justifycenter flexbox_wrap">
+     
+      <div @click="handleTypeSelection(0)" class="mx_02">
+        <app-button message="Tous" :active="photoType == 0 ? true : false" />
+      </div>
+      <div @click="handleTypeSelection(1)" class="mx_02">
+        <app-button
+          message="Numérique"
+          :active="photoType == 1 ? true : false"
+        />
+      </div>
+      <div @click="handleTypeSelection(2)" class="mx_02">
+        <app-button
+          message="Physique"
+          :active="photoType == 2 ? true : false"
+        />
+      </div>
+    </div>
     <div
       id="gallery_container"
       ref="GalleryContainer"
-      class="flexbox_row flexbox_justifystart flexbox_alignstart w_100"
+      class="flexbox_row flexbox_justifycenter flexbox_alignstart w_100"
     >
       <div
         class="img_thumbnail"
@@ -12,7 +30,7 @@
         @click="showPhotoModal(photo.id, false)"
       >
         <img
-          class="gallery_img"
+          class="gallery_img h_100"
           :src="'/img/expos/' + photo.file_name"
           :alt="photo.img_name"
         />
@@ -32,16 +50,22 @@
       @previousPhotoEvent="handlePreviousPhoto"
       @nextPhotoEvent="handleNextPhoto"
     />
-    <div ref="BottomDiv"></div>
+    <pagination
+      :currentPage="currentPage"
+      :pageCount="pageCount"
+      @pageSelectionEvent="handlePageSelection"
+    />
   </div>
 </template>
 
 <script>
 import PhotoModal from "./PhotoModal.vue";
 import api from "@/services/api/api.js";
+import AppButton from "../../services/AppButton.vue";
+import Pagination from "./Pagination.vue";
 
 export default {
-  components: { PhotoModal },
+  components: { PhotoModal, AppButton, Pagination },
   name: "Game",
   data() {
     return {
@@ -49,10 +73,11 @@ export default {
       loadingPhoto: false,
       loadingPhotos: false,
       idRange: {},
-      currentPage: 0,
+      currentPage: 1,
       pageCount: 1,
-      limit: 8,
+      limit: 16,
       displayedPhoto: {},
+      photoType: 0,
     };
   },
   computed: {
@@ -66,8 +91,9 @@ export default {
     },
   },
   async mounted() {
-    await this.getIdRange();
-    await this.getNextPhotos();
+    //Gather infos :
+    await this.loadGallery();
+    // await this.getNextPhotos();
 
     if (this.$route.params.photoId) {
       console.log("mounted i show" + this.$route);
@@ -80,13 +106,35 @@ export default {
       this.$route.query.credits = null;
     }
   },
-  created() {
-    window.addEventListener("scroll", this.handleScroll);
-  },
-  destroyed() {
-    window.removeEventListener("scroll", this.handleScroll);
-  },
+  created() {},
+  destroyed() {},
   methods: {
+    async loadGallery() {
+      let scroll = window.scrollY;
+      await this.getIdRange();
+      await this.getGalleryPhotos();
+      Window.scrollY = scroll;
+    },
+    /**
+     * Change current page
+     * takes target page as arg
+     */
+    handlePageSelection(page) {
+      this.currentPage = page;
+      this.loadGallery();
+    },
+    handleTypeSelection(type) {
+      if (type != this.photoType) {
+        this.photoType = type;
+        this.currentPage=1;
+        this.loadGallery();
+      }
+    },
+    /***
+     * Display next photo if id of actual photo is > to idmin.
+     * If photo is in list of photos already loaded, show it.
+     * Else, load next batch of photos, and then display next photo.
+     * */
     async handleNextPhoto() {
       console.log(
         "handle next photo in gallery.vue. Id=" + this.displayedPhotoIndex
@@ -109,6 +157,12 @@ export default {
         }
       }
     },
+
+    /**
+     *Display previous photo if id of actual photo is < to idmax.
+     * If photo is in list of photos already loaded, show it.
+     * Else, load previous batch of photos, and then display next photo.
+     */
     handlePreviousPhoto() {
       console.log(
         "handle previous photo in gallery.vue. Id=" + this.displayedPhoto.id
@@ -143,47 +197,16 @@ export default {
           });
       }
     },
+
+    /**
+     * load next batch of photos when scroll reached bottom of page
+     */
     handleScroll() {
-     
       if (!this.loadingPhotos) {
-        /* 
-        let bottomOfWindow= document.documentElement.scrollTop+document.documentElement.offsetHeight> this.$refs.GalleryContainer.offsetTop+this.$refs.GalleryContainer.offsetHeight;
-        console.log(bottomOfWindow);
-         console.log(document.documentElement);
-        console.log(window); 
-        console.log(document.documentElement.scrollTop+document.documentElement.offsetHeight);
-        console.log(this.$refs.GalleryContainer.offsetTop+this.$refs.GalleryContainer.offsetHeight)
-        if (bottomOfWindow) {
-            this.getNextPhotos();
-        } */
-       /*  console.log(e);
-        console.log("bottom div");
-
-        console.log(this.$refs.GalleryContainer);
-        console.log(this.$refs.BottomDiv);
-        console.log(document.documentElement);
-        console.log(window.scrollHeight);
-        console.log(
-          document.documentElement.scrollTop +
-            " cH:" +
-            document.documentElement.clientHeight +
-            " sH" +
-            document.documentElement.scrollHeight +
-            ", min sH and w.IH :" +
-            Math.min(screen.height, window.innerHeight)
-        ); */
-
-        /*   let bottomOfWindow =
-          document.documentElement.scrollTop + window.innerHeight >=
-          document.documentElement.scrollHeight - 100; */
-
-    /*    var  bottomOfWindow =
-          document.documentElement.scrollHeight -
-            document.documentElement.scrollTop -
-            document.documentElement.clientHeight <
-          100; */
-        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight -10) {
-          
+        if (
+          window.innerHeight + window.scrollY >=
+          document.documentElement.scrollHeight - 10
+        ) {
           console.log("t'en as trop pris, mec");
 
           this.loadingPhotos = true;
@@ -193,6 +216,10 @@ export default {
         }
       }
     },
+
+    /**
+     *
+     */
     async getNextPhotos() {
       if (this.currentPage <= this.pageCount) {
         this.loadingPhotos = true;
@@ -214,9 +241,17 @@ export default {
               this.loadingPhotos = false;
               console.log("inside getNextPhotos, last image loaded");
             };
-  
-            console.log('loading :'+process.env.VUE_APP_IMGLINK+'expos/' + this.photos[this.photos.length - 1].file_name);
-            img.src =process.env.VUE_APP_IMGLINK+'expos/' + this.photos[this.photos.length - 1].file_name;
+
+            console.log(
+              "loading :" +
+                process.env.VUE_APP_IMGLINK +
+                "expos/" +
+                this.photos[this.photos.length - 1].file_name
+            );
+            img.src =
+              process.env.VUE_APP_IMGLINK +
+              "expos/" +
+              this.photos[this.photos.length - 1].file_name;
           })
           .catch((error) => {
             alert(
@@ -225,48 +260,69 @@ export default {
             );
           })
           .finally(() => {
-          //  this.loadingPhotos = false;
+            //  this.loadingPhotos = false;
           });
       } else {
         this.loadingPhotos = false;
       }
     },
 
+    /**
+     * gather data:
+     * total number of photos in DB
+     * maxId and minId.
+     * Calculates total number of pages based on number of photos and limit
+     */
     async getIdRange() {
       return api
-        .getGalleryPhotoIdRange()
+        .getGalleryPhotoIdRange(this.photoType)
         .then((idRange) => {
           console.log(idRange);
           this.idRange = idRange;
-          this.idRange.max=Number(this.idRange.max);
-          this.idRange.min=Number(this.idRange.min);
-          this.idRange.total=Number(this.idRange.total);
+          this.idRange.max = Number(this.idRange.max);
+          this.idRange.min = Number(this.idRange.min);
+          this.idRange.total = Number(this.idRange.total);
           console.log(
-            "id range fecthed, min:" + this.idRange.min + ", max:" + idRange.max
+            "id range fecthed, min:" +
+              this.idRange.min +
+              ", max:" +
+              idRange.max +
+              ",total:" +
+              idRange.total
           );
+
           this.pageCount = Math.ceil(this.idRange.total / this.limit);
           console.log("page count:" + this.pageCount);
         })
         .catch((error) => {
           alert("erreur lors du chargement de IdRange" + error.message);
+        })
+        .finally(() => {
+          console.log("get id range finally");
         });
     },
-    getGalleryPhotos() {
-      this.loadingPhotos = true;
+    async getGalleryPhotos() {
       api
-        .getGalleryPhotos()
+        .getGalleryPhotos(this.photoType, this.currentPage, this.limit)
         .then((photos) => {
           this.photos = photos;
           console.log("photos fetched from api");
           console.log(this.photos);
-          console.log("param id in gallery.vue:" + this.$route.params.photoId);
         })
         .catch((error) => {
           alert("erreur lors du chargement des photos" + error.message);
-          this.loadingPhotos = false;
         })
         .finally(() => {});
     },
+
+    /**
+     * Display specific photo.
+     * Args:
+     * photoId = id of photo displayed.
+     * showCredits = Show a text to explain the end of the game. Default = false. Put true when called from game.
+     * if photo is among photos loaded, dispay it.
+     * Else, load this photo from database and display it.
+     */
     showPhotoModal(photoId, showCredits) {
       if (this.photos.find((photo) => photo.id == photoId)) {
         this.displayedPhoto = this.photos.find((photo) => photo.id == photoId);
@@ -312,7 +368,10 @@ export default {
 
 <style lang="scss" scoped>
 .img_thumbnail {
-  width: 24%;
+  width: 22vw;
+  height: 13.5vw;
+  min-width: 120px;
+  min-height: 67.5px;
   padding-bottom: 20px;
   padding-right: 0.5%;
   padding-left: 0.5%;
@@ -321,6 +380,7 @@ export default {
 .gallery_img {
   width: 100%;
   border-radius: 2%;
+  object-fit: cover;
 }
 #gallery_container {
   padding: 0px 20px;

@@ -36,8 +36,8 @@ export default {
 
   },
 
-  async getGalleryPhotos() {
-    return axios.get("getgalleryphotos.php").then((response) => {
+  async getGalleryPhotos(photoType,currentPage,limit) {
+    return axios.get("getgalleryphotos.php", { params: {typeId : photoType,page: currentPage,limit: limit} }).then((response) => {
       console.log('api getgalleryphotos ok');
       console.log(response.data);
       return response.data;
@@ -50,10 +50,18 @@ export default {
     });
   },
 
-  async getGalleryPhotoIdRange() {
-    return axios.get("getgalleryphotos.php", { params: { function: 'idrange' } }).then((response) => {
-      return response.data;
-    });
+  async getGalleryPhotoIdRange(photoType) {
+    if (photoType==0) {
+      return axios.get("getgalleryphotos.php", { params: { function: 'idrange' } }).then((response) => {
+        return response.data;
+      });
+
+    }
+    else {
+      return axios.get("getgalleryphotos.php", { params: { function: 'idrange',typeId : photoType } }).then((response) => {
+        return response.data;
+      });
+    }
   },
 
 
