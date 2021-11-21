@@ -9,11 +9,11 @@
       <!--ASK FOR CONFIRMATION -->
      
       <div class="DeleteArtwork_modal h_100 align_center flexbox_col" >
-        <div class="bold font_size_big">
+        <div class="bold font_size_big mw_410">
           Êtes-vous sûr de vouloir retirer cette oeuvre de votre exposition?
         </div>
 
-        <div class="flexbox flexbox_col flexbox_justifyend flex_grow ">
+        <div class="flexbox flexbox_col flexbox_justifyend flex_grow mw_410">
           <div @click="onConfirmDelete()"  class="w_100 p_t_20">
             <app-button message="oui" class="w_100" />
           </div>
@@ -59,7 +59,10 @@ export default {
 </script>
 <style lang="scss">
 .DeleteArtwork_modal {
-  max-width: 410px;
   margin: 30px 0px 75px 0px;
+}
+
+.mw_410 {
+    max-width: 410px;
 }
 </style>

@@ -14,7 +14,7 @@
             :src="imgLink + 'question/' + question.img_link"
             alt="image loading"
           />
-          <div class="caption text_align_left" v-html="question.caption">
+          <div class="caption text_align_left" v-html="question.caption_details? question.caption_details : question.caption">
  
           </div>
         </div>
@@ -48,7 +48,7 @@
               </div>
             </div>
             <div @click="$refs.AnswerModal.closeModal()">
-              <app-button v-if="this.correct == 1" message="Placer l'oeuvre" />
+              <app-button v-if="this.correct == 1" message="Placer l'œuvre" />
               <app-button
                 v-if="this.correct == 0"
                 message="Continuer à jouer"

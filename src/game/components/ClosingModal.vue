@@ -65,6 +65,6 @@ export default {
 <style lang="scss">
 .closing_modal {
   max-width: 410px;
-  margin: 30px 0px 75px 0px;
+  margin: 30px auto 30px auto;
 }
 </style>

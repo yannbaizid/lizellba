@@ -107,12 +107,12 @@ export default {
 }
 
 .text_column {
-  width: 40%;
-  max-width: 600px;
+  width: 64%;
+  // max-width: 600px;
   // padding: 20px;
 
   @media (max-width: 900px) {
-    width: 70%;
+    width: 64%;
   }
   @media (max-width: 700px) {
     width: 95%;
