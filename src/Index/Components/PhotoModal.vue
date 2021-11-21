@@ -142,7 +142,7 @@
     hashtags="lacrieecentredart,LiZellBa"
   >
    
-<svg version="1.1" stroke-width="10" id="White" fill="none" height="39" width="39" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
+<svg version="1.1" stroke-width="10" id="White" fill="none" height="39" width="39" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-5 -5 410 410" style="enable-background:new 0 0 400 400;" xml:space="preserve">
 
 <path stroke="black"  class="st0" d="M400,200c0,110.5-89.5,200-200,200S0,310.5,0,200S89.5,0,200,0S400,89.5,400,200z M163.4,305.5
 	c88.7,0,137.2-73.5,137.2-137.2c0-2.1,0-4.2-0.1-6.2c9.4-6.8,17.6-15.3,24.1-25c-8.6,3.8-17.9,6.4-27.7,7.6

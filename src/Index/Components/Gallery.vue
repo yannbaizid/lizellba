@@ -1,22 +1,25 @@
 <template>
   <div id="gallery">
-    <div v-if="showTypeSelection" class="my_20 mx_05 flexbox_row flexbox_justifycenter flexbox_wrap">
-     
+    <div v-if="showTypeSelection" class="my_20 flexbox_row flexbox_justifycenter flexbox_wrap">
+     <div  class="flexbox_row flexbox_justifyend flexbox_wrap type_selector_container">
+ 
       <div @click="handleTypeSelection(0)" class="mx_02">
-        <app-button message="Tous" :active="photoType == 0 ? true : false" />
+        <app-button message="Tous" :active="photoType == 0 ? true : false"  :selector="true" />
       </div>
       <div @click="handleTypeSelection(1)" class="mx_02">
         <app-button
           message="Numérique"
-          :active="photoType == 1 ? true : false"
+          :active="photoType == 1 ? true : false"  :selector="true"
         />
       </div>
+
       <div @click="handleTypeSelection(2)" class="mx_02">
         <app-button
           message="Physique"
-          :active="photoType == 2 ? true : false"
+          :active="photoType == 2 ? true : false"  :selector="true"
         />
       </div>
+          </div>
     </div> 
     <div
       id="gallery_container"
@@ -50,11 +53,15 @@
       @previousPhotoEvent="handlePreviousPhoto"
       @nextPhotoEvent="handleNextPhoto"
     />
+ <div  class="flexbox_row flexbox_justifycenter">
+    <div class="flexbox_row flexbox_justifyend mx_20 type_selector_container">
+
     <pagination
       :currentPage="currentPage"
       :pageCount="pageCount"
       @pageSelectionEvent="handlePageSelection"
     />
+    </div></div>
   </div>
 </template>
 
@@ -78,7 +85,7 @@ export default {
       limit: 16,
       displayedPhoto: {},
       photoType: 0,
-      showTypeSelection: false,
+      showTypeSelection: true,
     };
   },
   computed: {
@@ -369,14 +376,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
+.type_selector_container {
+  width: 91vw;
+}
 .img_thumbnail {
   width: 22vw;
   height: 13.5vw;
   min-width: 120px;
   min-height: 67.5px;
   padding-bottom: 20px;
-  padding-right: 0.5%;
-  padding-left: 0.5%;
+  padding-right: 0.5vw;
+  padding-left: 0.5vw;
 }
 
 .gallery_img {

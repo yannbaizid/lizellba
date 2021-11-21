@@ -6,11 +6,11 @@
     <div id="gallery">
       <gallery />
     </div>
-    <footer id="index_footer" class="align_left flexbox_row w_100 flexbox_spacebetween">
+    <footer id="index_footer" class="align_left flexbox_row w_100 flexbox_justifystart">
       <div id="typo_credits" class="font_size_small text_align_left flexbox_row flexbox_wrap">
-        <div class="mr_02">Graphisme: Fanny Martel.</div><div  class="mr_02">Développement: Yann Baïzid. </div><div  class="mr_02">Conception additionnelle: Léa Bénétou. </div><div>Crédit typographique pour le logo Lizellba : Jocelyn Cottencin.</div>
+        <div class="mr_02">Graphisme : Fanny Martel.</div><div  class="mr_02">Développement : Yann Baïzid. </div><div  class="mr_02">Conception additionnelle : Léa Bénétou. </div><div>Crédit typographique pour le logo Lizellba : Jocelyn Cottencin.</div>
       </div>
-    <div class="mx_20" @click="handleScrollTopClick">
+    <div v-if="showUpArrow" class="mx_20" @click="handleScrollTopClick">
     <app-icon type="up" :circle="false"></app-icon>
     </div>
     </footer>
@@ -19,10 +19,17 @@
 
 <script>
 import AppIcon from '../services/icons/Icon.vue';
+
 import Gallery from "./Components/Gallery.vue";
 import Presentation from "./Components/Presentation.vue";
 export default {
-  components: { Gallery, Presentation, AppIcon },
+  components: { Gallery, Presentation, AppIcon,  },
+
+  data() {
+    return {
+      showUpArrow: false,
+    }
+  },
  
   mounted() {
     console.log('salut'+this.$route.params.photoId);
@@ -51,5 +58,11 @@ export default {
 <style>
 #typo_credits {
   padding: 10px;
+}
+
+#index_container {
+    background-image: url("../assets/logo_bg.png");
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
 </style>
