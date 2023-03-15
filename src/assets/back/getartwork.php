@@ -1,16 +1,29 @@
 <?php
-header('Access-Control-Allow-Origin: *');
+
+require("dbconnection.php");
+
         try {
             $result_array = array();
-            $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', 'root', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-            $reponse = $bdd->query('SELECT * FROM `tabletest`;');
+            $response = $pdo->query('SELECT * FROM `artwork` ORDER BY id DESC;');
 
-            while ($donnee = $reponse->fetch()) {
-
-                $artist=$bdd->prepare('SELECT * FROM `author` WHERE id=?;');
-                $artist->execute(array($donnee['id_author']));
-                $donnee['artist']=$artist->fetch();
-                $result_array[] = $donnee;
+            while ($data = $response->fetch()) {
+                //add artist
+                $artist=$pdo->prepare('SELECT * FROM `artist` WHERE id=?;');
+                $artist->execute(array($data['artist_id']));
+                
+                
+                $data['artist']=$artist->fetch();
+                //add expo
+                $expo=$pdo->prepare('SELECT * FROM `expo` WHERE id=?;');
+                $expo->execute(array($data['expo_id']));
+                $data['expo']=$expo->fetch();
+                //add type
+                $type=$pdo->prepare('SELECT * FROM `artwork_type` WHERE id=?;');
+                $type->execute(array($data['type_id']));
+                $typeData=$type->fetch();
+                $data['type']=$typeData['name'];
+                $result_array[] = $data;
+                
  
             }
         } catch (Exception $e) {
@@ -20,5 +33,3 @@ header('Access-Control-Allow-Origin: *');
         }
         $arrayObjects = json_encode($result_array);
         echo($arrayObjects);
-
-        ?>

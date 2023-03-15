@@ -6,14 +6,8 @@ require("dbconnection.php");
 
 //GET REQUESTS
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-$conditions='';
-$parameters=[];
-$parameters['typeId']= !empty($_GET['typeId'])  ? $_GET['typeId']  : null;
-$parameters['limit']=!empty($_GET['limit'])? (int)$_GET['limit'] : 16;
 
-
-
-    //Specific functions
+    //Specifice functions
     if (isset($_GET['function'])) {
 
         try {
@@ -23,8 +17,7 @@ $parameters['limit']=!empty($_GET['limit'])? (int)$_GET['limit'] : 16;
 
 
 
-                $req = $pdo->prepare('SELECT MIN(id) as min, MAX(id) as max, COUNT(*) as total FROM `expo_photo`   WHERE (type_id=:typeId or :typeId is null)');
-                $req->bindValue(':typeId', $parameters['typeId'], PDO::PARAM_INT);
+                $req = $pdo->prepare('SELECT MIN(id) as min, MAX(id) as max, COUNT(*) as total FROM `expo_photo` ');
             }
             //GET FIRST NEXT PHOTO AFTER THE ID PROVIDED
             if ($_GET['function'] == 'prev' && isset($_GET['id'])) {
@@ -79,48 +72,25 @@ $parameters['limit']=!empty($_GET['limit'])? (int)$_GET['limit'] : 16;
 
 
 
-        //IF typeId in PARAMS, WORK ON THAT SPECIFIC PHOTO DATA.
-     /*    else if (isset($_GET['typeId'])) {
 
-
-            $typeId = $_GET['typeId'];
-            $result_array = array();
-
-            try {
-                $req = $pdo->prepare('SELECT * FROM expo_photo WHERE type_id=:typeId');
-                $req->bindValue(':typeId', $typeId, PDO::PARAM_INT);
-                $req->execute();
-
-                while ($data = $req->fetch()) {
-                    $result_array[]=$data;
-
-                }
-                $arrayObjects = json_encode($result_array);
-                echo ($arrayObjects);
-            } catch (Exception $e) {
-
-                http_response_code(540);
-                die('Erreur : ' . $e->getMessage());
-            }
-        }  */else {
-
-
+       
+        else {
             try {
                 $result_array = array();
+    
+     //GET xLIMIT PHOTOS STARTING FROM OFFSET=PAGExLIMIT
+                if (isset($_GET['limit']) && isset($_GET['page'])) {
+                    $limit=(int)$_GET['limit'];
 
-                //GET xLIMIT PHOTOS STARTING FROM OFFSET=PAGExLIMIT
-                if ( isset($_GET['page'])) {
-                   
-                    $offset = ($_GET['page'] - 1) * $parameters['limit'];
-                    $req = $pdo->prepare('SELECT * FROM `expo_photo`   WHERE (type_id=:typeId or :typeId is null) ORDER BY id DESC LIMIT :inputLimit OFFSET :inputOffset');
-                    $req->bindValue(':inputLimit', $parameters['limit'], PDO::PARAM_INT);
-                    $req->bindValue(':inputOffset', $offset, PDO::PARAM_INT);
-                    $req->bindValue(':typeId', $parameters['typeId'], PDO::PARAM_INT);
+                    $offset=($_GET['page']-1)*$_GET['limit'];
+                    $req = $pdo->prepare('SELECT * FROM `expo_photo` ORDER BY id DESC LIMIT :inputLimit OFFSET :inputOffset');
+                    $req->bindValue(':inputLimit',$limit,PDO::PARAM_INT);
+                    $req->bindValue(':inputOffset',$offset,PDO::PARAM_INT);
                 }
-                //ELSE, if NO PARAMS AT ALL, GET ALL THE PHOTOS
+                 //ELSE, if NO PARAMS AT ALL, GET ALL THE PHOTOS
                 else {
-                    $req = $pdo->prepare('SELECT * FROM expo_photo  WHERE (type_id=:typeId or :typeId is null) ORDER BY id DESC');
-                    $req->bindValue(':typeId', $parameters['typeId'], PDO::PARAM_INT);
+                    $req = $pdo->prepare('SELECT * FROM expo_photo ORDER BY id DESC');
+
                 }
 
                 $req->execute();

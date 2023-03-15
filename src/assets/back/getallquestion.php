@@ -2,11 +2,12 @@
 
 require("dbconnection.php");
 try {
+    $result_array = array();
     $questionData = array();
 
-    $response = $pdo->query('SELECT * FROM question  ORDER BY  RAND() LIMIT 1 ;');
+    $response = $pdo->query('SELECT * FROM question  ORDER BY  id DESC ;');
 
-    if ($questionData = $response->fetch()) {
+    while ($questionData = $response->fetch()) {
 
         $answersData = $pdo->prepare('SELECT id,text,correct FROM  question_answer WHERE question_answer.question_id=? ORDER BY RAND();');
         $answersData->execute(array($questionData['id']));
@@ -21,11 +22,12 @@ try {
         if ($type = $typeData->fetch()) {
         }
         $questionData['type'] = $type;
+        $result_array[] =  $questionData;
     }
 } catch (Exception $e) {
 
 
     die('Erreur : ' . $e->getMessage());
 }
-$arrayObject = json_encode($questionData);
+$arrayObject = json_encode($result_array);
 echo ($arrayObject);
