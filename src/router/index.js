@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Index from '../Index/Index'
 import Game from '../game/Game'
 import TestModal from '../views/TestModal'
+import TestKonva from '../views/TestKonva'
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,13 @@ const routes = [
     path: '/test',
     name: 'test',
     component: TestModal
+  },
+  
+  
+  {
+    path: '/testkonva',
+    name: 'testkonva',
+    component: TestKonva
   },
   {
     path: '/gallery/photo/:photoId',
